@@ -1,0 +1,39 @@
+$font-family-body: "Poppins", sans-serif;
+$font-family-headings: "Orbitron", sans-serif;
+
+$bodyTypoOptions: text-body-1, text-sm-body-1, text-md-body-1, text-lg-body-1,
+text-body-2, text-sm-body-2, text-md-body-2, text-lg-body-2,
+text-caption, subtitle-1, subtitle-2, text-overline;
+
+$headingTypoOptions: text-h1, text-sm-h1, text-md-h1, text-lg-h1,
+text-h2, text-sm-h2, text-md-h2, text-lg-h2,
+text-h3, text-sm-h3, text-md-h3, text-lg-h3,
+text-h4, text-sm-h4, text-md-h4, text-lg-h4,
+text-h5, text-sm-h5, text-md-h5, text-lg-h5,
+text-h6, text-sm-h6, text-md-h6, text-lg-h6,
+headline, title;
+
+body, #app {
+  background-color: rgb(var(--v-theme-background)) !important;
+  color: rgb(var(--v-theme-on-background)) !important;
+}
+
+#app {
+  font-family: $font-family-body !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: $font-family-headings !important;
+}
+
+@each $typoOption in $headingTypoOptions {
+  .#{$typoOption} {
+    font-family: $font-family-headings !important;
+  }
+}
+
+@each $typoOption in $bodyTypoOptions {
+  .#{$typoOption} {
+    font-family: $font-family-body !important;
+  }
+}
