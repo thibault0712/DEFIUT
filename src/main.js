@@ -9,11 +9,13 @@ import { createApp } from 'vue'
 
 // Plugins
 import { registerPlugins } from '@/plugins'
-
 // Components
 import App from './App.vue'
 
+
 // Styles
+import 'vuetify/styles'
+import '@mdi/font/css/materialdesignicons.css'
 import 'unfonts.css'
 
 const app = createApp(App)

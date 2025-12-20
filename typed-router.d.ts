@@ -19,6 +19,16 @@ declare module 'vue-router/auto-routes' {
    */
   export interface RouteNamedMap {
     '/': RouteRecordInfo<'/', '/', Record<never, never>, Record<never, never>>,
+    '/about/CGU/': RouteRecordInfo<'/about/CGU/', '/about/CGU', Record<never, never>, Record<never, never>>,
+    '/about/legalNotices/': RouteRecordInfo<'/about/legalNotices/', '/about/legalNotices', Record<never, never>, Record<never, never>>,
+    '/about/privacyPolicy/': RouteRecordInfo<'/about/privacyPolicy/', '/about/privacyPolicy', Record<never, never>, Record<never, never>>,
+    '/app/challenges/': RouteRecordInfo<'/app/challenges/', '/app/challenges', Record<never, never>, Record<never, never>>,
+    '/app/ranking/': RouteRecordInfo<'/app/ranking/', '/app/ranking', Record<never, never>, Record<never, never>>,
+    '/auth/login/': RouteRecordInfo<'/auth/login/', '/auth/login', Record<never, never>, Record<never, never>>,
+    '/auth/register/': RouteRecordInfo<'/auth/register/', '/auth/register', Record<never, never>, Record<never, never>>,
+    '/help/contact/': RouteRecordInfo<'/help/contact/', '/help/contact', Record<never, never>, Record<never, never>>,
+    '/help/FAQ/': RouteRecordInfo<'/help/FAQ/', '/help/FAQ', Record<never, never>, Record<never, never>>,
+    '/home/': RouteRecordInfo<'/home/', '/home', Record<never, never>, Record<never, never>>,
   }
 
   /**
@@ -34,6 +44,46 @@ declare module 'vue-router/auto-routes' {
   export interface _RouteFileInfoMap {
     'src/pages/index.vue': {
       routes: '/'
+      views: never
+    }
+    'src/pages/about/CGU/index.vue': {
+      routes: '/about/CGU/'
+      views: never
+    }
+    'src/pages/about/legalNotices/index.vue': {
+      routes: '/about/legalNotices/'
+      views: never
+    }
+    'src/pages/about/privacyPolicy/index.vue': {
+      routes: '/about/privacyPolicy/'
+      views: never
+    }
+    'src/pages/app/challenges/index.vue': {
+      routes: '/app/challenges/'
+      views: never
+    }
+    'src/pages/app/ranking/index.vue': {
+      routes: '/app/ranking/'
+      views: never
+    }
+    'src/pages/auth/login/index.vue': {
+      routes: '/auth/login/'
+      views: never
+    }
+    'src/pages/auth/register/index.vue': {
+      routes: '/auth/register/'
+      views: never
+    }
+    'src/pages/help/contact/index.vue': {
+      routes: '/help/contact/'
+      views: never
+    }
+    'src/pages/help/FAQ/index.vue': {
+      routes: '/help/FAQ/'
+      views: never
+    }
+    'src/pages/home/index.vue': {
+      routes: '/home/'
       views: never
     }
   }

@@ -8,6 +8,7 @@ const lightTheme = {
   colors: {
     'background': '#FFFFFF',
     'surface': '#FFFFFF',
+    'footer': '#0F1629',
     'surface-bright': '#FFFFFF',
     'surface-light': '#EEEEEE',
     'surface-variant': '#424242',
@@ -48,6 +49,7 @@ const darkTheme = {
   colors: {
     'background': '#0B121F',
     'surface': '#141A28',
+    'footer': '#0F1629',
     'surface-bright': '#141A28',
     'surface-light': '#F1F1E4',
     'surface-variant': '#424242',
@@ -64,7 +66,7 @@ const darkTheme = {
   variables: {
     'font-family': FONT_BODY,
     'heading-font-family': FONT_HEADINGS,
-    'border-color': '#000000',
+    'border-color': '#FFFFFF',
     'border-opacity': 0.12,
     'high-emphasis-opacity': 0.87,
     'medium-emphasis-opacity': 0.6,
