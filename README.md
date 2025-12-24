@@ -3,7 +3,7 @@
 ## 🚀 Démarrage rapide
 
 ### Prérequis
-- Node.js (version X.X ou supérieure)
+- Node.js
 - npm ou yarn
 
 ### Installation et lancement
