@@ -10,7 +10,7 @@
 
 ```bash
 # Cloner le repository
-git clone [url-du-repo]
+git clone https://GitHub.com/Thibault0712/DEFIUT
 
 # Installer les dépendances
 npm install
@@ -22,6 +22,8 @@ npm run dev
 
 ### Organisation du code
 
+**Utiliser le moins possible la balise style préférer les éléments deja disponible dans le param class par exemple class="px-12" padding horizontal de 12
+
 **Règle importante :** Avant de développer, posez-vous la question :
 
 > "Ce code sera-t-il réutilisé ailleurs dans le site ?"
@@ -31,7 +33,7 @@ npm run dev
 
 ### Exemple de structure
 
-```
+
 src/
 ├── pages/              # Pages de l'application
 │   └── index.js        # Code spécifique à cette page dans lequel on utilise scoreboard
