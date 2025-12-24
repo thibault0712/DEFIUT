@@ -1,79 +1,107 @@
-# Vuetify (Default)
+# DEFIUT
 
-This is the official scaffolding tool for Vuetify, designed to give you a head start in building your new Vuetify application. It sets up a base template with all the necessary configurations and standard directory structure, enabling you to begin development without the hassle of setting up the project from scratch.
+## 🚀 Démarrage rapide
 
-## ❗️ Important Links
+### Prérequis
+- Node.js (version X.X ou supérieure)
+- npm ou yarn
 
-- 📄 [Docs](https://vuetifyjs.com/)
-- 🚨 [Issues](https://issues.vuetifyjs.com/)
-- 🏬 [Store](https://store.vuetifyjs.com/)
-- 🎮 [Playground](https://play.vuetifyjs.com/)
-- 💬 [Discord](https://community.vuetifyjs.com)
-
-## 💿 Install
-
-Set up your project using your preferred package manager. Use the corresponding command to install the dependencies:
-
-| Package Manager                                                | Command        |
-|---------------------------------------------------------------|----------------|
-| [yarn](https://yarnpkg.com/getting-started)                   | `yarn install` |
-| [npm](https://docs.npmjs.com/cli/v7/commands/npm-install)     | `npm install`  |
-| [pnpm](https://pnpm.io/installation)                          | `pnpm install` |
-| [bun](https://bun.sh/#getting-started)                        | `bun install`  |
-
-After completing the installation, your environment is ready for Vuetify development.
-
-## ✨ Features
-
-- 🖼️ **Optimized Front-End Stack**: Leverage the latest Vue 3 and Vuetify 3 for a modern, reactive UI development experience. [Vue 3](https://v3.vuejs.org/) | [Vuetify 3](https://vuetifyjs.com/en/)
-- 🗃️ **State Management**: Integrated with [Pinia](https://pinia.vuejs.org/), the intuitive, modular state management solution for Vue.
-- 🚦 **Routing and Layouts**: Utilizes Vue Router for SPA navigation and vite-plugin-vue-layouts for organizing Vue file layouts. [Vue Router](https://router.vuejs.org/) | [vite-plugin-vue-layouts](https://github.com/JohnCampionJr/vite-plugin-vue-layouts)
-- ⚡ **Next-Gen Tooling**: Powered by Vite, experience fast cold starts and instant HMR (Hot Module Replacement). [Vite](https://vitejs.dev/)
-- 🧩 **Automated Component Importing**: Streamline your workflow with unplugin-vue-components, automatically importing components as you use them. [unplugin-vue-components](https://github.com/antfu/unplugin-vue-components)
-
-These features are curated to provide a seamless development experience from setup to deployment, ensuring that your Vuetify application is both powerful and maintainable.
-
-## 💡 Usage
-
-This section covers how to start the development server and build your project for production.
-
-### Starting the Development Server
-
-To start the development server with hot-reload, run the following command. The server will be accessible at [http://localhost:3000](http://localhost:3000):
+### Installation et lancement
 
 ```bash
-yarn dev
+# Cloner le repository
+git clone [url-du-repo]
+
+# Installer les dépendances
+npm install
+
+# Lancer le projet en développement
+npm run dev
+
+## 📁 Structure et conventions de développement
+
+### Organisation du code
+
+**Règle importante :** Avant de développer, posez-vous la question :
+
+> "Ce code sera-t-il réutilisé ailleurs dans le site ?"
+
+- **OUI** → Créez un composant dans le dossier `components/`
+- **NON** → Développez directement dans la page concernée
+
+### Exemple de structure
+
+```
+src/
+├── pages/              # Pages de l'application
+│   └── index.js        # Code spécifique à cette page dans lequel on utilise scoreboard
+├── components/         # Composants réutilisables uniquement
+│   ├── Scoreboard/
+│   
+│   
+└── ...
 ```
 
-(Repeat for npm, pnpm, and bun with respective commands.)
+### Quand créer un composant ?
 
-> Add NODE_OPTIONS='--no-warnings' to suppress the JSON import warnings that happen as part of the Vuetify import mapping. If you are on Node [v21.3.0](https://nodejs.org/en/blog/release/v21.3.0) or higher, you can change this to NODE_OPTIONS='--disable-warning=5401'. If you don't mind the warning, you can remove this from your package.json dev script.
+✅ **Créez un composant si :**
+- Il sera utilisé sur plusieurs pages
 
-### Building for Production
+❌ **Ne créez pas de composant si :**
+- Le code est spécifique à une seule page
+- Il n'y a aucune possibilité de réutilisation
 
-To build your project for production, use:
+## 🔄 Processus de Merge Request
+
+### 1. Créer une nouvelle branche
+
+Depuis github cliquer sur votre issues ensuite dans le menu de droite il
+y a un lien pas très visible pour créer une nouvelle branche
 
 ```bash
-yarn build
+# Partir de la branche principale à jour
+git checkout nom de la branche
 ```
 
-(Repeat for npm, pnpm, and bun with respective commands.)
+### 2. Développer et commiter
 
-Once the build process is completed, your application will be ready for deployment in a production environment.
+```bash
+# Ajouter vos modifications
+git add .
 
-## 💪 Support Vuetify Development
+# Commiter avec un message clair
+git commit -m "feature: description de la fonctionnalité"
 
-This project is built with [Vuetify](https://vuetifyjs.com/en/), a UI Library with a comprehensive collection of Vue components. Vuetify is an MIT licensed Open Source project that has been made possible due to the generous contributions by our [sponsors and backers](https://vuetifyjs.com/introduction/sponsors-and-backers/). If you are interested in supporting this project, please consider:
+# Pousser la branche sur le repository distant
+git push origin feature/nom-de-la-fonctionnalite
+```
 
-- [Requesting Enterprise Support](https://support.vuetifyjs.com/)
-- [Sponsoring John on Github](https://github.com/users/johnleider/sponsorship)
-- [Sponsoring Kael on Github](https://github.com/users/kaelwd/sponsorship)
-- [Supporting the team on Open Collective](https://opencollective.com/vuetify)
-- [Becoming a sponsor on Patreon](https://www.patreon.com/vuetify)
-- [Becoming a subscriber on Tidelift](https://tidelift.com/subscription/npm/vuetify)
-- [Making a one-time donation with Paypal](https://paypal.me/vuetify)
+### 3. Créer la Merge Request
 
-## 📑 License
-[MIT](http://opensource.org/licenses/MIT)
+1. Rendez-vous sur Github
+2. Cliquez sur "Pull Request"
+3. Sélectionnez votre branche 
+4. Remplissez les informations :
+   - **Titre** : Résumé clair de la modification
+   - **Description** : Détails sur ce qui a été fait et pourquoi
+   - **Assignee** : Personne qui doit reviewer
+5. Cliquez sur "Create Merge Request"
 
-Copyright (c) 2016-present Vuetify, LLC
+### 4. Convention de nommage des branches
+
+- `feature/nom-fonctionnalite` : Nouvelle fonctionnalité
+- `fix/nom-bug` : Correction de bug
+- `refactor/nom-refactoring` : Refactoring de code
+- `docs/nom-documentation` : Modification de documentation
+
+### 5. Convention de commits
+
+```
+feat: ajout d'une nouvelle fonctionnalité
+fix: correction d'un bug
+refactor: refactoring du code
+docs: modification de documentation
+style: formatage, point-virgule manquant, etc.
+test: ajout de tests
+chore: mise à jour des dépendances, configuration
+```
