@@ -1,10 +1,10 @@
 <template>
-  <v-footer class="text-grey-lighten-2 d-flex flex-column pa-0">
+  <v-footer class="d-flex flex-column pa-0 bg-background">
 
-    <v-container class="w-100 px-0" fluid>
+    <v-container class="w-100 px-0 py-0" fluid>
       <v-divider class="opacity-50" />
 
-      <v-container class="py-12 px-80" fluid>
+      <v-container class="py-12 w-75" fluid>
 
         <v-row class="ga-md-16" justify="start">
 
@@ -18,28 +18,28 @@
           </v-col>
 
           <v-col cols="12" md="auto">
-            <h3 class="footer-title">À propos & légal</h3>
+            <h2 class="mb-2">À propos & légal</h2>
             <ul class="footer-links">
-              <li><a href="/about/legalNotices">Mentions légales</a></li>
-              <li><a href="/about/CGU">CGU</a></li>
-              <li><a href="/about/privacyPolicy">Politique de confidentialité</a></li>
+              <li><a class="text-decoration-none" href="/about/legalNotices" style="color: inherit">Mentions légales</a></li>
+              <li><a class="text-decoration-none" href="/about/CGU" style="color: inherit">CGU</a></li>
+              <li><a class="text-decoration-none" href="/about/privacyPolicy" style="color: inherit">Politique de confidentialité</a></li>
             </ul>
           </v-col>
 
           <v-col cols="12" md="auto">
-            <h3 class="footer-title">Aide & support</h3>
+            <h2 class="mb-2">Aide & support</h2>
             <ul class="footer-links">
-              <li><a href="/help/FAQ">FAQ</a></li>
-              <li><a href="/help/contact">Contact</a></li>
+              <li><a class="text-decoration-none" href="/help/FAQ" style="color: inherit">FAQ</a></li>
+              <li><a class="text-decoration-none" href="/help/contact" style="color: inherit">Contact</a></li>
             </ul>
           </v-col>
 
           <v-col cols="12" md="auto">
-            <h3 class="footer-title">Liens rapides</h3>
+            <h2 class="mb-2">Liens rapides</h2>
             <ul class="footer-links">
-              <li><a href="/home">Accueil</a></li>
-              <li><a href="/app/challenges">Défis</a></li>
-              <li><a href="/app/ranking">Classement</a></li>
+              <li><a class="text-decoration-none" href="/home" style="color: inherit">Accueil</a></li>
+              <li><a class="text-decoration-none" href="/app/challenges" style="color: inherit">Défis</a></li>
+              <li><a class="text-decoration-none" href="/app/ranking" style="color: inherit">Classement</a></li>
             </ul>
           </v-col>
         </v-row>
@@ -56,20 +56,10 @@
   </v-footer>
 </template>
 
-<style scoped>
-.border-top-colored {
-  border-top: 4px solid #ff4081;
-  width: 100%;
-}
+<script setup lang="ts">
+</script>
 
-.footer-title {
-  font-weight: 600;
-  font-size: 0.95rem;
-  margin-bottom: 12px;
-  text-transform: uppercase;
-  color: white;
-  text-align: left;
-}
+<style scoped>
 
 .footer-links {
   list-style: none;
@@ -82,25 +72,8 @@
   margin-bottom: 6px;
 }
 
-.footer-links a {
-  color: #cfcfcf;
-  text-decoration: none;
-  font-size: 0.9rem;
-  transition: all 0.2s ease;
-  display: inline-block;
-}
-
-.footer-links a:hover {
-  color: #ff4081;
-  transform: translateX(4px);
-}
-
 .text-center {
   text-align: center;
 }
 
-.px-80 {
-  padding-right: 80px;
-  padding-left: 80px;
-}
 </style>
