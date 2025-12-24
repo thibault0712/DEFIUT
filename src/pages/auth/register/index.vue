@@ -7,7 +7,7 @@
       rounded="lg"
       width="100%"
     >
-      <h1 class="text-h3 font-weight-bold text-white mb-8">
+      <h1 class="text-h3 font-weight-bold mb-8">
         S'inscrire
       </h1>
 
@@ -16,7 +16,6 @@
           class="mb-2"
           density="comfortable"
           label="Nom d'utilisateur"
-          theme="dark"
           variant="outlined"
         />
 
@@ -24,7 +23,6 @@
           class="mb-2"
           density="comfortable"
           label="Email"
-          theme="dark"
           variant="outlined"
         />
 
@@ -32,7 +30,6 @@
           class="mb-2"
           density="comfortable"
           label="Mot de passe"
-          theme="dark"
           type="password"
           variant="outlined"
         />
@@ -40,18 +37,17 @@
         <v-text-field
           density="comfortable"
           label="Même mot de passe"
-          theme="dark"
           type="password"
           variant="outlined"
         />
 
-        <v-checkbox base-color="white">
+        <v-checkbox>
           <template #label>
             <div>
               J'accepte les
               <a
-                class="text-white"
-                href="/terms"
+                href="/about/CGU"
+                style="color: inherit"
                 target="_blank"
               >
                 termes et conditions
@@ -74,7 +70,7 @@
 
       <div class="d-flex align-center my-6">
         <v-divider class="opacity-100" />
-        <span class="mx-4 text-caption text-grey-lighten-1">OU</span>
+        <span class="mx-4 text-caption">OU</span>
         <v-divider class="opacity-100" />
       </div>
 
