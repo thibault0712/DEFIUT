@@ -17,6 +17,7 @@ npm install
 
 # Lancer le projet en développement
 npm run dev
+```
 
 ## 📁 Structure et conventions de développement
 
