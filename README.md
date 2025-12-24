@@ -34,7 +34,7 @@ npm run dev
 
 ### Exemple de structure
 
-
+```
 src/
 ├── pages/              # Pages de l'application
 │   └── index.js        # Code spécifique à cette page dans lequel on utilise scoreboard
