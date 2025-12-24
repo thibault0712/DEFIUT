@@ -8,7 +8,7 @@
       rounded="lg"
       width="100%"
     >
-      <h1 class="text-h3 font-weight-bold text-white mb-8">
+      <h1 class="text-h3 font-weight-bold mb-8">
         Se connecter
       </h1>
 
@@ -16,8 +16,7 @@
         <v-text-field
           class="mb-2"
           density="comfortable"
-          label="Nom d'utilisateur ou email"
-          theme="dark"
+          label="Email"
           variant="outlined"
         />
 
@@ -25,7 +24,6 @@
           class="mb-6"
           density="comfortable"
           label="Mot de passe"
-          theme="dark"
           type="password"
           variant="outlined"
         />
@@ -53,7 +51,6 @@
         class="text-none"
         color="grey-lighten-4"
         size="large"
-        style="color: #444 !important;"
         variant="flat"
       >
         <template #prepend>
