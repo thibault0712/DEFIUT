@@ -1,5 +1,14 @@
+<script setup>
+  import { useTheme } from 'vuetify'
+
+  const theme = useTheme()
+  function toggleTheme () {
+    theme.global.name.value = theme.global.name.value === 'darkTheme' ? 'lightTheme' : 'darkTheme'
+  }
+</script>
+
 <template>
-  <v-app-bar class="px-80" flat height="80">
+  <v-app-bar class="px-80 bg-background" flat height="80">
     <router-link class="no-link-style" to="/home">
       <div class="d-flex align-center">
         <v-img
@@ -8,7 +17,7 @@
           src="/logo.png"
           width="40"
         />
-        <h2 class="text-h3 font-weight-bold text-white">
+        <h2 class="text-h3 font-weight-bold">
           DEFIUT
         </h2>
       </div>
@@ -46,24 +55,22 @@
 
       <v-btn
         color="#8DA34B"
-        icon="mdi-white-balance-sunny"
+        :icon="theme.global.name.value === 'lightTheme' ? 'mdi-weather-night' : 'mdi-white-balance-sunny'"
         rounded="lg"
         size="small"
         variant="flat"
+        @click="toggleTheme"
       />
     </div>
 
   </v-app-bar>
 </template>
 
-<script setup lang="ts">
-</script>
 <style scoped>
-/* Style spécifique pour les séparateurs fins de l'image */
 .vertical-divider {
   width: 1px;
   height: 24px;
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: #cfcfcf;
 }
 
 .px-80 {
