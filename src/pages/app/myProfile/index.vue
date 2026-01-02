@@ -75,23 +75,18 @@
         <h1>{{ user.username }}</h1>
       </v-row>
 
-      <v-row align="center" class="gx-4 mt-8 mb-3">
-        <v-col cols="3">
-          <p class="text-uppercase font-weight-medium">Dernière connexion : {{ user.lastLogin }}</p>
+      <v-row align="center" class="mt-8 mb-3">
+        <v-col cols="auto">
+          <p class="text-uppercase font-weight-medium mb-0">Dernière connexion : {{ user.lastLogin }}</p>
         </v-col>
-        <v-col align="center" cols="3">
-          <p class="text-uppercase font-weight-medium">Inscrit depuis : {{ user.registeredAt }}</p>
+        <v-col cols="auto">
+          <p class="text-uppercase font-weight-medium mb-0">Inscrit depuis : {{ user.registeredAt }}</p>
         </v-col>
-        <v-col cols="1">
-          <v-btn color="secondary">
-            <v-icon>mdi-pencil</v-icon>
-          </v-btn>
-        </v-col>
-        <v-col cols="3">
-          <v-btn color="secondary">
-            Supprimer le compte
-          </v-btn>
-        </v-col>
+        <v-btn class="mx-6" color="secondary"> <v-icon>mdi-pencil</v-icon>
+        </v-btn>
+        <v-btn color="secondary">
+          Supprimer le compte
+        </v-btn>
       </v-row>
 
       <!-- Onglets -->
