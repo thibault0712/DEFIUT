@@ -1,18 +1,11 @@
 <script setup>
-  import { useTheme } from 'vuetify'
 
-  const theme = useTheme()
-  function toggleTheme () {
-    theme.global.name.value =
-      theme.global.name.value === 'darkTheme'
-        ? 'lightTheme'
-        : 'darkTheme'
-  }
+  import { ref } from 'vue'
 
   const user = {
     username: 'Alice',
     lastLogin: '05/02/2025',
-    registeredAt: '12/09/2024'
+    registeredAt: '12/09/2024',
   }
 
   /* Onglet actif */
@@ -22,45 +15,49 @@
   const validatedHeaders = [
     { title: 'Titre du défi', key: 'title' },
     { title: 'Date de validation', key: 'date' },
-    { title: 'Points gagnés', key: 'points' }
+    { title: 'Points gagnés', key: 'points' },
   ]
 
   const validatedItems = [
-    { title: 'Défi Web', date: '02/02/2025', points: 150 }
+    { title: 'Défi Web', date: '02/02/2025', points: 150 },
   ]
 
   /* === Badges === */
   const badgesHeaders = [
     { title: 'Badge', key: 'icon' },
     { title: 'Nom du badge', key: 'name' },
-    { title: 'Date d’obtention', key: 'date' }
+    { title: 'Date d’obtention', key: 'date' },
   ]
 
   const badgesItems = [
-    { icon: 'mdi-star', name: 'Badge #1', date: '10/02/2025' }
+    { icon: 'mdi-star', name: 'Badge #1', date: '10/02/2025' },
   ]
 </script>
 
 <template>
   <Header />
 
-  <v-main>
-    <v-container>
+  <v-main class="h-screen">
+    <v-container max-width="1200">
 
       <!-- Titre -->
       <h1>Profil utilisateur</h1>
 
       <!-- Infos utilisateur -->
-      <v-row class="my-6">
-        <v-avatar size="96" class="mr-6" color="accent">
+      <v-row align="center" class="mt-6">
+        <v-avatar class="mr-6 text-h4" color="secondary" size="96">
           {{ user.username[0] }}
         </v-avatar>
+        <h1>{{ user.username }}</h1>
+      </v-row>
 
-        <div>
-          <div><strong>{{ user.username }}</strong></div>
-          <div>Dernière connexion : {{ user.lastLogin }}</div>
-          <div>Inscrit depuis : {{ user.registeredAt }}</div>
-        </div>
+      <v-row class="gx-4 mt-8 mb-3">
+        <v-col cols="4">
+          <p class="text-uppercase font-weight-medium">Dernière connexion : {{ user.lastLogin }}</p>
+        </v-col>
+        <v-col cols="4">
+          <p class="text-uppercase font-weight-medium">Inscrit depuis : {{ user.registeredAt }}</p>
+        </v-col>
       </v-row>
 
       <!-- Onglets -->

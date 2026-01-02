@@ -6,6 +6,10 @@
     { rank: 4, name: 'Maxime', points: 1938 },
     { rank: 5, name: 'Fabrice', points: 1937 },
   ]
+
+  function goToProfile () {
+    window.location.href = '/app/userProfile'
+  }
 </script>
 
 <template>
@@ -29,7 +33,7 @@
       </thead>
 
       <tbody>
-        <tr v-for="(player) in players" :key="player.name">
+        <tr v-for="(player) in players" :key="player.name" class="cursor-pointer" @click="goToProfile()">
           <td>{{ player.rank }}</td>
           <td>{{ player.name }}</td>
           <td class="text-right">{{ player.points }}</td>

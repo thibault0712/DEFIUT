@@ -1,26 +1,30 @@
 <script setup>
-import { computed } from "vue";
+  import { computed } from 'vue'
 
-const props = defineProps({
-  titre: { type: String, default: "Titre" },
-  points: { type: String, default: "Difficulté" },
-  description: { type: String, default: "Description" },
-  difficulte: { type: String, default: "Facile" },
-});
+  const props = defineProps({
+    titre: { type: String, default: 'Titre' },
+    points: { type: Number, default: -1 },
+    description: { type: String, default: 'Description' },
+    difficulte: { type: String, default: 'Facile' },
+  })
 
-// Pour mettre à jour la couleur suivant la difficulté
-const difficultyColor = computed(() => {
-  switch (props.difficulte.toLowerCase()) {
-    case "facile":
-      return "#8A9B46";
-    case "moyen":
-      return "#FB8C00";
-    case "difficile":
-      return "#BA2653";
-    default:
-      return "primary";
-  }
-});
+  // Pour mettre à jour la couleur suivant la difficulté
+  const difficultyColor = computed(() => {
+    switch (props.difficulte.toLowerCase()) {
+      case 'facile': {
+        return '#8A9B46'
+      }
+      case 'moyen': {
+        return '#FB8C00'
+      }
+      case 'difficile': {
+        return '#BA2653'
+      }
+      default: {
+        return 'primary'
+      }
+    }
+  })
 </script>
 
 <template>
