@@ -61,6 +61,8 @@ src/
 Depuis github cliquer sur votre issues ensuite dans le menu de droite il
 y a un lien pas très visible pour créer une nouvelle branche
 
+[Vidéo (sans son oops) sur comment créer une nouvelle branche et travailler dessus si explication pas claire](https://drive.google.com/file/d/1oRYu1ejJJ7WFBtRTtCwkCIRziHS2C2Fr/view?usp=sharing)
+
 ```bash
 # Partir de la branche principale à jour
 git checkout nom de la branche
