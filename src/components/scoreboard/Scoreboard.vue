@@ -14,7 +14,7 @@
 
 <template>
   <v-card
-    class="pa-4 w-75"
+    class="pa-4"
     flat
   >
     <v-table density="comfortable">
