@@ -21,6 +21,7 @@ declare module 'vue-router/auto-routes' {
     '/about/CGU/': RouteRecordInfo<'/about/CGU/', '/about/CGU', Record<never, never>, Record<never, never>>,
     '/about/legalNotices/': RouteRecordInfo<'/about/legalNotices/', '/about/legalNotices', Record<never, never>, Record<never, never>>,
     '/about/privacyPolicy/': RouteRecordInfo<'/about/privacyPolicy/', '/about/privacyPolicy', Record<never, never>, Record<never, never>>,
+    '/app/challenge/': RouteRecordInfo<'/app/challenge/', '/app/challenge', Record<never, never>, Record<never, never>>,
     '/app/challenges/': RouteRecordInfo<'/app/challenges/', '/app/challenges', Record<never, never>, Record<never, never>>,
     '/app/myProfile/': RouteRecordInfo<'/app/myProfile/', '/app/myProfile', Record<never, never>, Record<never, never>>,
     '/app/ranking/': RouteRecordInfo<'/app/ranking/', '/app/ranking', Record<never, never>, Record<never, never>>,
@@ -53,6 +54,10 @@ declare module 'vue-router/auto-routes' {
     }
     'src/pages/about/privacyPolicy/index.vue': {
       routes: '/about/privacyPolicy/'
+      views: never
+    }
+    'src/pages/app/challenge/index.vue': {
+      routes: '/app/challenge/'
       views: never
     }
     'src/pages/app/challenges/index.vue': {
