@@ -90,7 +90,18 @@
         </template>
         S'INSCRIRE AVEC GOOGLE
       </v-btn>
+      <p class="text-body-2 text-grey-darken-1 mt-6">
+        Déjà un compte ?
+        <a
+          class="text-decoration-none font-weight-bold"
+          href="/auth/login"
+          style="color: #8DA34B;"
+        >
+          Se connecter
+        </a>
+      </p>
     </v-card>
+
   </v-container>
   <Header />
 

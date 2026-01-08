@@ -17,16 +17,27 @@
           class="mb-2"
           density="comfortable"
           label="Email"
+          prepend-inner-icon="mdi-email-outline"
           variant="outlined"
         />
 
         <v-text-field
-          class="mb-6"
           density="comfortable"
+          hide-details
           label="Mot de passe"
+          prepend-inner-icon="mdi-lock-outline"
           type="password"
           variant="outlined"
         />
+
+        <div class="d-flex justify-end mb-6">
+          <a
+            class="text-caption text-decoration-none text-grey-darken-1 font-weight-bold mt-2"
+            href="#"
+          >
+            Mot de passe oublié ?
+          </a>
+        </div>
 
         <v-btn
           class="text-none px-10 mb-2"
@@ -35,6 +46,7 @@
           size="large"
           type="submit"
           variant="flat"
+          block
         >
           SE CONNECTER
         </v-btn>
@@ -48,7 +60,7 @@
 
       <v-btn
         block
-        class="text-none"
+        class="text-none mb-6"
         color="grey-lighten-4"
         size="large"
         variant="flat"
@@ -61,6 +73,17 @@
         </template>
         SE CONNECTER AVEC GOOGLE
       </v-btn>
+
+      <p class="text-body-2 text-grey-darken-1">
+        Pas encore de compte ?
+        <a
+          class="text-decoration-none font-weight-bold"
+          href="/auth/register"
+          style="color: #8DA34B;"
+        >
+          S'inscrire
+        </a>
+      </p>
     </v-card>
   </v-container>
 </template>

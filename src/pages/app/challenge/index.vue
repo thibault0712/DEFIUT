@@ -66,20 +66,6 @@ function closeIndiceDialog () {
               <p class="text-h6 mb-1" style="color: #8A9B46">
                 Nombre de points : {{ challenge.points }}
               </p>
-              <div class="d-flex align-center justify-start">
-                <span class="text-h6 mr-2">Note :</span>
-                <div class="d-flex">
-                  <v-icon
-                    v-for="i in 5"
-                    :key="i"
-                    :color="i <= challenge.rating ? '#8A9B46' : 'transparent'"
-                    :style="i > challenge.rating ? 'border: 2px solid #8A9B46; border-radius: 50%;' : ''"
-                    size="small"
-                  >
-                    mdi-circle
-                  </v-icon>
-                </div>
-              </div>
             </div>
           </div>
         </v-col>
@@ -118,7 +104,7 @@ function closeIndiceDialog () {
           <div class="mb-6">
             <h3 class="text-h5 mb-3">Liens/Ressource :</h3>
             <div v-for="(link, index) in challenge.links" :key="index" class="mb-1">
-              <a :href="`https://${link}`" class="text-body-1" style="color: white; text-decoration: none;">
+              <a class="text-body-1" :href="`https://${link}`" style="color: white; text-decoration: none;">
                 {{ link }}
               </a>
             </div>
