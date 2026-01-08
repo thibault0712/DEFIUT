@@ -25,10 +25,14 @@
       }
     }
   })
+
+  function goToChallenge () {
+    window.location.href = '/app/challenge'
+  }
 </script>
 
 <template>
-  <v-card class="bg-surface border-thin d-flex flex-column" flat height="100%">
+  <v-card class="bg-surface border-thin d-flex flex-column" flat height="100%" @click="goToChallenge()">
     <v-card-item class="pt-6">
       <h6 class="text-h6 font-weight-bold text-on-surface mb-2 text-truncate">
         {{ titre }}

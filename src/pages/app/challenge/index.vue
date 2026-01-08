@@ -38,14 +38,17 @@ const openIndiceDialog = (indice) => {
   showIndiceDialog.value = true
 }
 
-const closeIndiceDialog = () => {
+function closeIndiceDialog () {
   showIndiceDialog.value = false
   currentIndice.value = null
 }
 </script>
 
 <template>
-  <v-main class="bg-background min-vh-100 pt-0 pb-16">
+
+  <Header/>
+
+  <v-main class="bg-background min-vh-100 pt-0 pb-16 h-screen">
     <v-container class="py-12" fluid max-width="1400">
       <v-row class="mb-8">
         <v-col cols="12">
@@ -58,7 +61,7 @@ const closeIndiceDialog = () => {
                 {{ challenge.catchPhrase }}
               </p>
             </div>
-            
+
             <div class="text-right">
               <p class="text-h6 mb-1" style="color: #8A9B46">
                 Nombre de points : {{ challenge.points }}
@@ -161,17 +164,19 @@ const closeIndiceDialog = () => {
           variant="text"
           @click="closeIndiceDialog"
         />
-        
+
         <v-card-title class="text-h3 mb-6 pa-0">
           INDICE {{ currentIndice?.id }}
         </v-card-title>
-        
+
         <v-card-text class="text-body-1 pa-0" style="line-height: 1.8;">
           {{ currentIndice?.text }}
         </v-card-text>
       </v-card>
     </v-dialog>
   </v-main>
+
+  <Footer></Footer>
 </template>
 
 <style scoped>
@@ -179,3 +184,4 @@ const closeIndiceDialog = () => {
   gap: 1rem;
 }
 </style>
+

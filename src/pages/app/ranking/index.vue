@@ -7,7 +7,7 @@
 
   <v-main class="bg-background min-vh-100 pt-0 pb-16">
     <v-container max-width="1200">
-      <h1 class="text-h2 font-weight-bold text-on-background mb-4">
+      <h1 class="mb-4">
         Classement
       </h1>
       <v-container class="h-75">
