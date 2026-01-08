@@ -5,7 +5,7 @@
 <template>
   <Header />
 
-  <v-main class="bg-background min-vh-100 pt-0 pb-16">
+  <v-main class="min-vh-100 pt-0 pb-16">
     <v-container max-width="1200">
       <h1 class="mb-4">
         Classement

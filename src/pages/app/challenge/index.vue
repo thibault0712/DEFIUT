@@ -48,7 +48,7 @@ function closeIndiceDialog () {
 
   <Header/>
 
-  <v-main class="bg-background min-vh-100 pt-0 pb-16 h-screen">
+  <v-main class="min-vh-100 pt-0 pb-16 h-screen">
     <v-container class="py-12" fluid max-width="1400">
       <v-row class="mb-8">
         <v-col cols="12">

@@ -41,7 +41,7 @@
 <template>
   <Header />
 
-  <v-main class="bg-background min-vh-100 pt-0 pb-16">
+  <v-main class="min-vh-100 pt-0 pb-16">
     <v-container max-width="1200">
       <v-container
         class="d-flex align-center justify-center h-screen pb-16"

@@ -62,8 +62,10 @@
 
 <template>
   <Header />
-  <v-container class="h-screen">
-    <h1>Catalogue des défis</h1>
+  <v-container max-width="1200">
+    <h1 class="mb-4">
+      Catalogue des défis
+    </h1>
 
     <v-container>
       <v-row>
