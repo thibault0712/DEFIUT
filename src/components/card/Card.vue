@@ -6,6 +6,7 @@
     points: { type: Number, default: -1 },
     description: { type: String, default: 'Description' },
     difficulte: { type: String, default: 'Facile' },
+    avancement: {type: String, default: 'Avancement'},
   })
 
   // Pour mettre à jour la couleur suivant la difficulté
@@ -33,7 +34,10 @@
 
 <template>
   <v-card class="bg-surface border-thin d-flex flex-column" flat height="100%" @click="goToChallenge()">
-    <v-card-item class="pt-6">
+    <v-card-item class="pt-2">
+      <div class="text-caption text-medium-emphasis mb-4 d-flex justify-end">
+        {{ avancement }}
+      </div>
       <h6 class="text-h6 font-weight-bold text-on-surface mb-2 text-truncate">
         {{ titre }}
       </h6>
