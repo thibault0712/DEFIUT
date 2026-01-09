@@ -28,7 +28,28 @@
     <div class="d-flex align-center ga-6">
       <v-btn class="text-none text-body-1" to="/app/challenges" variant="text">Défis</v-btn>
       <v-btn class="text-none text-body-1" to="/app/ranking" variant="text">Classement</v-btn>
+      <v-menu open-on-hover>
+        <template #activator="{ props }">
+          <v-btn
+            v-bind="props"
+            append-icon="mdi-chevron-down"
+            class="text-none text-body-1"
+            variant="text"
+          >
+            Aides
+          </v-btn>
+        </template>
 
+        <v-list class="mt-2" density="compact" rounded="lg">
+          <v-list-item prepend-icon="mdi-help-circle-outline" to="/help/faq">
+            <v-list-item-title>FAQ</v-list-item-title>
+          </v-list-item>
+
+          <v-list-item prepend-icon="mdi-email-outline" to="/help/contact">
+            <v-list-item-title>Contact</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
       <div class="vertical-divider" />
 
       <v-btn
@@ -42,9 +63,8 @@
 
       <v-btn
         class="text-none px-6"
-        color="#8DA34B"
+        color="primary"
         rounded="lg"
-        theme="dark"
         to="/auth/login"
         variant="flat"
       >
@@ -53,14 +73,20 @@
 
       <div class="vertical-divider" />
 
-      <v-btn
-        color="#8DA34B"
-        :icon="theme.global.name.value === 'lightTheme' ? 'mdi-weather-night' : 'mdi-white-balance-sunny'"
-        rounded="lg"
-        size="small"
-        variant="flat"
-        @click="toggleTheme"
-      />
+      <v-tooltip :close-delay="300" location="bottom" :open-delay="100">
+        <template #activator="{ props }">
+          <v-btn
+            v-bind="props"
+            color="primary"
+            :icon="theme.global.name.value === 'lightTheme' ? 'mdi-weather-night' : 'mdi-white-balance-sunny'"
+            rounded="lg"
+            size="small"
+            variant="flat"
+            @click="toggleTheme"
+          />
+        </template>
+        <span class="text-white">Thème du site</span>
+      </v-tooltip>
     </div>
 
   </v-app-bar>
