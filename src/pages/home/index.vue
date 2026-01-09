@@ -10,30 +10,35 @@
       points: 100,
       description: 'Exploitez une faille SQL pour récupérer la base de données.',
       difficulty: 'Facile',
+      progress: 'En cours',
     },
     {
       title: 'Reverse Engineering',
       points: 250,
       description: 'Analysez le binaire pour trouver le flag caché.',
       difficulty: 'Moyen',
+      progress: '',
     },
     {
       title: 'Cryptography',
       points: 150,
       description: 'Déchiffrez le message codé avec une méthode classique.',
       difficulty: 'Facile',
+      progress: 'Terminé',
     },
     {
       title: 'Network Analysis',
       points: 300,
       description: 'Analysez le fichier .pcap pour intercepter le trafic.',
       difficulty: 'Difficile',
+      progress: 'En cours',
     },
     {
       title: 'Web Exploitation',
       points: 200,
       description: 'Trouvez la vulnérabilité XSS sur cette page.',
       difficulty: 'Moyen',
+      progress: 'Terminé',
     },
   ]
 </script>
@@ -41,7 +46,7 @@
 <template>
   <Header />
 
-  <v-main class="bg-background min-vh-100 pt-0 pb-16">
+  <v-main class="min-vh-100 pt-0 pb-16">
     <v-container max-width="1200">
       <v-container
         class="d-flex align-center justify-center h-screen pb-16"
@@ -91,6 +96,7 @@
                 height="250"
                 :points="challenge.points"
                 :titre="challenge.title"
+                :avancement="challenge.progress"
                 width="250"
               />
             </v-slide-group-item>

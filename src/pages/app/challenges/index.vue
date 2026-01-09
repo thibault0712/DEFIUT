@@ -6,6 +6,7 @@
       description:
         'Injectez un script persistant pour voler les cookies de l\'admin.',
       difficulty: 'Moyen',
+      progress: 'En cours'
     },
     {
       title: 'Admin Panel Bypass',
@@ -13,6 +14,7 @@
       description:
         'Contournez le formulaire de login sans connaître le mot de passe.',
       difficulty: 'Difficile',
+      progress: ''
     },
 
     {
@@ -20,6 +22,7 @@
       points: 400,
       description: 'La clé publique est trop petite. Retrouvez la clé privée.',
       difficulty: 'Difficile',
+      progress: 'Terminé'
     },
     {
       title: 'Hash Cracking',
@@ -27,6 +30,7 @@
       description:
         'Retrouvez le mot de passe original à partir de ce hash SHA-256.',
       difficulty: 'Moyen',
+      progress: 'En cours'
     },
 
     {
@@ -35,12 +39,14 @@
       description:
         'Analysez le fichier .pcap pour intercepter le trafic suspect.',
       difficulty: 'Difficile',
+      progress: ''
     },
     {
       title: 'FTP Interception',
       points: 100,
       description: 'Un fichier a été transféré en clair. Retrouvez son contenu.',
       difficulty: 'Facile',
+      progress: 'Terminé'
     },
 
     {
@@ -49,6 +55,7 @@
       description:
         'Sortez de cet environnement Python restreint (sandbox escape).',
       difficulty: 'Moyen',
+      progress: ''
     },
     {
       title: 'Regex Master',
@@ -56,14 +63,17 @@
       description:
         'Créez une expression régulière pour valider ce format complexe.',
       difficulty: 'Facile',
+      progress: 'En cours'
     },
   ]
 </script>
 
 <template>
   <Header />
-  <v-container class="h-screen">
-    <h1>Catalogue des défis</h1>
+  <v-container max-width="1200">
+    <h1 class="mb-4">
+      Catalogue des défis
+    </h1>
 
     <v-container>
       <v-row>
@@ -92,6 +102,13 @@
         <v-col>
           <v-combobox label="TAGS" />
         </v-col>
+
+        <v-col>
+          <v-combobox
+            :items="['Pas commencé', 'En cours', 'Terminé']"
+            label="Avancement"
+          />
+        </v-col>
       </v-row>
 
       <v-btn color="#BA2653" variant="flat"> Chercher </v-btn>
@@ -112,6 +129,7 @@
             :difficulte="challenge.difficulty"
             :points="challenge.points"
             :titre="challenge.title"
+            :avancement="challenge.progress"
           />
         </v-col>
       </v-row>
