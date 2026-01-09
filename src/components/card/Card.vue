@@ -28,7 +28,7 @@
   })
 
   function goToChallenge () {
-    window.location.href = '/app/challenge'
+    window.location.href = '/DEFIUT/app/challenge'
   }
 </script>
 
