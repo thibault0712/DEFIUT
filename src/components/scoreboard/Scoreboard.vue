@@ -8,7 +8,7 @@
   ]
 
   function goToProfile () {
-    window.location.href = '/app/userProfile'
+    window.location.href = '/DEFIUT/app/userProfile'
   }
 </script>
 
