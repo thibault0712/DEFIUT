@@ -1,6 +1,7 @@
 <script setup>
 const avancement = ["Pas commencé", "En cours", "Terminé"];
-
+const difficulte = ["Facile", "Moyen", "Difficile"];
+const defis = ["Web", "Programmation", "Réseau", "Cryptographie"];
 const featuredChallenges = [
   {
     title: "XSS Stored",
@@ -83,15 +84,21 @@ const featuredChallenges = [
 
         <v-col>
           <v-combobox
-            :items="['Web', 'Programmation', 'Réseau', 'Cryptographie']"
+            :items="defis"
             label="Tous les défis"
+            placeholder="Ex: Web"
+            multiple
+            persistent-placeholder
           />
         </v-col>
 
         <v-col>
           <v-combobox
-            :items="['Facile', 'Moyen', 'Difficile']"
+            :items="difficulte"
             label="Difficulté"
+            placeholder="Ex: Facile"
+            multiple
+            persistent-placeholder
           />
         </v-col>
 
@@ -107,7 +114,7 @@ const featuredChallenges = [
           <v-combobox
             :items="avancement"
             label="Avancement"
-            placeholder="Ex: En Cours, Terminé"
+            placeholder="Ex: En Cours"
             multiple
             persistent-placeholder
           />
