@@ -20,26 +20,26 @@
           <v-col cols="12" md="auto">
             <h2 class="mb-2">À propos & légal</h2>
             <ul class="footer-links">
-              <li><a class="text-decoration-none" href="/about/legalNotices" style="color: inherit">Mentions légales</a></li>
-              <li><a class="text-decoration-none" href="/about/CGU" style="color: inherit">CGU</a></li>
-              <li><a class="text-decoration-none" href="/about/privacyPolicy" style="color: inherit">Politique de confidentialité</a></li>
+              <li><a class="text-decoration-none" href="/DEFIUT/about/legalNotices" style="color: inherit">Mentions légales</a></li>
+              <li><a class="text-decoration-none" href="/DEFIUT/about/CGU" style="color: inherit">CGU</a></li>
+              <li><a class="text-decoration-none" href="/DEFIUT/about/privacyPolicy" style="color: inherit">Politique de confidentialité</a></li>
             </ul>
           </v-col>
 
           <v-col cols="12" md="auto">
             <h2 class="mb-2">Aide & support</h2>
             <ul class="footer-links">
-              <li><a class="text-decoration-none" href="/help/FAQ" style="color: inherit">FAQ</a></li>
-              <li><a class="text-decoration-none" href="/help/contact" style="color: inherit">Contact</a></li>
+              <li><a class="text-decoration-none" href="/DEFIUT/help/FAQ" style="color: inherit">FAQ</a></li>
+              <li><a class="text-decoration-none" href="/DEFIUT/help/contact" style="color: inherit">Contact</a></li>
             </ul>
           </v-col>
 
           <v-col cols="12" md="auto">
             <h2 class="mb-2">Liens rapides</h2>
             <ul class="footer-links">
-              <li><a class="text-decoration-none" href="/home" style="color: inherit">Accueil</a></li>
-              <li><a class="text-decoration-none" href="/app/challenges" style="color: inherit">Défis</a></li>
-              <li><a class="text-decoration-none" href="/app/ranking" style="color: inherit">Classement</a></li>
+              <li><a class="text-decoration-none" href="/DEFIUT/home" style="color: inherit">Accueil</a></li>
+              <li><a class="text-decoration-none" href="/DEFIUT/app/challenges" style="color: inherit">Défis</a></li>
+              <li><a class="text-decoration-none" href="/DEFIUT/app/ranking" style="color: inherit">Classement</a></li>
             </ul>
           </v-col>
         </v-row>
