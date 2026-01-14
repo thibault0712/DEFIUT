@@ -1,79 +1,80 @@
 <script setup>
-  const featuredChallenges = [
-    {
-      title: 'XSS Stored',
-      points: 200,
-      description:
-        'Injectez un script persistant pour voler les cookies de l\'admin.',
-      difficulty: 'Moyen',
-      progress: 'En cours'
-    },
-    {
-      title: 'Admin Panel Bypass',
-      points: 350,
-      description:
-        'Contournez le formulaire de login sans connaître le mot de passe.',
-      difficulty: 'Difficile',
-      progress: ''
-    },
+const avancement = ["Non commencé", "En cours", "Terminé"];
+const difficulte = ["Facile", "Moyen", "Difficile"];
+const defis = ["Web", "Programmation", "Réseau", "Cryptographie"];
+const featuredChallenges = [
+  {
+    title: "XSS Stored",
+    points: 200,
+    description:
+      "Injectez un script persistant pour voler les cookies de l'admin.",
+    difficulty: "Moyen",
+    progress: "En cours",
+  },
+  {
+    title: "Admin Panel Bypass",
+    points: 350,
+    description:
+      "Contournez le formulaire de login sans connaître le mot de passe.",
+    difficulty: "Difficile",
+    progress: "",
+  },
 
-    {
-      title: 'RSA Factorization',
-      points: 400,
-      description: 'La clé publique est trop petite. Retrouvez la clé privée.',
-      difficulty: 'Difficile',
-      progress: 'Terminé'
-    },
-    {
-      title: 'Hash Cracking',
-      points: 200,
-      description:
-        'Retrouvez le mot de passe original à partir de ce hash SHA-256.',
-      difficulty: 'Moyen',
-      progress: 'En cours'
-    },
+  {
+    title: "RSA Factorization",
+    points: 400,
+    description: "La clé publique est trop petite. Retrouvez la clé privée.",
+    difficulty: "Difficile",
+    progress: "Terminé",
+  },
+  {
+    title: "Hash Cracking",
+    points: 200,
+    description:
+      "Retrouvez le mot de passe original à partir de ce hash SHA-256.",
+    difficulty: "Moyen",
+    progress: "En cours",
+  },
 
-    {
-      title: 'Network Analysis',
-      points: 300,
-      description:
-        'Analysez le fichier .pcap pour intercepter le trafic suspect.',
-      difficulty: 'Difficile',
-      progress: ''
-    },
-    {
-      title: 'FTP Interception',
-      points: 100,
-      description: 'Un fichier a été transféré en clair. Retrouvez son contenu.',
-      difficulty: 'Facile',
-      progress: 'Terminé'
-    },
+  {
+    title: "Network Analysis",
+    points: 300,
+    description:
+      "Analysez le fichier .pcap pour intercepter le trafic suspect.",
+    difficulty: "Difficile",
+    progress: "",
+  },
+  {
+    title: "FTP Interception",
+    points: 100,
+    description: "Un fichier a été transféré en clair. Retrouvez son contenu.",
+    difficulty: "Facile",
+    progress: "Terminé",
+  },
 
-    {
-      title: 'Python Jail',
-      points: 250,
-      description:
-        'Sortez de cet environnement Python restreint (sandbox escape).',
-      difficulty: 'Moyen',
-      progress: ''
-    },
-    {
-      title: 'Regex Master',
-      points: 150,
-      description:
-        'Créez une expression régulière pour valider ce format complexe.',
-      difficulty: 'Facile',
-      progress: 'En cours'
-    },
-  ]
+  {
+    title: "Python Jail",
+    points: 250,
+    description:
+      "Sortez de cet environnement Python restreint (sandbox escape).",
+    difficulty: "Moyen",
+    progress: "",
+  },
+  {
+    title: "Regex Master",
+    points: 150,
+    description:
+      "Créez une expression régulière pour valider ce format complexe.",
+    difficulty: "Facile",
+    progress: "En cours",
+  },
+];
 </script>
 
 <template>
   <Header />
   <v-container max-width="1200">
-    <h1 class="mb-4">
-      Catalogue des défis
-    </h1>
+    <h1 class="mb-4">Catalogue des défis</h1>
 
     <v-container>
       <v-row>
@@ -83,15 +84,21 @@
 
         <v-col>
           <v-combobox
-            :items="['Web', 'Programmation', 'Réseau', 'Cryptographie']"
+            :items="defis"
             label="Tous les défis"
+            placeholder="Ex: Web"
+            multiple
+            persistent-placeholder
           />
         </v-col>
 
         <v-col>
           <v-combobox
-            :items="['Facile', 'Moyen', 'Difficile']"
+            :items="difficulte"
             label="Difficulté"
+            placeholder="Ex: Facile"
+            multiple
+            persistent-placeholder
           />
         </v-col>
 
@@ -105,8 +112,11 @@
 
         <v-col>
           <v-combobox
-            :items="['Pas commencé', 'En cours', 'Terminé']"
+            :items="avancement"
             label="Avancement"
+            placeholder="Ex: En Cours"
+            multiple
+            persistent-placeholder
           />
         </v-col>
       </v-row>
