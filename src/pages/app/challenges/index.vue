@@ -1,5 +1,5 @@
 <script setup>
-const avancement = ["Pas commencé", "En cours", "Terminé"];
+const avancement = ["Non commencé", "En cours", "Terminé"];
 const difficulte = ["Facile", "Moyen", "Difficile"];
 const defis = ["Web", "Programmation", "Réseau", "Cryptographie"];
 const featuredChallenges = [
