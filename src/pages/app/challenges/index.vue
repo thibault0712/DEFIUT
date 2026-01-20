@@ -37,7 +37,7 @@ const featuredChallenges = [
       "Retrouvez le mot de passe original à partir de ce hash SHA-256.",
     difficulty: "Moyen",
     progress: "En cours",
-    category: "Réseaux",
+    category: "Réseau",
   },
 
   {
@@ -47,7 +47,7 @@ const featuredChallenges = [
       "Analysez le fichier .pcap pour intercepter le trafic suspect.",
     difficulty: "Difficile",
     progress: "",
-    category: "Réseaux",
+    category: "Réseau",
   },
   {
     title: "FTP Interception",
