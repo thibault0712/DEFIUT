@@ -1,46 +1,51 @@
 <script setup>
-  definePage({
-    alias: ['/'],
-  })
+definePage({
+  alias: ["/"],
+});
 
-  // Données factices pour le carousel des défis
-  const featuredChallenges = [
-    {
-      title: 'SQL Injection',
-      points: 100,
-      description: 'Exploitez une faille SQL pour récupérer la base de données.',
-      difficulty: 'Facile',
-      progress: 'En cours',
-    },
-    {
-      title: 'Reverse Engineering',
-      points: 250,
-      description: 'Analysez le binaire pour trouver le flag caché.',
-      difficulty: 'Moyen',
-      progress: '',
-    },
-    {
-      title: 'Cryptography',
-      points: 150,
-      description: 'Déchiffrez le message codé avec une méthode classique.',
-      difficulty: 'Facile',
-      progress: 'Terminé',
-    },
-    {
-      title: 'Network Analysis',
-      points: 300,
-      description: 'Analysez le fichier .pcap pour intercepter le trafic.',
-      difficulty: 'Difficile',
-      progress: 'En cours',
-    },
-    {
-      title: 'Web Exploitation',
-      points: 200,
-      description: 'Trouvez la vulnérabilité XSS sur cette page.',
-      difficulty: 'Moyen',
-      progress: 'Terminé',
-    },
-  ]
+// Données factices pour le carousel des défis
+const featuredChallenges = [
+  {
+    title: "SQL Injection",
+    points: 100,
+    description: "Exploitez une faille SQL pour récupérer la base de données.",
+    difficulty: "Facile",
+    progress: "En cours",
+    category: "Web",
+  },
+  {
+    title: "Reverse Engineering",
+    points: 250,
+    description: "Analysez le binaire pour trouver le flag caché.",
+    difficulty: "Moyen",
+    progress: "",
+    category: "Programmation",
+  },
+  {
+    title: "Cryptography",
+    points: 150,
+    description: "Déchiffrez le message codé avec une méthode classique.",
+    difficulty: "Facile",
+    progress: "Terminé",
+    category: "Cryptographie",
+  },
+  {
+    title: "Network Analysis",
+    points: 300,
+    description: "Analysez le fichier .pcap pour intercepter le trafic.",
+    difficulty: "Difficile",
+    progress: "En cours",
+    category: "Réseau",
+  },
+  {
+    title: "Web Exploitation",
+    points: 200,
+    description: "Trouvez la vulnérabilité XSS sur cette page.",
+    difficulty: "Moyen",
+    progress: "Terminé",
+    category: "Web",
+  },
+];
 </script>
 
 <template>
@@ -97,6 +102,7 @@
                 :points="challenge.points"
                 :titre="challenge.title"
                 :avancement="challenge.progress"
+                :categorie="challenge.category"
                 width="250"
               />
             </v-slide-group-item>
@@ -142,7 +148,6 @@
         </v-row>
       </v-container>
     </v-container>
-
   </v-main>
 
   <Footer />
