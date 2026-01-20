@@ -36,7 +36,7 @@
 
         <v-text-field
           density="comfortable"
-          label="Même mot de passe"
+          label="Confirmer le mot de passe"
           type="password"
           variant="outlined"
         />
