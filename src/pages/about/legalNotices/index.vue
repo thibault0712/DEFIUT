@@ -15,7 +15,7 @@
         <ul class="ml-6">
           <li class="mb-2 position-relative pl-4"><strong>Dénomination sociale :</strong> DEFIUT</li>
           <li class="mb-2 position-relative pl-4"><strong>Adresse :</strong> 8 Rue Michel de Montaigne, 56000 Vannes</li>
-          <li class="mb-2 position-relative pl-4"><strong>Contact :</strong> <a class="link" href="mailto:contact@defiut.com">contact@defiut.com</a></li>
+          <li class="mb-2 position-relative pl-4"><strong>Contact :</strong> <a class="link" href="mailto:contact@defiut.com">defiut.contact@gmail.com</a></li>
         </ul>
       </section>
 
