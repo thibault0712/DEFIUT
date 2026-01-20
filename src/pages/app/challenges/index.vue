@@ -10,6 +10,7 @@ const featuredChallenges = [
       "Injectez un script persistant pour voler les cookies de l'admin.",
     difficulty: "Moyen",
     progress: "En cours",
+    category: "Web",
   },
   {
     title: "Admin Panel Bypass",
@@ -18,6 +19,7 @@ const featuredChallenges = [
       "Contournez le formulaire de login sans connaître le mot de passe.",
     difficulty: "Difficile",
     progress: "",
+    category: "Cryptographie",
   },
 
   {
@@ -26,6 +28,7 @@ const featuredChallenges = [
     description: "La clé publique est trop petite. Retrouvez la clé privée.",
     difficulty: "Difficile",
     progress: "Terminé",
+    category: "Programmation",
   },
   {
     title: "Hash Cracking",
@@ -34,6 +37,7 @@ const featuredChallenges = [
       "Retrouvez le mot de passe original à partir de ce hash SHA-256.",
     difficulty: "Moyen",
     progress: "En cours",
+    category: "Réseaux",
   },
 
   {
@@ -43,6 +47,7 @@ const featuredChallenges = [
       "Analysez le fichier .pcap pour intercepter le trafic suspect.",
     difficulty: "Difficile",
     progress: "",
+    category: "Réseaux",
   },
   {
     title: "FTP Interception",
@@ -50,6 +55,7 @@ const featuredChallenges = [
     description: "Un fichier a été transféré en clair. Retrouvez son contenu.",
     difficulty: "Facile",
     progress: "Terminé",
+    category: "Web",
   },
 
   {
@@ -59,6 +65,7 @@ const featuredChallenges = [
       "Sortez de cet environnement Python restreint (sandbox escape).",
     difficulty: "Moyen",
     progress: "",
+    category: "Programmation",
   },
   {
     title: "Regex Master",
@@ -67,6 +74,7 @@ const featuredChallenges = [
       "Créez une expression régulière pour valider ce format complexe.",
     difficulty: "Facile",
     progress: "En cours",
+    category: "Web",
   },
 ];
 </script>
@@ -140,6 +148,7 @@ const featuredChallenges = [
             :points="challenge.points"
             :titre="challenge.title"
             :avancement="challenge.progress"
+            :categorie="challenge.category"
           />
         </v-col>
       </v-row>
