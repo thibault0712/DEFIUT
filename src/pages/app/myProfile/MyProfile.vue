@@ -2,16 +2,38 @@
 
   import { ref } from 'vue'
   import { useTheme } from 'vuetify'
+  import serializedTimestampToStringFormated from '@/pages/app/myProfile/utils/dateConvertor.js'
+  import router from '@/router/index.js'
+  import user from '@/store/user.js'
 
+  const userInfos = user.getters.user.data
   const theme = useTheme()
-  function toggleTheme () {
-    theme.global.name.value = theme.global.name.value === 'darkTheme' ? 'lightTheme' : 'darkTheme'
+
+  async function logOut () {
+    await user.dispatch('logOut')
+    await router.push('/')
   }
 
-  const user = {
-    username: 'VJ',
-    lastLogin: '01/01/2025',
-    registeredAt: '01/09/2024',
+  function toggleTheme () {
+    let newTheme = 'darkTheme'
+
+    switch (userInfos.theme) {
+      case 'lightTheme': {
+        newTheme = 'darkTheme'
+        break
+      }
+      case 'darkTheme': {
+        newTheme = 'lightTheme'
+        break
+      }
+      default: {
+        console.warn(`WARN : theme ${userInfos.theme} not found`)
+        break
+      }
+    }
+
+    user.dispatch('updateTheme', newTheme)
+    theme.change(newTheme)
   }
 
   /* Onglet actif */
@@ -56,12 +78,15 @@
 
         <v-col class="d-flex justify-end align-center ma-0 pa-0">
           <v-switch
+            v-model="userInfos.theme"
             append-icon="mdi-weather-sunny"
             class="ma-0"
             color="primary"
+            false-value="darkTheme"
             hide-details
             inset
             prepend-icon="mdi-weather-night"
+            true-value="lightTheme"
             @click="toggleTheme"
           />
         </v-col>
@@ -69,23 +94,32 @@
 
       <!-- Infos utilisateur -->
       <v-row align="center" class="mt-6">
-        <v-avatar class="mr-6 text-h4" color="secondary" size="96">
-          {{ user.username[0] }}
-        </v-avatar>
-        <h1>{{ user.username }}</h1>
+        <v-img
+          class="mr-6 rounded-circle"
+          :max-width="96"
+          :src="userInfos.imageUrl"
+        />
+        <h1>{{ userInfos.userName }}</h1>
       </v-row>
 
-      <v-row align="center" class="mt-8 mb-3">
+      <v-row align="center" class="mt-8">
         <v-col cols="auto">
-          <p class="text-uppercase font-weight-medium mb-0">Dernière connexion : {{ user.lastLogin }}</p>
+          <p class="text-uppercase font-weight-medium mb-0">Dernière connexion : {{ serializedTimestampToStringFormated(userInfos.lastLogin) }}</p>
         </v-col>
         <v-col cols="auto">
-          <p class="text-uppercase font-weight-medium mb-0">Inscrit depuis : {{ user.registeredAt }}</p>
+          <p class="text-uppercase font-weight-medium mb-0">Inscrit depuis : {{ serializedTimestampToStringFormated(userInfos.registeredAt) }}</p>
         </v-col>
-        <v-btn class="mx-6" color="secondary"> <v-icon>mdi-pencil</v-icon>
+      </v-row>
+
+      <v-row class="my-8">
+        <v-btn class="ml-3" color="secondary">
+          <v-icon>mdi-pencil</v-icon>
+        </v-btn>
+        <v-btn class="mx-6" color="secondary" @click="logOut">
+          Se déconnecter
         </v-btn>
         <v-btn color="secondary">
-          Supprimer le compte
+          Supprimer son compte
         </v-btn>
       </v-row>
 

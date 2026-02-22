@@ -11,14 +11,14 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    AppFooter: typeof import('./src/components/AppFooter.vue')['default']
     Card: typeof import('./src/components/card/Card.vue')['default']
     Footer: typeof import('./src/components/footer/Footer.vue')['default']
+    ForgottenPassordPopup: typeof import('./src/components/popups/forgottentPasswordPopup/ForgottenPassordPopup.vue')['default']
     Header: typeof import('./src/components/header/Header.vue')['default']
-    HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
     Podium: typeof import('./src/components/podium/Podium.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Scoreboard: typeof import('./src/components/scoreboard/Scoreboard.vue')['default']
+    Toast: typeof import('./src/components/toast/Toast.vue')['default']
   }
 }

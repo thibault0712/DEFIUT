@@ -20,26 +20,26 @@
           <v-col cols="12" md="auto">
             <h2 class="mb-2">À propos & légal</h2>
             <ul class="footer-links">
-              <li><a class="text-decoration-none" href="/DEFIUT/about/legalNotices" style="color: inherit">Mentions légales</a></li>
-              <li><a class="text-decoration-none" href="/DEFIUT/about/CGU" style="color: inherit">CGU</a></li>
-              <li><a class="text-decoration-none" href="/DEFIUT/about/privacyPolicy" style="color: inherit">Politique de confidentialité</a></li>
+              <li><router-link class="text-decoration-none" style="color: inherit" to="/about/legal-notices">Mentions légales</router-link></li>
+              <li><router-link class="text-decoration-none" style="color: inherit" to="/about/cgu">CGU</router-link></li>
+              <li><router-link class="text-decoration-none" style="color: inherit" to="/about/privacy-policy">Politique de confidentialité</router-link></li>
             </ul>
           </v-col>
 
           <v-col cols="12" md="auto">
             <h2 class="mb-2">Aide & support</h2>
             <ul class="footer-links">
-              <li><a class="text-decoration-none" href="/DEFIUT/help/FAQ" style="color: inherit">FAQ</a></li>
-              <li><a class="text-decoration-none" href="/DEFIUT/help/contact" style="color: inherit">Contact</a></li>
+              <li><router-link class="text-decoration-none" style="color: inherit" to="/help/faq">FAQ</router-link></li>
+              <li><router-link class="text-decoration-none" style="color: inherit" to="/help/contact">Contact</router-link></li>
             </ul>
           </v-col>
 
           <v-col cols="12" md="auto">
             <h2 class="mb-2">Liens rapides</h2>
             <ul class="footer-links">
-              <li><a class="text-decoration-none" href="/DEFIUT/home" style="color: inherit">Accueil</a></li>
-              <li><a class="text-decoration-none" href="/DEFIUT/app/challenges" style="color: inherit">Défis</a></li>
-              <li><a class="text-decoration-none" href="/DEFIUT/app/ranking" style="color: inherit">Classement</a></li>
+              <li><router-link class="text-decoration-none" style="color: inherit" to="/">Accueil</router-link></li>
+              <li><router-link class="text-decoration-none" style="color: inherit" to="/challenges">Défis</router-link></li>
+              <li><router-link class="text-decoration-none" style="color: inherit" to="/ranking">Classement</router-link></li>
             </ul>
           </v-col>
         </v-row>

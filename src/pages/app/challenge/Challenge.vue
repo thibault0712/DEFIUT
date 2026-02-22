@@ -1,52 +1,52 @@
 <script setup>
-import { ref } from 'vue'
+  import { ref } from 'vue'
 
-const flagInput = ref('')
-const showIndiceDialog = ref(false)
-const currentIndice = ref(null)
+  const flagInput = ref('')
+  const showIndiceDialog = ref(false)
+  const currentIndice = ref(null)
 
-const challenge = {
-  title: 'Titre - Reseau',
-  catchPhrase: "Phrase D'accroche",
-  difficulty: 'Facile',
-  points: 150,
-  rating: 3,
-  flag: 'FLAG{...}',
-  links: [
-    'www.example.com',
-    'www.example.com',
-    'www.example.com'
-  ],
-  description: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+  const challenge = {
+    title: 'Titre - Reseau',
+    catchPhrase: 'Phrase D\'accroche',
+    difficulty: 'Facile',
+    points: 150,
+    rating: 3,
+    flag: 'FLAG{...}',
+    links: [
+      'www.example.com',
+      'www.example.com',
+      'www.example.com',
+    ],
+    description: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
 It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.`,
-  indices: [
-    {
-      id: 1,
-      points: 20,
-      text: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard \n dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen`
-    },
-    {
-      id: 2,
-      points: 25,
-      text: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard \n dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen`
-    }
-  ]
-}
+    indices: [
+      {
+        id: 1,
+        points: 20,
+        text: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard \n dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen`,
+      },
+      {
+        id: 2,
+        points: 25,
+        text: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard \n dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen`,
+      },
+    ],
+  }
 
-const openIndiceDialog = (indice) => {
-  currentIndice.value = indice
-  showIndiceDialog.value = true
-}
+  function openIndiceDialog (indice) {
+    currentIndice.value = indice
+    showIndiceDialog.value = true
+  }
 
-function closeIndiceDialog () {
-  showIndiceDialog.value = false
-  currentIndice.value = null
-}
+  function closeIndiceDialog () {
+    showIndiceDialog.value = false
+    currentIndice.value = null
+  }
 </script>
 
 <template>
 
-  <Header/>
+  <Header />
 
   <v-main class="min-vh-100 pt-0 pb-16 h-screen">
     <v-container class="py-12" fluid max-width="1400">
@@ -162,7 +162,7 @@ function closeIndiceDialog () {
     </v-dialog>
   </v-main>
 
-  <Footer></Footer>
+  <Footer />
 </template>
 
 <style scoped>
@@ -170,4 +170,3 @@ function closeIndiceDialog () {
   gap: 1rem;
 }
 </style>
-
