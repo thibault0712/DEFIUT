@@ -1,8 +1,10 @@
 <script setup>
   import { ref } from 'vue'
+  import { useStore } from 'vuex'
   import { useToast } from '@/components/toast/useToast.js'
   import router from '@/router/index.js'
-  import user from '@/store/user.js'
+
+  const store = useStore()
   const userName = ref('')
   const email = ref('')
   const password = ref('')
@@ -40,7 +42,7 @@
 
   async function registerPopup () {
     try {
-      await user.dispatch('registerPopup')
+      await store.dispatch('user/signInWithGoogle')
       await router.push('/')
     } catch (error_) {
       addMessage(error_.message, 'error')
@@ -51,7 +53,7 @@
 
   async function register () {
     try {
-      await user.dispatch('register', {
+      await store.dispatch('user/register', {
         email: email.value,
         password: password.value,
         userName: userName.value,

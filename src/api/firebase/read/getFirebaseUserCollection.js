@@ -1,5 +1,5 @@
 import { doc, getDoc } from 'firebase/firestore'
-import { db } from '@/api/firebase/firebaseApp.js'
+import { db } from '@/api/firebaseApp.js'
 
 async function getFirebaseUserCollection (
   uid,

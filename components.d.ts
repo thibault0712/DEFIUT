@@ -12,10 +12,12 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     Card: typeof import('./src/components/card/Card.vue')['default']
+    EditUserInformationPopup: typeof import('./src/components/popups/editUserInformationPopup/EditUserInformationPopup.vue')['default']
     Footer: typeof import('./src/components/footer/Footer.vue')['default']
     ForgottenPassordPopup: typeof import('./src/components/popups/forgottentPasswordPopup/ForgottenPassordPopup.vue')['default']
     Header: typeof import('./src/components/header/Header.vue')['default']
     Podium: typeof import('./src/components/podium/Podium.vue')['default']
+    RemoveAccountPopup: typeof import('./src/components/popups/removaAccountPopup/RemoveAccountPopup.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Scoreboard: typeof import('./src/components/scoreboard/Scoreboard.vue')['default']

@@ -1,9 +1,10 @@
 <script setup>
 
   import { ref } from 'vue'
+  import { useStore } from 'vuex'
   import { useToast } from '@/components/toast/useToast.js'
-  import user from '@/store/user.js'
 
+  const store = useStore()
   const isOpen = defineModel('isOpen', { required: true })
 
   const email = ref('')
@@ -12,7 +13,7 @@
 
   function sendEmail () {
     try {
-      user.dispatch('forgotPassword', email.value)
+      store.dispatch('user/forgotPassword', email.value)
       addMessage('Un email vous a été envoyé', 'success')
     } catch {
       addMessage('Echec de l\'envoie du mail', 'error')

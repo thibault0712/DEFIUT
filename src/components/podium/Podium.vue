@@ -1,10 +1,35 @@
+<script setup>
+  import { computed, onMounted } from 'vue'
+  import { useStore } from 'vuex'
+
+  const store = useStore()
+
+  const bestUsers = computed(() => store.getters['userList/userList'])
+
+  const firstPlace = computed(() => bestUsers.value?.[0] || null)
+  const secondPlace = computed(() => bestUsers.value?.[1] || null)
+  const thirdPlace = computed(() => bestUsers.value?.[2] || null)
+
+  onMounted(async () => {
+    await store.dispatch('userList/updateList')
+  })
+
+</script>
+
 <template>
   <v-container class="d-flex align-end justify-center py-10" style="min-height: 500px;">
 
     <div class="d-flex flex-column align-center mx-1">
-      <v-avatar class="mb-4 elevation-2" color="secondary" size="80">
-        <span class="text-h6">VJ</span>
-      </v-avatar>
+      <RouterLink :to="{ path: '/userProfile', query: { uid: thirdPlace ? thirdPlace.uid : 'INCONNU' } }">
+        <v-img
+          v-if="thirdPlace"
+          class="rounded-circle mb-2"
+          :height="96"
+          :max-width="96"
+          :src="thirdPlace.imageUrl"
+          :width="96"
+        />
+      </RouterLink>
       <v-sheet
         class="rounded-t-lg d-flex align-center justify-center"
         color="primary"
@@ -18,9 +43,16 @@
     </div>
 
     <div class="d-flex flex-column align-center mx-1">
-      <v-avatar class="mb-4 elevation-4 border-lg" color="secondary" size="100">
-        <span class="text-h5">VJ</span>
-      </v-avatar>
+      <RouterLink :to="{ path: '/userProfile', query: { uid: firstPlace ? firstPlace.uid : 'INCONNU' } }">
+
+        <v-img
+          v-if="firstPlace"
+          class="rounded-circle mb-2"
+          :height="96"
+          :src="firstPlace.imageUrl"
+          :width="96"
+        />
+      </RouterLink>
       <v-sheet
         class="rounded-t-lg d-flex align-center justify-center shadow-lg"
         color="primary"
@@ -34,9 +66,15 @@
     </div>
 
     <div class="d-flex flex-column align-center mx-1">
-      <v-avatar class="mb-4 elevation-2" color="secondary" size="80">
-        <span class="text-h6">VJ</span>
-      </v-avatar>
+      <RouterLink :to="{ path: '/userProfile', query: { uid: secondPlace ? secondPlace.uid : 'INCONNU' } }">
+        <v-img
+          v-if="secondPlace"
+          class="rounded-circle mb-2"
+          height="96"
+          :src="secondPlace.imageUrl"
+          :width="96"
+        />
+      </RouterLink>
       <v-sheet
         class="rounded-t-lg d-flex align-center justify-center"
         color="primary"

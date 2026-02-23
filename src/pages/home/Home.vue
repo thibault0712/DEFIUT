@@ -131,7 +131,7 @@
           </v-col>
 
           <v-col class="d-flex justify-center border-s-thin" cols="12" md="6">
-            <Scoreboard />
+            <Scoreboard :max-list-size="5" />
           </v-col>
         </v-row>
 

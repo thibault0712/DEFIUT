@@ -1,10 +1,11 @@
 <script setup>
   import { ref } from 'vue'
   import { useRouter } from 'vue-router'
+  import { useStore } from 'vuex'
   import ForgottenPassordPopup from '@/components/popups/forgottentPasswordPopup/ForgottenPassordPopup.vue'
   import { useToast } from '@/components/toast/useToast.js'
-  import user from '@/store/user.js'
 
+  const store = useStore()
   const email = ref('')
   const password = ref('')
   const error = ref(null)
@@ -17,7 +18,7 @@
 
   async function Login () {
     try {
-      await user.dispatch('logIn', {
+      await store.dispatch('user/logIn', {
         email: email.value,
         password: password.value,
       })
@@ -31,7 +32,7 @@
 
   async function loginWithGoogle () {
     try {
-      await user.dispatch('logInPopup')
+      await store.dispatch('user/signInWithGoogle')
       await router.push('/')
     } catch (error_) {
       error.value = error_.message

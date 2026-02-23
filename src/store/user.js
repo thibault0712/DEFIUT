@@ -1,14 +1,16 @@
-import { createUserWithEmailAndPassword, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut } from 'firebase/auth'
+import { createUserWithEmailAndPassword, deleteUser, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut } from 'firebase/auth'
 import { Timestamp } from 'firebase/firestore'
-import { createStore } from 'vuex'
-import createPersistedState from 'vuex-persistedstate'
+import { useTheme } from 'vuetify'
 import createFirebaseUserCollection from '@/api/firebase/create/createFirebaseUserCollection.js'
-import { auth, googleAuthProvider } from '@/api/firebase/firebaseApp.js'
+import deleteFirebaseUserCollection from '@/api/firebase/delete/deleteFirebaseUserCollection.js'
 import getFirebaseUserCollection from '@/api/firebase/read/getFirebaseUserCollection.js'
 import updateFirebaseUserCollection from '@/api/firebase/update/updateFirebaseUserCollection.js'
+import { auth, googleAuthProvider } from '@/api/firebaseApp.js'
+import uploadUserProfilePicture from '@/api/firestore/uploadUserProfilePicture.js'
+import isPreviousCalendarDay from '@/utils/isPreviousCalendarDay.js'
 
-const user = createStore({
-
+const user = {
+  namespaced: true,
   state: {
     user: {
       loggedIn: false,
@@ -40,6 +42,7 @@ const user = createStore({
         lastLogin: value.lastLogin,
         registeredAt: value.registeredAt,
         theme: value.theme,
+        points: value.points,
       }
     },
   },
@@ -50,9 +53,9 @@ const user = createStore({
         const response = await createUserWithEmailAndPassword(auth, email, password)
         if (response) {
           const imageUrl = 'https://api.dicebear.com/9.x/bottts/svg?seed=' + userName + '&backgroundColor=BA2653&backgroundType=solid&scale=80'
-          await createFirebaseUserCollection(response.user.uid, userName, response.user.email, imageUrl, Timestamp.now(), Timestamp.now(), 'darkTheme')
+          await createFirebaseUserCollection(response.user.uid, userName, response.user.email, imageUrl, Timestamp.now(), Timestamp.now(), 'darkTheme', 0)
           await sendEmailVerification(response.user)
-          await context.dispatch('logOut') // Due to email validation, the user is automatically logged out (email is not verified yet)
+          await context.dispatch('logOut') // Due to email validation, the user is automatically logged out
         } else {
           throw new Error('Impossible d\'enregistrer l\'utilisateur')
         }
@@ -80,24 +83,33 @@ const user = createStore({
       }
     },
 
-    async registerPopup (context) {
+    // Used for registration and login
+    async signInWithGoogle (context) {
       const response = await signInWithPopup(auth, googleAuthProvider)
       if (response) {
-        const userName = 'Utilisateur' + Math.random().toString(36).slice(0, 8)
-        const imageUrl = 'https://api.dicebear.com/9.x/bottts/svg?seed=' + userName + '&backgroundColor=BA2653&backgroundType=solid&scale=80'
-        context.commit('SET_USER', {
-          uid: response.user.uid,
-          userName,
-          email: response.user.email,
-          imageUrl,
-          lastLogin: Timestamp.now(),
-          registeredAt: Timestamp.now(),
-          theme: 'darkTheme',
-        },
-        )
-        await createFirebaseUserCollection(response.user.uid, userName, response.user.email, imageUrl, Timestamp.now(), Timestamp.now(), 'darkTheme')
+        const userData = await getFirebaseUserCollection(response.user.uid)
+
+        // Create the user if it does not exist yet
+        if (userData) {
+          await context.dispatch('fetchUser', response.user)
+        } else {
+          const userName = 'Utilisateur' + Math.random().toString(36).slice(0, 8)
+          const imageUrl = 'https://api.dicebear.com/9.x/bottts/svg?seed=' + userName + '&backgroundColor=BA2653&backgroundType=solid&scale=80'
+          context.commit('SET_USER', {
+            uid: response.user.uid,
+            userName,
+            email: response.user.email,
+            imageUrl,
+            lastLogin: Timestamp.now(),
+            registeredAt: Timestamp.now(),
+            theme: 'darkTheme',
+            points: 0,
+          },
+          )
+          await createFirebaseUserCollection(response.user.uid, userName, response.user.email, imageUrl, Timestamp.now(), Timestamp.now(), 'darkTheme', 0)
+        }
       } else {
-        throw new Error('Unable to register user')
+        throw new Error('Impossible d\'enregistrer l\'utilisateur')
       }
     },
 
@@ -106,10 +118,10 @@ const user = createStore({
         const response = await signInWithEmailAndPassword(auth, email, password)
         if (response) {
           if (response.user.emailVerified === false) {
-            await user.dispatch('logOut')
+            await context.dispatch('logOut')
             throw new Error('Vous devez dans un premier temps valider votre email')
           }
-          await user.dispatch('fetchUser', response.user)
+          await context.dispatch('fetchUser', response.user)
         } else {
           throw new Error('Impossible de se connecter, erreur inconnue')
         }
@@ -136,15 +148,6 @@ const user = createStore({
         // No default
         }
         throw new Error(message)
-      }
-    },
-
-    async logInPopup () {
-      const response = await signInWithPopup(auth, googleAuthProvider)
-      if (response) {
-        await user.dispatch('fetchUser', response.user)
-      } else {
-        throw new Error('login failed')
       }
     },
 
@@ -178,29 +181,49 @@ const user = createStore({
         lastLogin: userData.lastLogin,
         registeredAt: userData.registeredAt,
         theme: userData.theme,
+        points: userData.points,
       })
 
-      // Could be very greedy
-      await updateFirebaseUserCollection(user.uid, userData.userName, user.email, userData.imageUrl, Timestamp.now(), userData.registeredAt, userData.theme)
+      if (isPreviousCalendarDay(userData.lastLogin)) {
+        await updateFirebaseUserCollection(user.uid, userData.userName, user.email, userData.imageUrl, Timestamp.now(), userData.registeredAt, userData.theme, userData.points)
+      }
+    },
+
+    async removeUser (context) {
+      const uid = context.getters.user.data.uid
+      await deleteUser(auth.currentUser)
+      // Don't use the logout function because deleteUser logout the user automatically
+      await deleteFirebaseUserCollection(uid)
+      context.commit('SET_USER', null)
+      context.commit('SET_LOGGED_IN', false)
     },
 
     async updateTheme (context, theme) {
       const user = context.getters.user.data
       context.commit('SET_USER', { ...user, theme })
-      await updateFirebaseUserCollection(user.uid, user.userName, user.email, user.imageUrl, user.lastLogin, user.registeredAt, theme)
+      await updateFirebaseUserCollection(user.uid, user.userName, user.email, user.imageUrl, user.lastLogin, user.registeredAt, theme, user.points)
     },
 
     async forgotPassword (context, email) {
       await sendPasswordResetEmail(auth, email)
     },
-  },
 
-  plugins: [
-    createPersistedState({
-      key: 'defiut-store',
-      paths: ['user'],
-    }),
-  ],
-})
+    async updateUserInformation (context, { userName, profilePictureFile }) {
+      const userData = context.getters.user.data
+      let profilePictureUrl = userData.imageUrl
+
+      if (profilePictureFile !== null) {
+        profilePictureUrl = await uploadUserProfilePicture(profilePictureFile, userName)
+      }
+
+      await updateFirebaseUserCollection(userData.uid, userName, userData.email, profilePictureUrl, userData.lastLogin, userData.registeredAt, userData.theme, userData.points)
+      context.commit('SET_USER', {
+        ...userData,
+        userName,
+        imageUrl: profilePictureUrl,
+      })
+    },
+  },
+}
 
 export default user

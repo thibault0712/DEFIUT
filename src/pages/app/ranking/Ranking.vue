@@ -20,7 +20,7 @@
         <h2 class="text-h4 py-10 font-bold">
           Classement global
         </h2>
-        <Scoreboard />
+        <Scoreboard :max-list-size="100" />
       </v-container>
 
     </v-container>

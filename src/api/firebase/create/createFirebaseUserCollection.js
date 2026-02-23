@@ -1,5 +1,5 @@
 import { doc, setDoc } from 'firebase/firestore'
-import { db } from '@/api/firebase/firebaseApp.js'
+import { db } from '@/api/firebaseApp.js'
 
 async function createFirebaseUserCollection (
   uid,
@@ -9,6 +9,7 @@ async function createFirebaseUserCollection (
   lastLogin,
   registeredAt,
   theme,
+  points,
 ) {
   await setDoc(doc(db, 'users', uid), {
     userName,
@@ -17,6 +18,7 @@ async function createFirebaseUserCollection (
     lastLogin,
     registeredAt,
     theme,
+    points,
   })
 }
 

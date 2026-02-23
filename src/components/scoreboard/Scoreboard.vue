@@ -1,14 +1,49 @@
 <script setup>
-  const players = [
-    { rank: 1, name: 'Leo', points: 2419 },
-    { rank: 2, name: 'Lorem', points: 2354 },
-    { rank: 3, name: 'Lionel', points: 2286 },
-    { rank: 4, name: 'Maxime', points: 1938 },
-    { rank: 5, name: 'Fabrice', points: 1937 },
-  ]
 
-  function goToProfile () {
-    window.location.href = '/DEFIUT/app/userProfile'
+  import { computed } from 'vue'
+  import store from '@/store/index.js'
+
+  const maxListSize = defineModel('maxListSize', { required: true, type: Number })
+
+  const bestUsers = computed(() => store.getters['userList/userList'].slice(0, maxListSize.value))
+
+  async function loadNextPage ({ done }) {
+    if (maxListSize.value <= bestUsers.value.length) {
+      bestUsers.value = bestUsers.value.slice(0, maxListSize.value)
+      return done('empty')
+    }
+
+    const result = await store.dispatch('userList/updateList')
+
+    switch (result) {
+      case 'empty': {
+        done('empty')
+        break
+      }
+      case 'ok': {
+        done('ok')
+        break
+      }
+      case 'loading': {
+        done('loading')
+        break
+      }
+      default: {
+        done('error')
+      }
+    }
+
+    if (result === 'empty') {
+      done('empty')
+    } else if (result === 'error') {
+      done('error')
+    } else {
+      done('ok')
+    }
+  }
+
+  function goToProfile (uid) {
+    window.location.href = '/userProfile?uid=' + uid
   }
 </script>
 
@@ -17,29 +52,32 @@
     class="pa-4"
     flat
   >
-    <v-table density="comfortable">
-      <thead>
-        <tr>
-          <th class="text-left text-uppercase text-medium-emphasis">
-            Rang
-          </th>
-          <th class="text-left text-uppercase text-medium-emphasis">
-            Pseudo
-          </th>
-          <th class="text-right text-uppercase text-medium-emphasis">
-            Nombre de points
-          </th>
-        </tr>
-      </thead>
+    <v-infinite-scroll :items="bestUsers" @load="loadNextPage">
+      <v-table density="comfortable">
+        <thead>
+          <tr>
+            <th class="text-left text-uppercase text-medium-emphasis">Rang</th>
+            <th class="text-left text-uppercase text-medium-emphasis">Pseudo</th>
+            <th class="text-right text-uppercase text-medium-emphasis text-no-wrap">Nombre de points</th>
+          </tr>
+        </thead>
 
-      <tbody>
-        <tr v-for="(player) in players" :key="player.name" class="cursor-pointer" @click="goToProfile()">
-          <td>{{ player.rank }}</td>
-          <td>{{ player.name }}</td>
-          <td class="text-right">{{ player.points }}</td>
-        </tr>
-      </tbody>
-    </v-table>
+        <tbody>
+          <tr
+            v-for="(bestUser, index) in bestUsers"
+            :key="bestUser.uid"
+            class="cursor-pointer"
+            @click="goToProfile(bestUser.uid)"
+          >
+            <td>{{ index + 1 }}</td>
+            <td>{{ bestUser.userName }}</td>
+            <td class="text-right font-weight-bold">{{ bestUser.points }}</td>
+          </tr>
+        </tbody>
+      </v-table>
+
+      <template #empty />
+    </v-infinite-scroll>
   </v-card>
 </template>
 

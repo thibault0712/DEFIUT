@@ -1,9 +1,11 @@
 <script setup>
+  import { computed } from 'vue'
   import { useTheme } from 'vuetify'
-  import user from '@/store/user.js'
+  import { useStore } from 'vuex'
 
   const theme = useTheme()
-  const userInfos = user.getters.user
+  const store = useStore()
+  const userInfos = computed(() => store.getters['user/user'])
 
   // Function available only if user is not logged in, that's why we don't use the store here
   function toggleTheme () {

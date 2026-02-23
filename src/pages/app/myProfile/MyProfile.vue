@@ -1,23 +1,26 @@
 <script setup>
 
-  import { ref } from 'vue'
+  import { computed, ref } from 'vue'
   import { useTheme } from 'vuetify'
-  import serializedTimestampToStringFormated from '@/pages/app/myProfile/utils/dateConvertor.js'
+  import { useStore } from 'vuex'
   import router from '@/router/index.js'
-  import user from '@/store/user.js'
+  import serializedTimestampToStringFormated from '@/utils/dateConvertor.js'
 
-  const userInfos = user.getters.user.data
+  const store = useStore()
+  const userInfos = computed(() => store.getters['user/user'].data)
   const theme = useTheme()
+  const removeAccountPopup = ref(false)
+  const editUserInformationPopup = ref(false)
 
   async function logOut () {
-    await user.dispatch('logOut')
+    await store.dispatch('user/logOut')
     await router.push('/')
   }
 
   function toggleTheme () {
     let newTheme = 'darkTheme'
 
-    switch (userInfos.theme) {
+    switch (userInfos.value.theme) {
       case 'lightTheme': {
         newTheme = 'darkTheme'
         break
@@ -27,12 +30,12 @@
         break
       }
       default: {
-        console.warn(`WARN : theme ${userInfos.theme} not found`)
+        console.warn(`WARN : theme ${userInfos.value.theme} not found`)
         break
       }
     }
 
-    user.dispatch('updateTheme', newTheme)
+    store.dispatch('user/updateTheme', newTheme)
     theme.change(newTheme)
   }
 
@@ -67,6 +70,9 @@
 <template>
   <Header />
 
+  <RemoveAccountPopup v-model:is-open="removeAccountPopup" />
+  <EditUserInformationPopup v-model:is-open="editUserInformationPopup" />
+
   <v-main>
     <v-container class="h-screen" max-width="1200">
 
@@ -86,6 +92,7 @@
             hide-details
             inset
             prepend-icon="mdi-weather-night"
+            readonly
             true-value="lightTheme"
             @click="toggleTheme"
           />
@@ -112,13 +119,13 @@
       </v-row>
 
       <v-row class="my-8">
-        <v-btn class="ml-3" color="secondary">
+        <v-btn class="ml-3" color="secondary" @click="editUserInformationPopup = true">
           <v-icon>mdi-pencil</v-icon>
         </v-btn>
         <v-btn class="mx-6" color="secondary" @click="logOut">
           Se déconnecter
         </v-btn>
-        <v-btn color="secondary">
+        <v-btn color="secondary" @click="removeAccountPopup = true">
           Supprimer son compte
         </v-btn>
       </v-row>

@@ -12,7 +12,7 @@ import Register from '@/pages/auth/register/Register.vue'
 import Contact from '@/pages/help/contact/Contact.vue'
 import FAQ from '@/pages/help/FAQ/FAQ.vue'
 import Home from '@/pages/home/Home.vue'
-import user from '@/store/user.js'
+import store from '@/store/index.js'
 
 const routes = [
   {
@@ -102,7 +102,7 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const requiresAuth = to.meta.requiresAuth
-  const isAuthenticated = user.getters.user.loggedIn
+  const isAuthenticated = store.getters['user/user'].loggedIn
 
   if (requiresAuth && !isAuthenticated) {
     next('/login')

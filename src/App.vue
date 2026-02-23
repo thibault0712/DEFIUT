@@ -1,16 +1,24 @@
 <script setup>
+  import { computed, watch } from 'vue'
   import { useTheme } from 'vuetify/framework'
+  import { useStore } from 'vuex'
   import Toast from '@/components/toast/Toast.vue'
   import { useToast } from '@/components/toast/useToast.js'
-  import user from '@/store/user.js'
 
   const { messages, visibility, types } = useToast()
   const theme = useTheme()
-  const userInfos = user.getters.user
+  const store = useStore()
+  const userInfos = computed(() => store.getters['user/user'])
 
-  if (userInfos.loggedIn) {
-    theme.change(user.getters.user.data.theme)
-  }
+  watch(
+    () => userInfos.value.data,
+    () => {
+      if (userInfos.value.loggedIn && userInfos.value.data !== null) {
+        theme.change(userInfos.value.data.theme)
+      }
+    },
+    { immediate: true },
+  )
 
 </script>
 

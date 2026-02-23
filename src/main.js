@@ -9,10 +9,10 @@ import { createApp } from 'vue'
 
 import { VueFire, VueFireAuth } from 'vuefire'
 
-import { auth, firebaseApp } from '@/api/firebase/firebaseApp.js'
+import { auth, firebaseApp } from '@/api/firebaseApp.js'
 // Plugins
 import { registerPlugins } from '@/plugins'
-import user from '@/store/user.js'
+import store from '@/store/index.js'
 // Components
 import App from './App.vue'
 // Styles
@@ -22,10 +22,10 @@ import 'unfonts.css'
 
 const app = createApp(App)
 
-app.use(user)
+app.use(store)
 
 auth.onAuthStateChanged(fetchedUser => {
-  user.dispatch('fetchUser', fetchedUser)
+  store.dispatch('user/fetchUser', fetchedUser)
 })
 
 app.use(VueFire, {
