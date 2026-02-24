@@ -42,9 +42,6 @@
     }
   }
 
-  function goToProfile (uid) {
-    window.location.href = '/userProfile?uid=' + uid
-  }
 </script>
 
 <template>
@@ -67,12 +64,13 @@
             v-for="(bestUser, index) in bestUsers"
             :key="bestUser.uid"
             class="cursor-pointer"
-            @click="goToProfile(bestUser.uid)"
+            @click="$router.push({ path: '/userProfile', query: { uid: bestUser.uid } })"
           >
             <td>{{ index + 1 }}</td>
             <td>{{ bestUser.userName }}</td>
             <td class="text-right font-weight-bold">{{ bestUser.points }}</td>
           </tr>
+
         </tbody>
       </v-table>
 
