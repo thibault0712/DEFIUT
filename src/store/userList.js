@@ -1,4 +1,4 @@
-import getFirebaseUserListCollection from '@/api/firebase/read/getFirebaseUserListCollection.js'
+import getFirebaseUserListCollection from '@/api/firebase/read/getUsers.js'
 
 let lastDocFromPreviousPage = null
 let endReached = false

@@ -3,7 +3,7 @@ import { db } from '@/api/firebaseApp.js'
 
 const PAGE_SIZE = 25
 
-async function getFirebaseUserListCollection (
+async function getUsers (
   lastDocFromPreviousPage,
 ) {
   const q = lastDocFromPreviousPage
@@ -22,4 +22,4 @@ async function getFirebaseUserListCollection (
   return { users, lastDoc }
 }
 
-export default getFirebaseUserListCollection
+export default getUsers

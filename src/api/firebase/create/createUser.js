@@ -1,7 +1,7 @@
 import { doc, setDoc } from 'firebase/firestore'
 import { db } from '@/api/firebaseApp.js'
 
-async function createFirebaseUserCollection (
+async function createUser (
   uid,
   userName,
   email,
@@ -22,4 +22,4 @@ async function createFirebaseUserCollection (
   })
 }
 
-export default createFirebaseUserCollection
+export default createUser

@@ -1,7 +1,7 @@
 import { doc, setDoc } from 'firebase/firestore'
 import { db } from '@/api/firebaseApp.js'
 
-async function updateFirebaseUserCollection (
+async function updateUser (
   uid,
   userName,
   email,
@@ -22,4 +22,4 @@ async function updateFirebaseUserCollection (
   })
 }
 
-export default updateFirebaseUserCollection
+export default updateUser

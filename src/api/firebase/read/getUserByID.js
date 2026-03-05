@@ -1,7 +1,7 @@
 import { doc, getDoc } from 'firebase/firestore'
 import { db } from '@/api/firebaseApp.js'
 
-async function getFirebaseUserCollection (
+async function getUserByID (
   uid,
 ) {
   const ref = doc(db, 'users', uid)
@@ -16,4 +16,4 @@ async function getFirebaseUserCollection (
   return null
 }
 
-export default getFirebaseUserCollection
+export default getUserByID
