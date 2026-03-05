@@ -12,7 +12,7 @@ onMounted(async () => {
 
 const user = computed(() => {
   return {
-    username: userData.value?.userName || "...",
+    username: userData.value?.userName || "Chargement...",
     lastLogin: userData.value?.lastLogin
       ? userData.value.lastLogin.toDate().toLocaleDateString()
       : "...",
@@ -32,7 +32,17 @@ const validatedHeaders = [
   { title: "Points gagnés", key: "points" },
 ];
 
-const validatedItems = [{ title: "Défi Web", date: "02/02/2025", points: 150 }];
+const validatedItems = computed(() => {
+  if (!userData.value || !userData.value.challenges) return [];
+
+  return Object.entries(userData.value.challenges).map(([id, data]) => {
+    return {
+      title: data.title || "...",
+      date: data.date || "...",
+      points: data.points || "...",
+    };
+  });
+});
 
 /* === Badges === */
 const badgesHeaders = [
