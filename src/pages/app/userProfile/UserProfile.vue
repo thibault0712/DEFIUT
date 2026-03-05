@@ -2,6 +2,7 @@
 import { ref, onMounted, computed } from "vue";
 import { useRoute } from "vue-router";
 import getUserByID from "@/api/firebase/read/getUserByID";
+import serializedTimestampToStringFormated from "@/utils/dateConvertor.js";
 
 const route = useRoute();
 const userData = ref(null);
@@ -38,7 +39,7 @@ const validatedItems = computed(() => {
   return Object.entries(userData.value.challenges).map(([id, data]) => {
     return {
       title: data.title || "...",
-      date: data.date || "...",
+      date: serializedTimestampToStringFormated(data.date) || "...",
       points: data.points || "...",
     };
   });
