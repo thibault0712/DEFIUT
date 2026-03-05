@@ -1,37 +1,49 @@
 <script setup>
+import { ref, onMounted, computed } from "vue";
+import { useRoute } from "vue-router";
+import getUserByID from "@/api/firebase/read/getUserByID";
 
-  import { ref } from 'vue'
+const route = useRoute();
+const userData = ref(null);
 
-  const user = {
-    username: 'Alice',
-    lastLogin: '05/02/2025',
-    registeredAt: '12/09/2024',
-  }
+onMounted(async () => {
+  userData.value = await getUserByID(route.query.uid);
+});
 
-  /* Onglet actif */
-  const tab = ref(0)
+const user = computed(() => {
+  return {
+    username: userData.value?.userName || "...",
+    lastLogin: userData.value?.lastLogin
+      ? userData.value.lastLogin.toDate().toLocaleDateString()
+      : "...",
+    registeredAt: userData.value?.registeredAt
+      ? userData.value.registeredAt.toDate().toLocaleDateString()
+      : "...",
+  };
+});
 
-  /* === Défis validés === */
-  const validatedHeaders = [
-    { title: 'Titre du défi', key: 'title' },
-    { title: 'Date de validation', key: 'date' },
-    { title: 'Points gagnés', key: 'points' },
-  ]
+/* Onglet actif */
+const tab = ref(0);
 
-  const validatedItems = [
-    { title: 'Défi Web', date: '02/02/2025', points: 150 },
-  ]
+/* === Défis validés === */
+const validatedHeaders = [
+  { title: "Titre du défi", key: "title" },
+  { title: "Date de validation", key: "date" },
+  { title: "Points gagnés", key: "points" },
+];
 
-  /* === Badges === */
-  const badgesHeaders = [
-    { title: 'Badge', key: 'icon' },
-    { title: 'Nom du badge', key: 'name' },
-    { title: 'Date d’obtention', key: 'date' },
-  ]
+const validatedItems = [{ title: "Défi Web", date: "02/02/2025", points: 150 }];
 
-  const badgesItems = [
-    { icon: 'mdi-star', name: 'Badge #1', date: '10/02/2025' },
-  ]
+/* === Badges === */
+const badgesHeaders = [
+  { title: "Badge", key: "icon" },
+  { title: "Nom du badge", key: "name" },
+  { title: "Date d’obtention", key: "date" },
+];
+
+const badgesItems = [
+  { icon: "mdi-star", name: "Badge #1", date: "10/02/2025" },
+];
 </script>
 
 <template>
@@ -39,7 +51,6 @@
 
   <v-main class="h-screen">
     <v-container max-width="1200">
-
       <!-- Titre -->
       <h1>Profil utilisateur</h1>
 
@@ -53,10 +64,14 @@
 
       <v-row class="gx-4 mt-8 mb-3">
         <v-col cols="4">
-          <p class="text-uppercase font-weight-medium">Dernière connexion : {{ user.lastLogin }}</p>
+          <p class="text-uppercase font-weight-medium">
+            Dernière connexion : {{ user.lastLogin }}
+          </p>
         </v-col>
         <v-col cols="4">
-          <p class="text-uppercase font-weight-medium">Inscrit depuis : {{ user.registeredAt }}</p>
+          <p class="text-uppercase font-weight-medium">
+            Inscrit depuis : {{ user.registeredAt }}
+          </p>
         </v-col>
       </v-row>
 
@@ -77,7 +92,6 @@
           <v-icon>{{ value }}</v-icon>
         </template>
       </v-data-table>
-
     </v-container>
   </v-main>
 
