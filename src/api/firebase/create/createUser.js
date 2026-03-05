@@ -11,6 +11,7 @@ async function createUser (
   theme,
   points,
   challenges = {},
+  badges = {},
 ) {
   await setDoc(doc(db, 'users', uid), {
     userName,
@@ -21,6 +22,7 @@ async function createUser (
     theme,
     points,
     challenges,
+    badges,
   })
 }
 

@@ -53,7 +53,7 @@ const user = {
         const response = await createUserWithEmailAndPassword(auth, email, password)
         if (response) {
           const imageUrl = 'https://api.dicebear.com/9.x/bottts/svg?seed=' + userName + '&backgroundColor=BA2653&backgroundType=solid&scale=80'
-          await createFirebaseUserCollection(response.user.uid, userName, response.user.email, imageUrl, Timestamp.now(), Timestamp.now(), 'darkTheme', 0, {})
+          await createFirebaseUserCollection(response.user.uid, userName, response.user.email, imageUrl, Timestamp.now(), Timestamp.now(), 'darkTheme', 0, {}, {})
           await sendEmailVerification(response.user)
           await context.dispatch('logOut') // Due to email validation, the user is automatically logged out
         } else {
@@ -106,7 +106,7 @@ const user = {
             points: 0,
           },
           )
-          await createFirebaseUserCollection(response.user.uid, userName, response.user.email, imageUrl, Timestamp.now(), Timestamp.now(), 'darkTheme', 0, {})
+          await createFirebaseUserCollection(response.user.uid, userName, response.user.email, imageUrl, Timestamp.now(), Timestamp.now(), 'darkTheme', 0, {}, {})
         }
       } else {
         throw new Error('Impossible d\'enregistrer l\'utilisateur')
