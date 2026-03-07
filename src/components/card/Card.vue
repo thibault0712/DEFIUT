@@ -29,7 +29,7 @@ const difficultyColor = computed(() => {
 });
 
 function goToChallenge() {
-  window.location.href = '/DEFIUT/app/challenge';
+  window.location.href = '/challenge';
 }
 </script>
 
