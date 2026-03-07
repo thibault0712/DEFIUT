@@ -1,19 +1,18 @@
-import { doc, getDoc } from 'firebase/firestore'
-import { db } from '@/api/firebaseApp.js'
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '@/api/firebaseApp.js';
 
-async function getUserByID (
-  uid,
-) {
-  const ref = doc(db, 'users', uid)
-  const snap = await getDoc(ref)
+async function getUserByID(uid) {
+  const ref = doc(db, 'users', uid);
+  const snap = await getDoc(ref);
 
   if (snap.exists()) {
     return {
       uid,
-      ...snap.data() }
+      ...snap.data(),
+    };
   }
 
-  return null
+  return null;
 }
 
-export default getUserByID
+export default getUserByID;

@@ -1,7 +1,7 @@
-import { initializeApp } from 'firebase/app'
-import { getAuth, GoogleAuthProvider } from 'firebase/auth'
-import { getFirestore } from 'firebase/firestore'
-import { getStorage } from 'firebase/storage'
+import { initializeApp } from 'firebase/app';
+import { getAuth, GoogleAuthProvider } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
+import { getStorage } from 'firebase/storage';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyCAFI3xwbQcZ2jaqIokyYrHfIW1JZGybEQ',
@@ -10,14 +10,14 @@ const firebaseConfig = {
   storageBucket: 'defiut-9fe2f.firebasestorage.app',
   messagingSenderId: '601055720099',
   appId: '1:601055720099:web:77bec43f17ed92b3bdc516',
-}
+};
 
-export const firebaseApp = initializeApp(firebaseConfig)
+export const firebaseApp = initializeApp(firebaseConfig);
 
-export const auth = getAuth(firebaseApp)
+export const auth = getAuth(firebaseApp);
 
-export const googleAuthProvider = new GoogleAuthProvider()
+export const googleAuthProvider = new GoogleAuthProvider();
 
-export const db = getFirestore(firebaseApp)
+export const db = getFirestore(firebaseApp);
 
-export const storage = getStorage(firebaseApp)
+export const storage = getStorage(firebaseApp);

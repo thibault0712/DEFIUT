@@ -1,7 +1,7 @@
-import { doc, setDoc } from 'firebase/firestore'
-import { db } from '@/api/firebaseApp.js'
+import { doc, setDoc } from 'firebase/firestore';
+import { db } from '@/api/firebaseApp.js';
 
-async function createUser (
+async function createUser(
   uid,
   userName,
   email,
@@ -23,7 +23,7 @@ async function createUser (
     points,
     challenges,
     badges,
-  })
+  });
 }
 
-export default createUser
+export default createUser;

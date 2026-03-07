@@ -1,7 +1,7 @@
-import { createStore } from 'vuex'
-import createPersistedState from 'vuex-persistedstate'
-import user from './user.js'
-import userList from './userList.js'
+import { createStore } from 'vuex';
+import createPersistedState from 'vuex-persistedstate';
+import user from './user.js';
+import userList from './userList.js';
 
 export default createStore({
   modules: {
@@ -14,4 +14,4 @@ export default createStore({
       paths: ['user'],
     }),
   ],
-})
+});

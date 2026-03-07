@@ -1,86 +1,86 @@
 <script setup>
-  import { ref } from 'vue'
-  import { useStore } from 'vuex'
-  import { useToast } from '@/components/toast/useToast.js'
-  import router from '@/router/index.js'
+import { ref } from 'vue';
+import { useStore } from 'vuex';
+import { useToast } from '@/components/toast/useToast.js';
+import router from '@/router/index.js';
 
-  const store = useStore()
-  const userName = ref('')
-  const email = ref('')
-  const password = ref('')
-  const repassword = ref('')
-  const acceptTerms = ref(false)
-  const isFormValid = ref(false)
+const store = useStore();
+const userName = ref('');
+const email = ref('');
+const password = ref('');
+const repassword = ref('');
+const acceptTerms = ref(false);
+const isFormValid = ref(false);
 
-  const error = ref(null)
+const error = ref(null);
 
-  const { addMessage } = useToast()
+const { addMessage } = useToast();
 
-  const userNameRules = [
-    v => !!v || 'Le nom d\'utilisateur est requis',
-    v => (v && v.length >= 5 && v.length <= 25) || 'Le nom d\'utilisateur doit être entre 5 et 25 caractères',
-  ]
+const userNameRules = [
+  (v) => !!v || "Le nom d'utilisateur est requis",
+  (v) =>
+    (v && v.length >= 5 && v.length <= 25) ||
+    "Le nom d'utilisateur doit être entre 5 et 25 caractères",
+];
 
-  const emailRules = [
-    v => !!v || 'L\'email est requis',
-    v => /.+@.+\..+/.test(v) || 'L\'email doit être valide',
-  ]
+const emailRules = [
+  (v) => !!v || "L'email est requis",
+  (v) => /.+@.+\..+/.test(v) || "L'email doit être valide",
+];
 
-  const passwordRules = [
-    v => !!v || 'Le mot de passe est requis',
-    v => (v && v.length >= 6) || 'Le mot de passe doit faire au moins 6 caractères',
-  ]
+const passwordRules = [
+  (v) => !!v || 'Le mot de passe est requis',
+  (v) =>
+    (v && v.length >= 6) || 'Le mot de passe doit faire au moins 6 caractères',
+];
 
-  const repasswordRules = [
-    v => !!v || 'La confirmation du mot de passe est requise',
-    v => v === password.value || 'Les mots de passe ne correspondent pas',
-  ]
+const repasswordRules = [
+  (v) => !!v || 'La confirmation du mot de passe est requise',
+  (v) => v === password.value || 'Les mots de passe ne correspondent pas',
+];
 
-  const termsRules = [
-    v => !!v || 'Vous devez accepter les conditions générales',
-  ]
+const termsRules = [
+  (v) => !!v || 'Vous devez accepter les conditions générales',
+];
 
-  async function registerPopup () {
-    try {
-      await store.dispatch('user/signInWithGoogle')
-      await router.push('/')
-    } catch (error_) {
-      addMessage(error_.message, 'error')
-      error.value = error_.message
-      console.error(error_.message)
-    }
+async function registerPopup() {
+  try {
+    await store.dispatch('user/signInWithGoogle');
+    await router.push('/');
+  } catch (error_) {
+    addMessage(error_.message, 'error');
+    error.value = error_.message;
+    console.error(error_.message);
   }
+}
 
-  async function register () {
-    try {
-      await store.dispatch('user/register', {
-        email: email.value,
-        password: password.value,
-        userName: userName.value,
-      })
-      await router.push('/login')
-      addMessage('Un email de validation vous a été envoyé !', 'info')
-    } catch (error_) {
-      addMessage(error_.message, 'error')
-      error.value = error_.message
-      console.error(error_.message)
-    }
+async function register() {
+  try {
+    await store.dispatch('user/register', {
+      email: email.value,
+      password: password.value,
+      userName: userName.value,
+    });
+    await router.push('/login');
+    addMessage('Un email de validation vous a été envoyé !', 'info');
+  } catch (error_) {
+    addMessage(error_.message, 'error');
+    error.value = error_.message;
+    console.error(error_.message);
   }
-
+}
 </script>
 
 <template>
   <v-container class="fill-height d-flex align-center justify-center">
     <v-card
-      class="pa-8 text-center "
+      class="pa-8 text-center"
       elevation="4"
       max-width="500"
       rounded="lg"
       width="100%"
     >
-      <h1 class="text-h3 font-weight-bold mb-8">
-        S'inscrire
-      </h1>
+      <h1 class="text-h3 font-weight-bold mb-8">S'inscrire</h1>
 
       <v-form v-model="isFormValid">
         <v-text-field
@@ -124,11 +124,7 @@
           variant="outlined"
         />
 
-        <v-checkbox
-          v-model="acceptTerms"
-          required
-          :rules="termsRules"
-        >
+        <v-checkbox v-model="acceptTerms" required :rules="termsRules">
           <template #label>
             <div>
               J'accepte les
@@ -168,15 +164,12 @@
         class="text-none"
         color="grey-lighten-4"
         size="large"
-        style="color: #444 !important;"
+        style="color: #444 !important"
         variant="flat"
         @click="registerPopup"
       >
         <template #prepend>
-          <v-img
-            src="/google_icon.svg"
-            width="32"
-          />
+          <v-img src="/google_icon.svg" width="32" />
         </template>
         S'INSCRIRE AVEC GOOGLE
       </v-btn>
@@ -184,15 +177,13 @@
         Déjà un compte ?
         <router-link
           class="text-decoration-none font-weight-bold"
-          style="color: #8DA34B;"
+          style="color: #8da34b"
           to="/login"
         >
           Se connecter
         </router-link>
       </p>
     </v-card>
-
   </v-container>
   <Header />
-
 </template>
