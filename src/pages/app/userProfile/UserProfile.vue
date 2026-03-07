@@ -52,9 +52,16 @@ const badgesHeaders = [
   { title: "Date d’obtention", key: "date" },
 ];
 
-const badgesItems = [
-  { icon: "mdi-star", name: "Badge #1", date: "10/02/2025" },
-];
+const badgesItems = computed(() => {
+  if (!userData.value || !userData.value.badges) return [];
+  return Object.entries(userData.value.badges).map(([id, data]) => {
+    return {
+      icon: data.icon || "...",
+      name: data.name || "...",
+      date: serializedTimestampToStringFormated(data.date) || "...",
+    };
+  });
+});
 </script>
 
 <template>
