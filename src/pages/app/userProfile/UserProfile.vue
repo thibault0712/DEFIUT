@@ -1,8 +1,8 @@
 <script setup>
-import { ref, onMounted, computed } from "vue";
-import { useRoute } from "vue-router";
-import getUserByID from "@/api/firebase/read/getUserByID";
-import serializedTimestampToStringFormated from "@/utils/dateConvertor.js";
+import { ref, onMounted, computed } from 'vue';
+import { useRoute } from 'vue-router';
+import getUserByID from '@/api/firebase/read/getUserByID';
+import serializedTimestampToStringFormated from '@/utils/dateConvertor.js';
 
 const route = useRoute();
 const userData = ref(null);
@@ -13,13 +13,13 @@ onMounted(async () => {
 
 const user = computed(() => {
   return {
-    username: userData.value?.userName || "Chargement...",
+    username: userData.value?.userName || 'Chargement...',
     lastLogin: userData.value?.lastLogin
       ? userData.value.lastLogin.toDate().toLocaleDateString()
-      : "...",
+      : '...',
     registeredAt: userData.value?.registeredAt
       ? userData.value.registeredAt.toDate().toLocaleDateString()
-      : "...",
+      : '...',
   };
 });
 
@@ -28,9 +28,9 @@ const tab = ref(0);
 
 /* === Défis validés === */
 const validatedHeaders = [
-  { title: "Titre du défi", key: "title" },
-  { title: "Date de validation", key: "date" },
-  { title: "Points gagnés", key: "points" },
+  { title: 'Titre du défi', key: 'title' },
+  { title: 'Date de validation', key: 'date' },
+  { title: 'Points gagnés', key: 'points' },
 ];
 
 const validatedItems = computed(() => {
@@ -38,27 +38,27 @@ const validatedItems = computed(() => {
 
   return Object.entries(userData.value.challenges).map(([id, data]) => {
     return {
-      title: data.title || "...",
-      date: serializedTimestampToStringFormated(data.date) || "...",
-      points: data.points || "...",
+      title: data.title || '...',
+      date: serializedTimestampToStringFormated(data.date) || '...',
+      points: data.points || '...',
     };
   });
 });
 
 /* === Badges === */
 const badgesHeaders = [
-  { title: "Badge", key: "icon" },
-  { title: "Nom du badge", key: "name" },
-  { title: "Date d’obtention", key: "date" },
+  { title: 'Badge', key: 'icon' },
+  { title: 'Nom du badge', key: 'name' },
+  { title: 'Date d’obtention', key: 'date' },
 ];
 
 const badgesItems = computed(() => {
   if (!userData.value || !userData.value.badges) return [];
   return Object.entries(userData.value.badges).map(([id, data]) => {
     return {
-      icon: data.icon || "...",
-      name: data.name || "...",
-      date: serializedTimestampToStringFormated(data.date) || "...",
+      icon: data.icon || '...',
+      name: data.name || '...',
+      date: serializedTimestampToStringFormated(data.date) || '...',
     };
   });
 });
@@ -105,6 +105,7 @@ const badgesItems = computed(() => {
         :headers="tab === 0 ? validatedHeaders : badgesHeaders"
         :items="tab === 0 ? validatedItems : badgesItems"
         :items-per-page="5"
+        :items-per-page-options="[5, 10, 25, 50, 100, -1]"
       >
         <template #item.icon="{ value }">
           <v-icon>{{ value }}</v-icon>

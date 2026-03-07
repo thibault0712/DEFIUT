@@ -163,6 +163,7 @@ const badgesItems = computed(() => {
         :headers="tab === 0 ? validatedHeaders : badgesHeaders"
         :items="tab === 0 ? validatedItems : badgesItems"
         :items-per-page="5"
+        :items-per-page-options="[5, 10, 25, 50, 100, -1]"
       >
         <!-- Icône badge -->
         <template #item.icon="{ value }">
