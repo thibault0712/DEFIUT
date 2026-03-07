@@ -1,40 +1,40 @@
 <script setup>
-import { computed, ref } from "vue";
-import { useTheme } from "vuetify";
-import { useStore } from "vuex";
-import router from "@/router/index.js";
-import serializedTimestampToStringFormated from "@/utils/dateConvertor.js";
+import { computed, ref } from 'vue';
+import { useTheme } from 'vuetify';
+import { useStore } from 'vuex';
+import router from '@/router/index.js';
+import serializedTimestampToStringFormated from '@/utils/dateConvertor.js';
 
 const store = useStore();
-const userInfos = computed(() => store.getters["user/user"].data);
+const userData = computed(() => store.getters['user/user'].data);
 const theme = useTheme();
 const removeAccountPopup = ref(false);
 const editUserInformationPopup = ref(false);
 
 async function logOut() {
-  await store.dispatch("user/logOut");
-  await router.push("/");
+  await store.dispatch('user/logOut');
+  await router.push('/');
 }
 
 function toggleTheme() {
-  let newTheme = "darkTheme";
+  let newTheme = 'darkTheme';
 
-  switch (userInfos.value.theme) {
-    case "lightTheme": {
-      newTheme = "darkTheme";
+  switch (userData.value.theme) {
+    case 'lightTheme': {
+      newTheme = 'darkTheme';
       break;
     }
-    case "darkTheme": {
-      newTheme = "lightTheme";
+    case 'darkTheme': {
+      newTheme = 'lightTheme';
       break;
     }
     default: {
-      console.warn(`WARN : theme ${userInfos.value.theme} not found`);
+      console.warn(`WARN : theme ${userData.value.theme} not found`);
       break;
     }
   }
 
-  store.dispatch("user/updateTheme", newTheme);
+  store.dispatch('user/updateTheme', newTheme);
   theme.change(newTheme);
 }
 
@@ -43,27 +43,40 @@ const tab = ref(0);
 
 /* === Défis validés === */
 const validatedHeaders = [
-  { title: "Titre du défi", key: "title" },
-  { title: "Date de validation", key: "date" },
-  { title: "Points gagnés", key: "points" },
+  { title: 'Titre du défi', key: 'title' },
+  { title: 'Date de validation', key: 'date' },
+  { title: 'Points gagnés', key: 'points' },
 ];
 
-const validatedItems = [
-  { title: "Défi Web", date: "01/01/2025", points: 120 },
-  { title: "Défi Crypto", date: "15/01/2025", points: 200 },
-];
+const validatedItems = computed(() => {
+  if (!userData.value || !userData.value.challenges) return [];
+
+  return Object.entries(userData.value.challenges).map(([id, data]) => {
+    return {
+      title: data.title || '...',
+      date: serializedTimestampToStringFormated(data.date) || '...',
+      points: data.points || '...',
+    };
+  });
+});
 
 /* === Badges === */
 const badgesHeaders = [
-  { title: "Badge", key: "icon" },
-  { title: "Nom du badge", key: "name" },
-  { title: "Date d’obtention", key: "date" },
+  { title: 'Badge', key: 'icon' },
+  { title: 'Nom du badge', key: 'name' },
+  { title: 'Date d’obtention', key: 'date' },
 ];
 
-const badgesItems = [
-  { icon: "mdi-star", name: "Badge #1", date: "05/01/2025" },
-  { icon: "mdi-shield-check", name: "Badge #2", date: "20/01/2025" },
-];
+const badgesItems = computed(() => {
+  if (!userData.value || !userData.value.badges) return [];
+  return Object.entries(userData.value.badges).map(([id, data]) => {
+    return {
+      icon: data.icon || '...',
+      name: data.name || '...',
+      date: serializedTimestampToStringFormated(data.date) || '...',
+    };
+  });
+});
 </script>
 
 <template>
@@ -82,7 +95,7 @@ const badgesItems = [
 
         <v-col class="d-flex justify-end align-center ma-0 pa-0">
           <v-switch
-            v-model="userInfos.theme"
+            v-model="userData.theme"
             append-icon="mdi-weather-sunny"
             class="ma-0"
             color="primary"
@@ -102,22 +115,22 @@ const badgesItems = [
         <v-img
           class="mr-6 rounded-circle"
           :max-width="96"
-          :src="userInfos.imageUrl"
+          :src="userData.imageUrl"
         />
-        <h1>{{ userInfos.userName }}</h1>
+        <h1>{{ userData.userName }}</h1>
       </v-row>
 
       <v-row align="center" class="mt-8">
         <v-col cols="auto">
           <p class="text-uppercase font-weight-medium mb-0">
             Dernière connexion :
-            {{ serializedTimestampToStringFormated(userInfos.lastLogin) }}
+            {{ serializedTimestampToStringFormated(userData.lastLogin) }}
           </p>
         </v-col>
         <v-col cols="auto">
           <p class="text-uppercase font-weight-medium mb-0">
             Inscrit depuis :
-            {{ serializedTimestampToStringFormated(userInfos.registeredAt) }}
+            {{ serializedTimestampToStringFormated(userData.registeredAt) }}
           </p>
         </v-col>
       </v-row>

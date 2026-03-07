@@ -1,7 +1,7 @@
-import { doc, setDoc } from 'firebase/firestore'
-import { db } from '@/api/firebaseApp.js'
+import { doc, setDoc } from 'firebase/firestore';
+import { db } from '@/api/firebaseApp.js';
 
-async function updateUser (
+async function updateUser(
   uid,
   userName,
   email,
@@ -10,6 +10,8 @@ async function updateUser (
   registeredAt,
   theme,
   points,
+  challenges,
+  badges,
 ) {
   await setDoc(doc(db, 'users', uid), {
     userName,
@@ -19,7 +21,9 @@ async function updateUser (
     registeredAt,
     theme,
     points,
-  })
+    challenges,
+    badges,
+  });
 }
 
-export default updateUser
+export default updateUser;
