@@ -20,6 +20,7 @@ const user = computed(() => {
     registeredAt: userData.value?.registeredAt
       ? userData.value.registeredAt.toDate().toLocaleDateString()
       : '...',
+    imageUrl: userData.value?.imageUrl || null,
   };
 });
 
@@ -75,7 +76,10 @@ const badgesItems = computed(() => {
       <!-- Infos utilisateur -->
       <v-row align="center" class="mt-6">
         <v-avatar class="mr-6 text-h4" color="secondary" size="96">
-          {{ user.username[0] }}
+          <v-img v-if="user.imageUrl" :src="user.imageUrl" cover />
+          <span v-else class="text-h4">
+            {{ user.username[0] }}
+          </span>
         </v-avatar>
         <h1>{{ user.username }}</h1>
       </v-row>

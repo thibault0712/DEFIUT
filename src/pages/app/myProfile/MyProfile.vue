@@ -112,11 +112,16 @@ const badgesItems = computed(() => {
 
       <!-- Infos utilisateur -->
       <v-row align="center" class="mt-6">
-        <v-img
-          class="mr-6 rounded-circle"
-          :max-width="96"
-          :src="userData.imageUrl"
-        />
+        <v-avatar
+          class="mr-6"
+          size="96"
+          :color="userData?.imageUrl ? undefined : 'pink'"
+        >
+          <v-img v-if="userData?.imageUrl" :src="userData.imageUrl" cover />
+          <span v-else class="text-h4 text-white font-weight-bold">
+            {{ userData?.userName?.[0] }}
+          </span>
+        </v-avatar>
         <h1>{{ userData.userName }}</h1>
       </v-row>
 

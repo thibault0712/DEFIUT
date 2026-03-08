@@ -105,18 +105,26 @@ function toggleTheme() {
       </v-tooltip>
 
       <RouterLink to="/myProfile">
-        <v-img
+        <v-avatar
           v-if="userInfos.loggedIn && userInfos.data !== null"
-          class="rounded-circle cursor-pointer"
-          :height="48"
-          :src="userInfos.data.imageUrl"
-          :width="48"
-        />
+          size="48"
+          class="cursor-pointer"
+          :color="userInfos.data?.imageUrl ? undefined : 'pink'"
+        >
+          <v-img
+            v-if="userInfos.data?.imageUrl"
+            :src="userInfos.data.imageUrl"
+            cover
+          />
+          <span v-else class="text-white font-weight-bold">
+            {{ userInfos.data?.userName?.[0] }}
+          </span>
+        </v-avatar>
+
         <v-progress-circular
           v-if="userInfos.loggedIn && userInfos.data === null"
           color="secondary"
           indeterminate
-          model-value="20"
         />
       </RouterLink>
     </div>

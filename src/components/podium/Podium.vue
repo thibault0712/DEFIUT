@@ -27,14 +27,12 @@ onMounted(async () => {
           query: { uid: thirdPlace ? thirdPlace.uid : 'INCONNU' },
         }"
       >
-        <v-img
-          v-if="thirdPlace"
-          class="rounded-circle mb-2"
-          :height="96"
-          :max-width="96"
-          :src="thirdPlace.imageUrl"
-          :width="96"
-        />
+        <v-avatar size="96" color="secondary" class="mb-2">
+          <v-img v-if="thirdPlace?.imageUrl" :src="thirdPlace.imageUrl" cover />
+          <span v-else class="text-h5">
+            {{ thirdPlace?.userName?.[0] }}
+          </span>
+        </v-avatar>
       </RouterLink>
       <v-sheet
         class="rounded-t-lg d-flex align-center justify-center"
@@ -55,13 +53,12 @@ onMounted(async () => {
           query: { uid: firstPlace ? firstPlace.uid : 'INCONNU' },
         }"
       >
-        <v-img
-          v-if="firstPlace"
-          class="rounded-circle mb-2"
-          :height="96"
-          :src="firstPlace.imageUrl"
-          :width="96"
-        />
+        <v-avatar size="96" color="secondary" class="mb-2">
+          <v-img v-if="firstPlace?.imageUrl" :src="firstPlace.imageUrl" cover />
+          <span v-else class="text-h5">
+            {{ firstPlace?.userName?.[0] }}
+          </span>
+        </v-avatar>
       </RouterLink>
       <v-sheet
         class="rounded-t-lg d-flex align-center justify-center shadow-lg"
@@ -86,13 +83,16 @@ onMounted(async () => {
           query: { uid: secondPlace ? secondPlace.uid : 'INCONNU' },
         }"
       >
-        <v-img
-          v-if="secondPlace"
-          class="rounded-circle mb-2"
-          height="96"
-          :src="secondPlace.imageUrl"
-          :width="96"
-        />
+        <v-avatar size="96" color="secondary" class="mb-2">
+          <v-img
+            v-if="secondPlace?.imageUrl"
+            :src="secondPlace.imageUrl"
+            cover
+          />
+          <span v-else class="text-h5">
+            {{ secondPlace?.userName?.[0] }}
+          </span>
+        </v-avatar>
       </RouterLink>
       <v-sheet
         class="rounded-t-lg d-flex align-center justify-center"
