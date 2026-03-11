@@ -58,7 +58,7 @@ const routes = [
     meta: { requiresAuth: true },
   },
   {
-    path: '/challenge',
+    path: '/challenge/:id',
     name: 'Défi',
     component: Challenge,
     meta: { requiresAuth: true },

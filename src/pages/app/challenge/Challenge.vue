@@ -1,37 +1,22 @@
 <script setup>
-  import { ref } from 'vue'
+  import { onMounted, ref } from 'vue'
+  import { useRoute } from 'vue-router'
+  import getFirebaseChalCollection from '@/api/firebase/read/getFirebaseChalCollection.js'
+
+  const route = useRoute()
 
   const flagInput = ref('')
   const showIndiceDialog = ref(false)
   const currentIndice = ref(null)
+  const loading = ref(true)
 
-  const challenge = {
-    title: 'Titre - Reseau',
-    catchPhrase: 'Phrase D\'accroche',
-    difficulty: 'Facile',
-    points: 150,
-    rating: 3,
-    flag: 'FLAG{...}',
-    links: [
-      'www.example.com',
-      'www.example.com',
-      'www.example.com',
-    ],
-    description: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
-It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.`,
-    indices: [
-      {
-        id: 1,
-        points: 20,
-        text: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard \n dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen`,
-      },
-      {
-        id: 2,
-        points: 25,
-        text: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard \n dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen`,
-      },
-    ],
-  }
+  const challenge = ref(null)
+
+  onMounted(async () => {
+    const challengeId = route.params.id
+    challenge.value = await getFirebaseChalCollection(challengeId)
+    loading.value = false
+  })
 
   function openIndiceDialog (indice) {
     currentIndice.value = indice
@@ -49,7 +34,11 @@ It was popularised in the 1960s with the release of Letraset sheets containing L
   <Header />
 
   <v-main class="min-vh-100 pt-0 pb-16 h-screen">
-    <v-container class="py-12" fluid max-width="1400">
+    <v-container v-if="loading" class="d-flex justify-center align-center" style="height: 50vh;">
+      <v-progress-circular color="primary" indeterminate size="64" />
+    </v-container>
+
+    <v-container v-else-if="challenge" class="py-12" fluid max-width="1400">
       <v-row class="mb-8">
         <v-col cols="12">
           <div class="d-flex justify-space-between align-start">
@@ -112,7 +101,7 @@ It was popularised in the 1960s with the release of Letraset sheets containing L
 
           <div class="d-flex gap-4">
             <v-btn
-              v-for="indice in challenge.indices"
+              v-for="indice in challenge.indice"
               :key="indice.id"
               class="text-none"
               color="#8A9B46"
@@ -120,7 +109,7 @@ It was popularised in the 1960s with the release of Letraset sheets containing L
               variant="flat"
               @click="openIndiceDialog(indice)"
             >
-              INDICE {{ indice.id }} ({{ indice.points }} POINTS)
+              INDICE {{ indice.id }} ({{ indice.point }} POINTS)
             </v-btn>
           </div>
         </v-col>
