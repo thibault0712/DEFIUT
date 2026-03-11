@@ -1,4 +1,4 @@
-import { collection, getDocs, limit, orderBy, query, startAfter } from 'firebase/firestore'
+import { collection, getDocs, query, startAfter } from 'firebase/firestore'
 import { db } from '@/api/firebaseApp.js'
 
 async function getFirebaseChalListCollection (
