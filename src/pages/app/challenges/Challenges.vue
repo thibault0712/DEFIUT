@@ -66,6 +66,7 @@
     })
   })
 </script>
+
 <template>
   <Header />
   <v-main class="pb-16">
@@ -141,7 +142,7 @@
           sm="6"
         >
           <Card
-            :avancement="challenge.progress"
+            :avancement="''"
             :categorie="challenge.category"
             :description="challenge.description"
             :difficulte="challenge.difficulty"
