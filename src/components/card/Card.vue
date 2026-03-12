@@ -28,10 +28,6 @@ const difficultyColor = computed(() => {
   }
 })
 
-function goToChallenge () {
-  window.location.href = '/challenge'
-}
-
 function goToChallenge() {
   window.location.href = '/challenge';
 }
