@@ -1,44 +1,44 @@
 <script setup>
-  import { ref } from 'vue'
-  import { useRouter } from 'vue-router'
-  import { useStore } from 'vuex'
-  import ForgottenPassordPopup from '@/components/popups/forgottentPasswordPopup/ForgottenPassordPopup.vue'
-  import { useToast } from '@/components/toast/useToast.js'
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
+import ForgottenPassordPopup from '@/components/popups/forgottentPasswordPopup/ForgottenPassordPopup.vue';
+import { useToast } from '@/components/toast/useToast.js';
 
-  const store = useStore()
-  const email = ref('')
-  const password = ref('')
-  const error = ref(null)
+const store = useStore();
+const email = ref('');
+const password = ref('');
+const error = ref(null);
 
-  const router = useRouter()
+const router = useRouter();
 
-  const forgottenPasswordPopupIsOpen = ref(false)
+const forgottenPasswordPopupIsOpen = ref(false);
 
-  const { addMessage } = useToast()
+const { addMessage } = useToast();
 
-  async function Login () {
-    try {
-      await store.dispatch('user/logIn', {
-        email: email.value,
-        password: password.value,
-      })
-      await router.push('/')
-    } catch (error_) {
-      addMessage(error_.message, 'error')
-      error.value = error_.message
-      console.error(error_.message)
-    }
+async function Login() {
+  try {
+    await store.dispatch('user/logIn', {
+      email: email.value,
+      password: password.value,
+    });
+    await router.push('/');
+  } catch (error_) {
+    addMessage(error_.message, 'error');
+    error.value = error_.message;
+    console.error(error_.message);
   }
+}
 
-  async function loginWithGoogle () {
-    try {
-      await store.dispatch('user/signInWithGoogle')
-      await router.push('/')
-    } catch (error_) {
-      error.value = error_.message
-      console.error(error_.message)
-    }
+async function loginWithGoogle() {
+  try {
+    await store.dispatch('user/signInWithGoogle');
+    await router.push('/');
+  } catch (error_) {
+    error.value = error_.message;
+    console.error(error_.message);
   }
+}
 </script>
 
 <template>
@@ -52,9 +52,7 @@
       rounded="lg"
       width="100%"
     >
-      <h1 class="text-h3 font-weight-bold mb-8">
-        Se connecter
-      </h1>
+      <h1 class="text-h3 font-weight-bold mb-8">Se connecter</h1>
 
       <v-form>
         <v-text-field
@@ -112,10 +110,7 @@
         @click="loginWithGoogle"
       >
         <template #prepend>
-          <v-img
-            src="/google_icon.svg"
-            width="32"
-          />
+          <v-img src="/google_icon.svg" width="32" />
         </template>
         SE CONNECTER AVEC GOOGLE
       </v-btn>
@@ -124,7 +119,7 @@
         Pas encore de compte ?
         <router-link
           class="text-decoration-none font-weight-bold"
-          style="color: #8DA34B;"
+          style="color: #8da34b"
           to="/register"
         >
           S'inscrire

@@ -1,34 +1,38 @@
 <script setup>
-  import { computed, onMounted } from 'vue'
-  import { useStore } from 'vuex'
+import { computed, onMounted } from 'vue';
+import { useStore } from 'vuex';
 
-  const store = useStore()
+const store = useStore();
 
-  const bestUsers = computed(() => store.getters['userList/userList'])
+const bestUsers = computed(() => store.getters['userList/userList']);
 
-  const firstPlace = computed(() => bestUsers.value?.[0] || null)
-  const secondPlace = computed(() => bestUsers.value?.[1] || null)
-  const thirdPlace = computed(() => bestUsers.value?.[2] || null)
+const firstPlace = computed(() => bestUsers.value?.[0] || null);
+const secondPlace = computed(() => bestUsers.value?.[1] || null);
+const thirdPlace = computed(() => bestUsers.value?.[2] || null);
 
-  onMounted(async () => {
-    await store.dispatch('userList/updateList')
-  })
-
+onMounted(async () => {
+  await store.dispatch('userList/updateList');
+});
 </script>
 
 <template>
-  <v-container class="d-flex align-end justify-center py-10" style="min-height: 500px;">
-
+  <v-container
+    class="d-flex align-end justify-center py-10"
+    style="min-height: 500px"
+  >
     <div class="d-flex flex-column align-center mx-1">
-      <RouterLink :to="{ path: '/userProfile', query: { uid: thirdPlace ? thirdPlace.uid : 'INCONNU' } }">
-        <v-img
-          v-if="thirdPlace"
-          class="rounded-circle mb-2"
-          :height="96"
-          :max-width="96"
-          :src="thirdPlace.imageUrl"
-          :width="96"
-        />
+      <RouterLink
+        :to="{
+          path: '/userProfile',
+          query: { uid: thirdPlace ? thirdPlace.uid : 'INCONNU' },
+        }"
+      >
+        <v-avatar size="96" color="secondary" class="mb-2">
+          <v-img v-if="thirdPlace?.imageUrl" :src="thirdPlace.imageUrl" cover />
+          <span v-else class="text-h5">
+            {{ thirdPlace?.userName?.[0] }}
+          </span>
+        </v-avatar>
       </RouterLink>
       <v-sheet
         class="rounded-t-lg d-flex align-center justify-center"
@@ -43,15 +47,18 @@
     </div>
 
     <div class="d-flex flex-column align-center mx-1">
-      <RouterLink :to="{ path: '/userProfile', query: { uid: firstPlace ? firstPlace.uid : 'INCONNU' } }">
-
-        <v-img
-          v-if="firstPlace"
-          class="rounded-circle mb-2"
-          :height="96"
-          :src="firstPlace.imageUrl"
-          :width="96"
-        />
+      <RouterLink
+        :to="{
+          path: '/userProfile',
+          query: { uid: firstPlace ? firstPlace.uid : 'INCONNU' },
+        }"
+      >
+        <v-avatar size="96" color="secondary" class="mb-2">
+          <v-img v-if="firstPlace?.imageUrl" :src="firstPlace.imageUrl" cover />
+          <span v-else class="text-h5">
+            {{ firstPlace?.userName?.[0] }}
+          </span>
+        </v-avatar>
       </RouterLink>
       <v-sheet
         class="rounded-t-lg d-flex align-center justify-center shadow-lg"
@@ -59,21 +66,33 @@
         height="280"
         width="160"
       >
-        <v-avatar class="title-orbitron elevation-6" color="orange-darken-1" size="80">
+        <v-avatar
+          class="title-orbitron elevation-6"
+          color="orange-darken-1"
+          size="80"
+        >
           <span class="text-h3 font-weight-bold">1</span>
         </v-avatar>
       </v-sheet>
     </div>
 
     <div class="d-flex flex-column align-center mx-1">
-      <RouterLink :to="{ path: '/userProfile', query: { uid: secondPlace ? secondPlace.uid : 'INCONNU' } }">
-        <v-img
-          v-if="secondPlace"
-          class="rounded-circle mb-2"
-          height="96"
-          :src="secondPlace.imageUrl"
-          :width="96"
-        />
+      <RouterLink
+        :to="{
+          path: '/userProfile',
+          query: { uid: secondPlace ? secondPlace.uid : 'INCONNU' },
+        }"
+      >
+        <v-avatar size="96" color="secondary" class="mb-2">
+          <v-img
+            v-if="secondPlace?.imageUrl"
+            :src="secondPlace.imageUrl"
+            cover
+          />
+          <span v-else class="text-h5">
+            {{ secondPlace?.userName?.[0] }}
+          </span>
+        </v-avatar>
       </RouterLink>
       <v-sheet
         class="rounded-t-lg d-flex align-center justify-center"
@@ -86,6 +105,5 @@
         </v-avatar>
       </v-sheet>
     </div>
-
   </v-container>
 </template>

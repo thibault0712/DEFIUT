@@ -5,28 +5,28 @@
  */
 
 // Composables
-import { createApp } from 'vue'
+import { createApp } from 'vue';
 
-import { VueFire, VueFireAuth } from 'vuefire'
+import { VueFire, VueFireAuth } from 'vuefire';
 
-import { auth, firebaseApp } from '@/api/firebaseApp.js'
+import { auth, firebaseApp } from '@/api/firebaseApp.js';
 // Plugins
-import { registerPlugins } from '@/plugins'
-import store from '@/store/index.js'
+import { registerPlugins } from '@/plugins';
+import store from '@/store/index.js';
 // Components
-import App from './App.vue'
+import App from './App.vue';
 // Styles
-import 'vuetify/styles'
-import '@mdi/font/css/materialdesignicons.css'
-import 'unfonts.css'
+import 'vuetify/styles';
+import '@mdi/font/css/materialdesignicons.css';
+import 'unfonts.css';
 
-const app = createApp(App)
+const app = createApp(App);
 
-app.use(store)
+app.use(store);
 
-auth.onAuthStateChanged(fetchedUser => {
-  store.dispatch('user/fetchUser', fetchedUser)
-})
+auth.onAuthStateChanged((fetchedUser) => {
+  store.dispatch('user/fetchUser', fetchedUser);
+});
 
 app.use(VueFire, {
   // imported above but could also just be created here
@@ -35,8 +35,8 @@ app.use(VueFire, {
     // we will see other modules later on
     VueFireAuth(),
   ],
-})
+});
 
-registerPlugins(app)
+registerPlugins(app);
 
-app.mount('#app')
+app.mount('#app');

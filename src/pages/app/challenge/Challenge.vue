@@ -1,51 +1,46 @@
 <script setup>
-  import { ref } from 'vue'
+import { ref } from 'vue';
 
-  const flagInput = ref('')
-  const showIndiceDialog = ref(false)
-  const currentIndice = ref(null)
+const flagInput = ref('');
+const showIndiceDialog = ref(false);
+const currentIndice = ref(null);
 
-  const challenge = {
-    title: 'Titre - Reseau',
-    catchPhrase: 'Phrase D\'accroche',
-    difficulty: 'Facile',
-    points: 150,
-    rating: 3,
-    flag: 'FLAG{...}',
-    links: [
-      'www.example.com',
-      'www.example.com',
-      'www.example.com',
-    ],
-    description: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+const challenge = {
+  title: 'Titre - Reseau',
+  catchPhrase: "Phrase D'accroche",
+  difficulty: 'Facile',
+  points: 150,
+  rating: 3,
+  flag: 'FLAG{...}',
+  links: ['www.example.com', 'www.example.com', 'www.example.com'],
+  description: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
 It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.`,
-    indices: [
-      {
-        id: 1,
-        points: 20,
-        text: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard \n dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen`,
-      },
-      {
-        id: 2,
-        points: 25,
-        text: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard \n dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen`,
-      },
-    ],
-  }
+  indices: [
+    {
+      id: 1,
+      points: 20,
+      text: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard \n dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen`,
+    },
+    {
+      id: 2,
+      points: 25,
+      text: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard \n dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen`,
+    },
+  ],
+};
 
-  function openIndiceDialog (indice) {
-    currentIndice.value = indice
-    showIndiceDialog.value = true
-  }
+function openIndiceDialog(indice) {
+  currentIndice.value = indice;
+  showIndiceDialog.value = true;
+}
 
-  function closeIndiceDialog () {
-    showIndiceDialog.value = false
-    currentIndice.value = null
-  }
+function closeIndiceDialog() {
+  showIndiceDialog.value = false;
+  currentIndice.value = null;
+}
 </script>
 
 <template>
-
   <Header />
 
   <v-main class="min-vh-100 pt-0 pb-16 h-screen">
@@ -57,13 +52,13 @@ It was popularised in the 1960s with the release of Letraset sheets containing L
               <h1 class="text-h2 mb-2">
                 {{ challenge.title }}
               </h1>
-              <p class="text-h5 text-center" style="color: white;">
+              <p class="text-h5 text-center" style="color: white">
                 {{ challenge.catchPhrase }}
               </p>
             </div>
 
             <div class="text-right">
-              <p class="text-h6 mb-1" style="color: #8A9B46">
+              <p class="text-h6 mb-1" style="color: #8a9b46">
                 Nombre de points : {{ challenge.points }}
               </p>
             </div>
@@ -75,7 +70,8 @@ It was popularised in the 1960s with the release of Letraset sheets containing L
         <v-col cols="12" md="6">
           <div class="mb-6">
             <h3 class="text-h5 mb-2">
-              Difficultée : <span style="color: #8A9B46">{{ challenge.difficulty }}</span>
+              Difficultée :
+              <span style="color: #8a9b46">{{ challenge.difficulty }}</span>
             </h3>
           </div>
 
@@ -103,8 +99,16 @@ It was popularised in the 1960s with the release of Letraset sheets containing L
 
           <div class="mb-6">
             <h3 class="text-h5 mb-3">Liens/Ressource :</h3>
-            <div v-for="(link, index) in challenge.links" :key="index" class="mb-1">
-              <a class="text-body-1" :href="`https://${link}`" style="color: white; text-decoration: none;">
+            <div
+              v-for="(link, index) in challenge.links"
+              :key="index"
+              class="mb-1"
+            >
+              <a
+                class="text-body-1"
+                :href="`https://${link}`"
+                style="color: white; text-decoration: none"
+              >
                 {{ link }}
               </a>
             </div>
@@ -128,7 +132,10 @@ It was popularised in the 1960s with the release of Letraset sheets containing L
         <v-col cols="12" md="6">
           <div>
             <h4 class="text-h4 mb-3">Description :</h4>
-            <p class="text-body-1" style="line-height: 1.8; white-space: pre-line;">
+            <p
+              class="text-body-1"
+              style="line-height: 1.8; white-space: pre-line"
+            >
               {{ challenge.description }}
             </p>
           </div>
@@ -146,7 +153,7 @@ It was popularised in the 1960s with the release of Letraset sheets containing L
           class="position-absolute"
           density="compact"
           icon="mdi-close"
-          style="top: 16px; right: 16px;"
+          style="top: 16px; right: 16px"
           variant="text"
           @click="closeIndiceDialog"
         />
@@ -155,7 +162,7 @@ It was popularised in the 1960s with the release of Letraset sheets containing L
           INDICE {{ currentIndice?.id }}
         </v-card-title>
 
-        <v-card-text class="text-body-1 pa-0" style="line-height: 1.8;">
+        <v-card-text class="text-body-1 pa-0" style="line-height: 1.8">
           {{ currentIndice?.text }}
         </v-card-text>
       </v-card>

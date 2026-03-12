@@ -1,39 +1,38 @@
 <script setup>
-  import { computed } from 'vue'
-  import { useTheme } from 'vuetify'
-  import { useStore } from 'vuex'
+import { computed } from 'vue';
+import { useTheme } from 'vuetify';
+import { useStore } from 'vuex';
 
-  const theme = useTheme()
-  const store = useStore()
-  const userInfos = computed(() => store.getters['user/user'])
+const theme = useTheme();
+const store = useStore();
+const userInfos = computed(() => store.getters['user/user']);
 
-  // Function available only if user is not logged in, that's why we don't use the store here
-  function toggleTheme () {
-    theme.change(theme.global.name.value === 'darkTheme' ? 'lightTheme' : 'darkTheme')
-  }
+// Function available only if user is not logged in, that's why we don't use the store here
+function toggleTheme() {
+  theme.change(
+    theme.global.name.value === 'darkTheme' ? 'lightTheme' : 'darkTheme',
+  );
+}
 </script>
 
 <template>
   <v-app-bar class="px-80 bg-background" flat height="80">
     <router-link class="no-link-style" to="/">
       <div class="d-flex align-center">
-        <v-img
-          alt="Logo"
-          class="mr-6"
-          src="/logo.png"
-          width="40"
-        />
-        <h2 class="text-h3 font-weight-bold">
-          DEFIUT
-        </h2>
+        <v-img alt="Logo" class="mr-6" src="/logo.png" width="40" />
+        <h2 class="text-h3 font-weight-bold">DEFIUT</h2>
       </div>
     </router-link>
 
     <v-spacer />
 
     <div class="d-flex align-center ga-6">
-      <v-btn class="text-none text-body-1" to="/challenges" variant="text">Défis</v-btn>
-      <v-btn class="text-none text-body-1" to="/ranking" variant="text">Classement</v-btn>
+      <v-btn class="text-none text-body-1" to="/challenges" variant="text"
+        >Défis</v-btn
+      >
+      <v-btn class="text-none text-body-1" to="/ranking" variant="text"
+        >Classement</v-btn
+      >
       <v-menu open-on-hover>
         <template #activator="{ props }">
           <v-btn
@@ -81,12 +80,21 @@
 
       <div v-if="!userInfos.loggedIn" class="vertical-divider" />
 
-      <v-tooltip v-if="!userInfos.loggedIn" :close-delay="300" location="bottom" :open-delay="100">
+      <v-tooltip
+        v-if="!userInfos.loggedIn"
+        :close-delay="300"
+        location="bottom"
+        :open-delay="100"
+      >
         <template #activator="{ props }">
           <v-btn
             v-bind="props"
             color="primary"
-            :icon="theme.global.name.value === 'lightTheme' ? 'mdi-weather-night' : 'mdi-white-balance-sunny'"
+            :icon="
+              theme.global.name.value === 'lightTheme'
+                ? 'mdi-weather-night'
+                : 'mdi-white-balance-sunny'
+            "
             rounded="lg"
             size="small"
             variant="flat"
@@ -97,18 +105,29 @@
       </v-tooltip>
 
       <RouterLink to="/myProfile">
-        <v-img
+        <v-avatar
           v-if="userInfos.loggedIn && userInfos.data !== null"
-          class="rounded-circle cursor-pointer"
-          :height="48"
-          :src="userInfos.data.imageUrl"
-          :width="48"
+          size="48"
+          class="cursor-pointer"
+          :color="userInfos.data?.imageUrl ? undefined : 'pink'"
+        >
+          <v-img
+            v-if="userInfos.data?.imageUrl"
+            :src="userInfos.data.imageUrl"
+            cover
+          />
+          <span v-else class="text-white font-weight-bold">
+            {{ userInfos.data?.userName?.[0] }}
+          </span>
+        </v-avatar>
+
+        <v-progress-circular
+          v-if="userInfos.loggedIn && userInfos.data === null"
+          color="secondary"
+          indeterminate
         />
-        <v-progress-circular v-if="userInfos.loggedIn && userInfos.data === null" color="secondary" indeterminate model-value="20" />
       </RouterLink>
-
     </div>
-
   </v-app-bar>
 </template>
 

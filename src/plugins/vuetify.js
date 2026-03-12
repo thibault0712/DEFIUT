@@ -1,28 +1,28 @@
-import { createVuetify } from 'vuetify'
+import { createVuetify } from 'vuetify';
 
-const FONT_BODY = 'Poppins, sans-serif'
-const FONT_HEADINGS = 'Orbitron, sans-serif'
+const FONT_BODY = 'Poppins, sans-serif';
+const FONT_HEADINGS = 'Orbitron, sans-serif';
 
 const lightTheme = {
   dark: false,
   colors: {
-    'background': '#FFFFFF',
-    'surface': '#FFFFFF',
-    'footer': '#0F1629',
+    background: '#FFFFFF',
+    surface: '#FFFFFF',
+    footer: '#0F1629',
     'on-background': '#000000',
     'on-surface': '#000000',
     'surface-bright': '#FFFFFF',
     'surface-light': '#EEEEEE',
     'surface-variant': '#424242',
     'on-surface-variant': '#EEEEEE',
-    'primary': '#8A9B46',
+    primary: '#8A9B46',
     'primary-darken-1': '#8A9B46',
-    'secondary': '#BA2653',
+    secondary: '#BA2653',
     'secondary-darken-1': '#BA2653',
-    'error': '#B00020',
-    'info': '#2196F3',
-    'success': '#4CAF50',
-    'warning': '#FB8C00',
+    error: '#B00020',
+    info: '#2196F3',
+    success: '#4CAF50',
+    warning: '#FB8C00',
   },
   variables: {
     'font-family': FONT_BODY,
@@ -44,26 +44,26 @@ const lightTheme = {
     'theme-code': '#F5F5F5',
     'theme-on-code': '#000000',
   },
-}
+};
 
 const darkTheme = {
   dark: true,
   colors: {
-    'background': '#0B121F',
-    'surface': '#141A28',
-    'footer': '#0B121F',
+    background: '#0B121F',
+    surface: '#141A28',
+    footer: '#0B121F',
     'surface-bright': '#141A28',
     'surface-light': '#F1F1E4',
     'surface-variant': '#424242',
     'on-surface-variant': '#424242',
-    'primary': '#8A9B46',
+    primary: '#8A9B46',
     'primary-darken-1': '#8A9B46',
-    'secondary': '#BA2653',
+    secondary: '#BA2653',
     'secondary-darken-1': '#BA2653',
-    'error': '#B00020',
-    'info': '#2196F3',
-    'success': '#4CAF50',
-    'warning': '#FB8C00',
+    error: '#B00020',
+    info: '#2196F3',
+    success: '#4CAF50',
+    warning: '#FB8C00',
   },
   variables: {
     'font-family': FONT_BODY,
@@ -85,7 +85,7 @@ const darkTheme = {
     'theme-code': '#F5F5F5',
     'theme-on-code': '#000000',
   },
-}
+};
 
 export default createVuetify({
   theme: {
@@ -95,4 +95,4 @@ export default createVuetify({
       darkTheme,
     },
   },
-})
+});
