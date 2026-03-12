@@ -1,6 +1,5 @@
 import { createUserWithEmailAndPassword, deleteUser, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut } from 'firebase/auth'
 import { Timestamp } from 'firebase/firestore'
-import { useTheme } from 'vuetify'
 import createFirebaseUserCollection from '@/api/firebase/create/createFirebaseUserCollection.js'
 import deleteFirebaseUserCollection from '@/api/firebase/delete/deleteFirebaseUserCollection.js'
 import getFirebaseUserCollection from '@/api/firebase/read/getFirebaseUserCollection.js'
