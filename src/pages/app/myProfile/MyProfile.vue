@@ -1,82 +1,82 @@
 <script setup>
-import { computed, ref } from 'vue';
-import { useTheme } from 'vuetify';
-import { useStore } from 'vuex';
-import router from '@/router/index.js';
-import serializedTimestampToStringFormated from '@/utils/dateConvertor.js';
+  import { computed, ref } from 'vue'
+  import { useTheme } from 'vuetify'
+  import { useStore } from 'vuex'
+  import router from '@/router/index.js'
+  import serializedTimestampToStringFormated from '@/utils/dateConvertor.js'
 
-const store = useStore();
-const userData = computed(() => store.getters['user/user'].data);
-const theme = useTheme();
-const removeAccountPopup = ref(false);
-const editUserInformationPopup = ref(false);
+  const store = useStore()
+  const userData = computed(() => store.getters['user/user'].data)
+  const theme = useTheme()
+  const removeAccountPopup = ref(false)
+  const editUserInformationPopup = ref(false)
 
-async function logOut() {
-  await store.dispatch('user/logOut');
-  await router.push('/');
-}
-
-function toggleTheme() {
-  let newTheme = 'darkTheme';
-
-  switch (userData.value.theme) {
-    case 'lightTheme': {
-      newTheme = 'darkTheme';
-      break;
-    }
-    case 'darkTheme': {
-      newTheme = 'lightTheme';
-      break;
-    }
-    default: {
-      console.warn(`WARN : theme ${userData.value.theme} not found`);
-      break;
-    }
+  async function logOut () {
+    await router.push('/')
+    await store.dispatch('user/logOut')
   }
 
-  store.dispatch('user/updateTheme', newTheme);
-  theme.change(newTheme);
-}
+  function toggleTheme () {
+    let newTheme = 'darkTheme'
 
-/* Onglet actif */
-const tab = ref(0);
+    switch (userData.value.theme) {
+      case 'lightTheme': {
+        newTheme = 'darkTheme'
+        break
+      }
+      case 'darkTheme': {
+        newTheme = 'lightTheme'
+        break
+      }
+      default: {
+        console.warn(`WARN : theme ${userData.value.theme} not found`)
+        break
+      }
+    }
 
-/* === Défis validés === */
-const validatedHeaders = [
-  { title: 'Titre du défi', key: 'title' },
-  { title: 'Date de validation', key: 'date' },
-  { title: 'Points gagnés', key: 'points' },
-];
+    store.dispatch('user/updateTheme', newTheme)
+    theme.change(newTheme)
+  }
 
-const validatedItems = computed(() => {
-  if (!userData.value || !userData.value.challenges) return [];
+  /* Onglet actif */
+  const tab = ref(0)
 
-  return Object.entries(userData.value.challenges).map(([id, data]) => {
-    return {
-      title: data.title || '...',
-      date: serializedTimestampToStringFormated(data.date) || '...',
-      points: data.points || '...',
-    };
-  });
-});
+  /* === Défis validés === */
+  const validatedHeaders = [
+    { title: 'Titre du défi', key: 'title' },
+    { title: 'Date de validation', key: 'date' },
+    { title: 'Points gagnés', key: 'points' },
+  ]
 
-/* === Badges === */
-const badgesHeaders = [
-  { title: 'Badge', key: 'icon' },
-  { title: 'Nom du badge', key: 'name' },
-  { title: 'Date d’obtention', key: 'date' },
-];
+  const validatedItems = computed(() => {
+    if (!userData.value || !userData.value.challenges) return []
 
-const badgesItems = computed(() => {
-  if (!userData.value || !userData.value.badges) return [];
-  return Object.entries(userData.value.badges).map(([id, data]) => {
-    return {
-      icon: data.icon || '...',
-      name: data.name || '...',
-      date: serializedTimestampToStringFormated(data.date) || '...',
-    };
-  });
-});
+    return Object.entries(userData.value.challenges).map(([id, data]) => {
+      return {
+        title: data.title || '...',
+        date: serializedTimestampToStringFormated(data.date) || '...',
+        points: data.points || '...',
+      }
+    })
+  })
+
+  /* === Badges === */
+  const badgesHeaders = [
+    { title: 'Badge', key: 'icon' },
+    { title: 'Nom du badge', key: 'name' },
+    { title: 'Date d’obtention', key: 'date' },
+  ]
+
+  const badgesItems = computed(() => {
+    if (!userData.value || !userData.value.badges) return []
+    return Object.entries(userData.value.badges).map(([id, data]) => {
+      return {
+        icon: data.icon || '...',
+        name: data.name || '...',
+        date: serializedTimestampToStringFormated(data.date) || '...',
+      }
+    })
+  })
 </script>
 
 <template>
@@ -88,7 +88,7 @@ const badgesItems = computed(() => {
   <v-main>
     <v-container class="h-screen" max-width="1200">
       <!-- Titre -->
-      <v-row align="center" class="w-100 g-0" justify="space-between">
+      <v-row v-if="userData" align="center" class="w-100 g-0" justify="space-between">
         <v-col>
           <h1>Mon profil</h1>
         </v-col>
@@ -111,13 +111,13 @@ const badgesItems = computed(() => {
       </v-row>
 
       <!-- Infos utilisateur -->
-      <v-row align="center" class="mt-6">
+      <v-row v-if="userData" align="center" class="mt-6">
         <v-avatar
           class="mr-6"
-          size="96"
           :color="userData?.imageUrl ? undefined : 'pink'"
+          size="96"
         >
-          <v-img v-if="userData?.imageUrl" :src="userData.imageUrl" cover />
+          <v-img v-if="userData?.imageUrl" cover :src="userData.imageUrl" />
           <span v-else class="text-h4 text-white font-weight-bold">
             {{ userData?.userName?.[0] }}
           </span>
@@ -125,7 +125,7 @@ const badgesItems = computed(() => {
         <h1>{{ userData.userName }}</h1>
       </v-row>
 
-      <v-row align="center" class="mt-8">
+      <v-row v-if="userData" align="center" class="mt-8">
         <v-col cols="auto">
           <p class="text-uppercase font-weight-medium mb-0">
             Dernière connexion :
