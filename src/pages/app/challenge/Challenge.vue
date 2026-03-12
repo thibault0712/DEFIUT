@@ -1,20 +1,20 @@
 <script setup>
-  import { onMounted, ref } from 'vue'
+  import { computed, onMounted, ref } from 'vue'
   import { useRoute } from 'vue-router'
-  import getFirebaseChalCollection from '@/api/firebase/read/getFirebaseChalCollection.js'
+  import { useStore } from 'vuex'
 
   const route = useRoute()
+  const store = useStore()
 
   const flagInput = ref('')
   const showIndiceDialog = ref(false)
   const currentIndice = ref(null)
   const loading = ref(true)
 
-  const challenge = ref(null)
+  const challenge = computed(() => store.getters['challenge/currentChallenge'])
 
   onMounted(async () => {
-    const challengeId = route.params.id
-    challenge.value = await getFirebaseChalCollection(challengeId)
+    await store.dispatch('challenge/fetchChallenge', route.params.id)
     loading.value = false
   })
 
