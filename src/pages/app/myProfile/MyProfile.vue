@@ -1,5 +1,4 @@
 <script setup>
-
   import { computed, ref } from 'vue'
   import { useTheme } from 'vuetify'
   import { useStore } from 'vuex'
@@ -7,20 +6,20 @@
   import serializedTimestampToStringFormated from '@/utils/dateConvertor.js'
 
   const store = useStore()
-  const userInfos = computed(() => store.getters['user/user'].data)
+  const userData = computed(() => store.getters['user/user'].data)
   const theme = useTheme()
   const removeAccountPopup = ref(false)
   const editUserInformationPopup = ref(false)
 
   async function logOut () {
-    await store.dispatch('user/logOut')
     await router.push('/')
+    await store.dispatch('user/logOut')
   }
 
   function toggleTheme () {
     let newTheme = 'darkTheme'
 
-    switch (userInfos.value.theme) {
+    switch (userData.value.theme) {
       case 'lightTheme': {
         newTheme = 'darkTheme'
         break
@@ -30,7 +29,7 @@
         break
       }
       default: {
-        console.warn(`WARN : theme ${userInfos.value.theme} not found`)
+        console.warn(`WARN : theme ${userData.value.theme} not found`)
         break
       }
     }
@@ -49,10 +48,17 @@
     { title: 'Points gagnés', key: 'points' },
   ]
 
-  const validatedItems = [
-    { title: 'Défi Web', date: '01/01/2025', points: 120 },
-    { title: 'Défi Crypto', date: '15/01/2025', points: 200 },
-  ]
+  const validatedItems = computed(() => {
+    if (!userData.value || !userData.value.challenges) return []
+
+    return Object.entries(userData.value.challenges).map(([id, data]) => {
+      return {
+        title: data.title || '...',
+        date: serializedTimestampToStringFormated(data.date) || '...',
+        points: data.points || '...',
+      }
+    })
+  })
 
   /* === Badges === */
   const badgesHeaders = [
@@ -61,10 +67,16 @@
     { title: 'Date d’obtention', key: 'date' },
   ]
 
-  const badgesItems = [
-    { icon: 'mdi-star', name: 'Badge #1', date: '05/01/2025' },
-    { icon: 'mdi-shield-check', name: 'Badge #2', date: '20/01/2025' },
-  ]
+  const badgesItems = computed(() => {
+    if (!userData.value || !userData.value.badges) return []
+    return Object.entries(userData.value.badges).map(([id, data]) => {
+      return {
+        icon: data.icon || '...',
+        name: data.name || '...',
+        date: serializedTimestampToStringFormated(data.date) || '...',
+      }
+    })
+  })
 </script>
 
 <template>
@@ -75,16 +87,15 @@
 
   <v-main>
     <v-container class="h-screen" max-width="1200">
-
       <!-- Titre -->
-      <v-row align="center" class="w-100 g-0" justify="space-between">
+      <v-row v-if="userData" align="center" class="w-100 g-0" justify="space-between">
         <v-col>
           <h1>Mon profil</h1>
         </v-col>
 
         <v-col class="d-flex justify-end align-center ma-0 pa-0">
           <v-switch
-            v-model="userInfos.theme"
+            v-model="userData.theme"
             append-icon="mdi-weather-sunny"
             class="ma-0"
             color="primary"
@@ -100,26 +111,41 @@
       </v-row>
 
       <!-- Infos utilisateur -->
-      <v-row align="center" class="mt-6">
-        <v-img
-          class="mr-6 rounded-circle"
-          :max-width="96"
-          :src="userInfos.imageUrl"
-        />
-        <h1>{{ userInfos.userName }}</h1>
+      <v-row v-if="userData" align="center" class="mt-6">
+        <v-avatar
+          class="mr-6"
+          :color="userData?.imageUrl ? undefined : 'pink'"
+          size="96"
+        >
+          <v-img v-if="userData?.imageUrl" cover :src="userData.imageUrl" />
+          <span v-else class="text-h4 text-white font-weight-bold">
+            {{ userData?.userName?.[0] }}
+          </span>
+        </v-avatar>
+        <h1>{{ userData.userName }}</h1>
       </v-row>
 
-      <v-row align="center" class="mt-8">
+      <v-row v-if="userData" align="center" class="mt-8">
         <v-col cols="auto">
-          <p class="text-uppercase font-weight-medium mb-0">Dernière connexion : {{ serializedTimestampToStringFormated(userInfos.lastLogin) }}</p>
+          <p class="text-uppercase font-weight-medium mb-0">
+            Dernière connexion :
+            {{ serializedTimestampToStringFormated(userData.lastLogin) }}
+          </p>
         </v-col>
         <v-col cols="auto">
-          <p class="text-uppercase font-weight-medium mb-0">Inscrit depuis : {{ serializedTimestampToStringFormated(userInfos.registeredAt) }}</p>
+          <p class="text-uppercase font-weight-medium mb-0">
+            Inscrit depuis :
+            {{ serializedTimestampToStringFormated(userData.registeredAt) }}
+          </p>
         </v-col>
       </v-row>
 
       <v-row class="my-8">
-        <v-btn class="ml-3" color="secondary" @click="editUserInformationPopup = true">
+        <v-btn
+          class="ml-3"
+          color="secondary"
+          @click="editUserInformationPopup = true"
+        >
           <v-icon>mdi-pencil</v-icon>
         </v-btn>
         <v-btn class="mx-6" color="secondary" @click="logOut">
@@ -142,13 +168,13 @@
         :headers="tab === 0 ? validatedHeaders : badgesHeaders"
         :items="tab === 0 ? validatedItems : badgesItems"
         :items-per-page="5"
+        :items-per-page-options="[5, 10, 25, 50, 100, -1]"
       >
         <!-- Icône badge -->
         <template #item.icon="{ value }">
           <v-icon>{{ value }}</v-icon>
         </template>
       </v-data-table>
-
     </v-container>
   </v-main>
 

@@ -30,7 +30,6 @@
 </script>
 
 <template>
-
   <Header />
 
   <v-main class="min-vh-100 pt-0 pb-16 h-screen">
@@ -46,13 +45,13 @@
               <h1 class="text-h2 mb-2">
                 {{ challenge.title }}
               </h1>
-              <p class="text-h5 text-center" style="color: white;">
+              <p class="text-h5 text-center" style="color: white">
                 {{ challenge.catchPhrase }}
               </p>
             </div>
 
             <div class="text-right">
-              <p class="text-h6 mb-1" style="color: #8A9B46">
+              <p class="text-h6 mb-1" style="color: #8a9b46">
                 Nombre de points : {{ challenge.points }}
               </p>
             </div>
@@ -64,7 +63,8 @@
         <v-col cols="12" md="6">
           <div class="mb-6">
             <h3 class="text-h5 mb-2">
-              Difficultée : <span style="color: #8A9B46">{{ challenge.difficulty }}</span>
+              Difficultée :
+              <span style="color: #8a9b46">{{ challenge.difficulty }}</span>
             </h3>
           </div>
 
@@ -92,8 +92,16 @@
 
           <div class="mb-6">
             <h3 class="text-h5 mb-3">Liens/Ressource :</h3>
-            <div v-for="(link, index) in challenge.links" :key="index" class="mb-1">
-              <a class="text-body-1" :href="`https://${link}`" style="color: white; text-decoration: none;">
+            <div
+              v-for="(link, index) in challenge.links"
+              :key="index"
+              class="mb-1"
+            >
+              <a
+                class="text-body-1"
+                :href="`https://${link}`"
+                style="color: white; text-decoration: none"
+              >
                 {{ link }}
               </a>
             </div>
@@ -117,7 +125,10 @@
         <v-col cols="12" md="6">
           <div>
             <h4 class="text-h4 mb-3">Description :</h4>
-            <p class="text-body-1" style="line-height: 1.8; white-space: pre-line;">
+            <p
+              class="text-body-1"
+              style="line-height: 1.8; white-space: pre-line"
+            >
               {{ challenge.description }}
             </p>
           </div>
@@ -135,7 +146,7 @@
           class="position-absolute"
           density="compact"
           icon="mdi-close"
-          style="top: 16px; right: 16px;"
+          style="top: 16px; right: 16px"
           variant="text"
           @click="closeIndiceDialog"
         />
@@ -144,7 +155,7 @@
           INDICE {{ currentIndice?.id }}
         </v-card-title>
 
-        <v-card-text class="text-body-1 pa-0" style="line-height: 1.8;">
+        <v-card-text class="text-body-1 pa-0" style="line-height: 1.8">
           {{ currentIndice?.text }}
         </v-card-text>
       </v-card>

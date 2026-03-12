@@ -1,0 +1,18 @@
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '@/api/firebaseApp.js';
+
+async function getUserByID(uid) {
+  const ref = doc(db, 'users', uid);
+  const snap = await getDoc(ref);
+
+  if (snap.exists()) {
+    return {
+      uid,
+      ...snap.data(),
+    };
+  }
+
+  return null;
+}
+
+export default getUserByID;

@@ -1,18 +1,18 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import CGU from '@/pages/about/CGU/CGU.vue'
-import LegalNotices from '@/pages/about/legalNotices/LegalNotices.vue'
-import PrivacyPolicy from '@/pages/about/privacyPolicy/PrivacyPolicy.vue'
-import Challenge from '@/pages/app/challenge/Challenge.vue'
-import Challenges from '@/pages/app/challenges/Challenges.vue'
-import MyProfile from '@/pages/app/myProfile/MyProfile.vue'
-import Ranking from '@/pages/app/ranking/Ranking.vue'
-import UserProfile from '@/pages/app/userProfile/UserProfile.vue'
-import Login from '@/pages/auth/login/Login.vue'
-import Register from '@/pages/auth/register/Register.vue'
-import Contact from '@/pages/help/contact/Contact.vue'
-import FAQ from '@/pages/help/FAQ/FAQ.vue'
-import Home from '@/pages/home/Home.vue'
-import store from '@/store/index.js'
+import { createRouter, createWebHistory } from 'vue-router';
+import CGU from '@/pages/about/CGU/CGU.vue';
+import LegalNotices from '@/pages/about/legalNotices/LegalNotices.vue';
+import PrivacyPolicy from '@/pages/about/privacyPolicy/PrivacyPolicy.vue';
+import Challenge from '@/pages/app/challenge/Challenge.vue';
+import Challenges from '@/pages/app/challenges/Challenges.vue';
+import MyProfile from '@/pages/app/myProfile/MyProfile.vue';
+import Ranking from '@/pages/app/ranking/Ranking.vue';
+import UserProfile from '@/pages/app/userProfile/UserProfile.vue';
+import Login from '@/pages/auth/login/Login.vue';
+import Register from '@/pages/auth/register/Register.vue';
+import Contact from '@/pages/help/contact/Contact.vue';
+import FAQ from '@/pages/help/FAQ/FAQ.vue';
+import Home from '@/pages/home/Home.vue';
+import store from '@/store/index.js';
 
 const routes = [
   {
@@ -23,7 +23,7 @@ const routes = [
   },
   {
     path: '/register',
-    name: 'S\'inscrire',
+    name: "S'inscrire",
     component: Register,
     meta: { requiresAuth: false },
   },
@@ -93,24 +93,27 @@ const routes = [
     component: Contact,
     meta: { requiresAuth: false },
   },
-]
+];
 
 const router = createRouter({
   history: createWebHistory(),
   routes,
-})
+});
 
 router.beforeEach((to, from, next) => {
-  const requiresAuth = to.meta.requiresAuth
-  const isAuthenticated = store.getters['user/user'].loggedIn
+  const requiresAuth = to.meta.requiresAuth;
+  const isAuthenticated = store.getters['user/user'].loggedIn;
 
   if (requiresAuth && !isAuthenticated) {
-    next('/login')
-  } else if ((to.path === '/login' || to.path === '/register') && isAuthenticated) {
-    next('/')
+    next('/login');
+  } else if (
+    (to.path === '/login' || to.path === '/register') &&
+    isAuthenticated
+  ) {
+    next('/');
   } else {
-    next()
+    next();
   }
-})
+});
 
-export default router
+export default router;
