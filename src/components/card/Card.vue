@@ -26,7 +26,11 @@ const difficultyColor = computed(() => {
       return 'primary';
     }
   }
-});
+})
+
+function goToChallenge () {
+  window.location.href = '/challenge'
+}
 
 function goToChallenge() {
   window.location.href = '/challenge';
