@@ -1,14 +1,15 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import { useRoute } from 'vue-router';
-import getUserByID from '@/api/firebase/read/getUserByID';
+import { useStore } from 'vuex';
 import serializedTimestampToStringFormated from '@/utils/dateConvertor.js';
 
 const route = useRoute();
-const userData = ref(null);
+const store = useStore();
+const userData = computed(() => store.getters['otherUser/user'].data);
 
 onMounted(async () => {
-  userData.value = await getUserByID(route.query.uid);
+  await store.dispatch('otherUser/fetchUserByID', route.query.uid);
 });
 
 const user = computed(() => {

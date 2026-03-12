@@ -8,7 +8,6 @@ import {
   signOut,
 } from 'firebase/auth';
 import { Timestamp } from 'firebase/firestore';
-import { useTheme } from 'vuetify';
 import createFirebaseUserCollection from '@/api/firebase/create/createUser.js';
 import deleteFirebaseUserCollection from '@/api/firebase/delete/deleteUser.js';
 import getFirebaseUserCollection from '@/api/firebase/read/getUserByID.js';
