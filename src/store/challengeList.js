@@ -28,21 +28,29 @@ const challengeList = {
     },
 
     ADD_CHALLENGE_LIST (state, value) {
-      if (!value) return
-      state.challenges.push(...value)
+      if (value === null) {
+        return
+      }
+
+      const list = state.challenges
+
+      state.challenges.push.apply(list, value)
     },
   },
 
   actions: {
     async updateList (context) {
-
-      if (endReached) return 'empty'
-      if (isFetching) return 'isLoading'
+      if (endReached) {
+        return 'empty'
+      }
+      if (isFetching) {
+        return 'isLoading'
+      }
 
       isFetching = true
 
-      const { challenges, lastDoc } =
-        await getFirebaseChalListCollection(lastDocFromPreviousPage)
+      const { challenges, lastDoc }
+        = await getFirebaseChalListCollection(lastDocFromPreviousPage)
 
       if (!challenges || challenges.length === 0) {
         endReached = true
