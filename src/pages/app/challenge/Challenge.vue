@@ -76,7 +76,7 @@
                 class="mr-4"
                 density="comfortable"
                 hide-details
-                :placeholder="challenge.flag"
+                placeholder="FLAG-AAAAA-{aaaa_aaaa_aaaa_aaaa}"
                 variant="outlined"
               />
               <v-btn
