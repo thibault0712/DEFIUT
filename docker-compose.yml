@@ -1,7 +1,7 @@
 services:
   web:
     container_name: "DEFIUT"
-    image: ghcr.io/thibault0712/DEFIUT:main
+    image: ghcr.io/thibault0712/defiut:main
     ports:
       - "80:80"
     restart: always
