@@ -58,7 +58,7 @@ function goToChallenge() {
       <div class="text-caption text-medium-emphasis mb-4">
         Nombre de points : {{ points }}
       </div>
-      <p class="text-body-2 text-medium-emphasis">
+      <p class="text-body-2 text-medium-emphasis text-clamp-3">
         {{ description }}
       </p>
     </v-card-item>
