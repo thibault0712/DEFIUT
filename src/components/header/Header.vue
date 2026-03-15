@@ -1,11 +1,13 @@
 <script setup>
-  import { computed } from 'vue'
+  import { ref, computed } from 'vue'
   import { useTheme } from 'vuetify'
   import { useStore } from 'vuex'
 
   const theme = useTheme()
   const store = useStore()
   const userInfos = computed(() => store.getters['user/user'])
+
+  const drawer = ref(false)
 
   // Function available only if user is not logged in, that's why we don't use the store here
   function toggleTheme () {
@@ -15,6 +17,12 @@
 
 <template>
   <v-app-bar class="px-80 bg-background" flat height="80">
+    
+    <v-app-bar-nav-icon
+      class="d-md-none"
+      @click="drawer = !drawer"
+    />
+    
     <router-link class="no-link-style" to="/">
       <div class="d-flex align-center">
         <v-img
@@ -31,7 +39,7 @@
 
     <v-spacer />
 
-    <div class="d-flex align-center ga-6">
+    <div class="d-none d-md-flex align-center ga-6">
       <v-btn class="text-none text-body-1" to="/challenges" variant="text">Défis</v-btn>
       <v-btn class="text-none text-body-1" to="/ranking" variant="text">Classement</v-btn>
       <v-menu open-on-hover>
@@ -102,6 +110,7 @@
           class="rounded-circle cursor-pointer"
           :height="48"
           :src="userInfos.data.imageUrl"
+          :alt="`Avatar de ${userInfos.userName}`"
           :width="48"
         />
         <v-progress-circular v-if="userInfos.loggedIn && userInfos.data === null" color="secondary" indeterminate model-value="20" />
@@ -110,6 +119,63 @@
     </div>
 
   </v-app-bar>
+
+  <v-navigation-drawer
+    v-model="drawer"
+    temporary
+  >
+    <v-list>
+
+      <v-list-item to="/challenges">
+        <v-list-item-title>Défis</v-list-item-title>
+      </v-list-item>
+
+      <v-list-item to="/ranking">
+        <v-list-item-title>Classement</v-list-item-title>
+      </v-list-item>
+
+      <v-list-item to="/help/faq">
+        <v-list-item-title>FAQ</v-list-item-title>
+      </v-list-item>
+
+      <v-list-item to="/help/contact">
+        <v-list-item-title>Contact</v-list-item-title>
+      </v-list-item>
+
+      <v-divider class="my-2"/>
+
+      <!-- Menu selon l'état de connexion -->
+      <template v-if="!userInfos.loggedIn">
+        <v-list-item to="/login">
+          <v-list-item-title>Se connecter</v-list-item-title>
+        </v-list-item>
+
+        <v-list-item to="/register">
+          <v-list-item-title>S'inscrire</v-list-item-title>
+        </v-list-item>
+
+        <v-divider class="my-2" />
+
+        <v-list-item @click="toggleTheme">
+          <template #prepend>
+            <v-icon>
+              {{ theme.global.name.value === 'lightTheme'
+                ? 'mdi-weather-night'
+                : 'mdi-white-balance-sunny' }}
+            </v-icon>
+          </template>
+          <v-list-item-title>Changer le thème</v-list-item-title>
+        </v-list-item>
+      </template>
+
+      <template v-else>
+        <v-list-item to="/myProfile">
+          <v-list-item-title>Mon profil</v-list-item-title>
+        </v-list-item>
+      </template>
+
+    </v-list>
+  </v-navigation-drawer>
 </template>
 
 <style scoped>
@@ -120,8 +186,15 @@
 }
 
 .px-80 {
-  padding-left: 80px !important;
-  padding-right: 80px !important;
+  padding-left: 16px !important;
+  padding-right: 16px !important;
+}
+
+@media (min-width: 960px) {
+  .px-80 {
+    padding-left: 80px !important;
+    padding-right: 80px !important;
+  }
 }
 
 .v-app-bar {

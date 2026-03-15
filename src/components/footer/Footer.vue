@@ -1,45 +1,57 @@
 <template>
-  <v-footer class="d-flex flex-column pa-0 bg-background">
+  <v-footer
+    class="d-flex flex-column pa-0 bg-background"
+    aria-label="Pied de page du site"
+  >
 
     <v-container class="w-100 px-0 py-0" fluid>
       <v-divider class="opacity-50" />
 
-      <v-container class="py-12 w-75" fluid>
+      <v-container class="py-12 px-4 px-md-16">
 
-        <v-row class="ga-md-16" justify="start">
+        <v-row
+          class="ga-10 ga-md-16"
+          justify="center"
+          justify-md="start"
+          align="start"
+        >
 
-          <v-col class="d-flex justify-center" cols="12" md="auto">
+          <v-col
+            cols="12"
+            md="auto"
+            class="d-flex justify-center justify-md-start"
+          >
             <v-img
               alt="DefIUT logo"
-              class="mx-auto"
+              class="mx-auto mx-md-0"
               src="/big_logo.png"
               width="120"
             />
           </v-col>
 
           <v-col cols="12" md="auto">
-            <h2 class="mb-2">À propos & légal</h2>
+            <h3 class="mb-2 text-subtitle-1 font-weight-bold">À propos & légal</h3>
             <ul class="footer-links">
-              <li><router-link class="text-decoration-none" style="color: inherit" to="/about/legal-notices">Mentions légales</router-link></li>
-              <li><router-link class="text-decoration-none" style="color: inherit" to="/about/cgu">CGU</router-link></li>
-              <li><router-link class="text-decoration-none" style="color: inherit" to="/about/privacy-policy">Politique de confidentialité</router-link></li>
+              <li><router-link class="footer-link" to="/about/legal-notices">Mentions légales</router-link></li>
+              <li><router-link class="footer-link" to="/about/cgu">CGU</router-link></li>
+              <li><router-link class="footer-link" to="/about/privacy-policy">Politique de confidentialité</router-link></li>
             </ul>
           </v-col>
 
           <v-col cols="12" md="auto">
-            <h2 class="mb-2">Aide & support</h2>
+            <h3 class="mb-2 text-subtitle-1 font-weight-bold">Aide & support</h3>
             <ul class="footer-links">
-              <li><router-link class="text-decoration-none" style="color: inherit" to="/help/faq">FAQ</router-link></li>
-              <li><router-link class="text-decoration-none" style="color: inherit" to="/help/contact">Contact</router-link></li>
+              <li><router-link class="footer-link" to="/help/faq">FAQ</router-link></li>
+              <li><router-link class="footer-link" to="/help/contact">Contact</router-link></li>
             </ul>
           </v-col>
 
           <v-col cols="12" md="auto">
-            <h2 class="mb-2">Liens rapides</h2>
+            <h3 class="mb-2 text-subtitle-1 font-weight-bold">Liens rapides</h3>
             <ul class="footer-links">
-              <li><router-link class="text-decoration-none" style="color: inherit" to="/">Accueil</router-link></li>
-              <li><router-link class="text-decoration-none" style="color: inherit" to="/challenges">Défis</router-link></li>
-              <li><router-link class="text-decoration-none" style="color: inherit" to="/ranking">Classement</router-link></li>
+              <li><router-link class="footer-link" to="/">Accueil</router-link></li>
+              <li><router-link class="footer-link" to="/challenges">Défis</router-link></li>
+              <li><router-link class="footer-link" to="/ranking">Classement</router-link></li>
             </ul>
           </v-col>
         </v-row>
@@ -70,6 +82,15 @@
 
 .footer-links li {
   margin-bottom: 6px;
+}
+
+.footer-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.footer-link:hover {
+  text-decoration: underline;
 }
 
 .text-center {

@@ -37,31 +37,49 @@
 <template>
   <Header />
 
-  <v-main class="h-screen">
+  <v-main class="pb-16">
     <v-container max-width="1200">
 
       <!-- Titre -->
-      <h1>Profil utilisateur</h1>
+      <h1 class="text-h4 font-weight-bold mb-8">
+        Profil utilisateur
+      </h1>
 
       <!-- Infos utilisateur -->
-      <v-row align="center" class="mt-6">
-        <v-avatar class="mr-6 text-h4" color="secondary" size="96">
-          {{ user.username[0] }}
-        </v-avatar>
-        <h1>{{ user.username }}</h1>
+      <v-row align="center">
+        <v-col cols="auto">
+          <v-avatar class="text-h4" color="secondary" size="96">
+            {{ user.username[0] }}
+          </v-avatar>
+        </v-col>
+
+        <v-col>
+          <h2 class="text-h5 font-weight-bold">
+            {{ user.username }}
+          </h2>
+        </v-col>
       </v-row>
 
-      <v-row class="gx-4 mt-8 mb-3">
-        <v-col cols="4">
-          <p class="text-uppercase font-weight-medium">Dernière connexion : {{ user.lastLogin }}</p>
+      <!-- Informations -->
+      <v-row class="mt-6">
+        <v-col cols="12" md="6">
+          <p class="text-medium-emphasis">
+            Dernière connexion : {{ user.lastLogin }}
+          </p>
         </v-col>
-        <v-col cols="4">
-          <p class="text-uppercase font-weight-medium">Inscrit depuis : {{ user.registeredAt }}</p>
+
+        <v-col cols="12" md="6">
+          <p class="text-medium-emphasis">
+            Inscrit depuis : {{ user.registeredAt }}
+          </p>
         </v-col>
       </v-row>
 
       <!-- Onglets -->
-      <v-tabs v-model="tab">
+      <v-tabs
+        v-model="tab"
+        class="mt-10"
+      >
         <v-tab>Défis validés</v-tab>
         <v-tab>Badges</v-tab>
       </v-tabs>
@@ -72,9 +90,12 @@
         :headers="tab === 0 ? validatedHeaders : badgesHeaders"
         :items="tab === 0 ? validatedItems : badgesItems"
         :items-per-page="5"
+        density="comfortable"
       >
         <template #item.icon="{ value }">
-          <v-icon>{{ value }}</v-icon>
+          <v-icon aria-hidden="true">
+            {{ value }}
+          </v-icon>
         </template>
       </v-data-table>
 
@@ -84,4 +105,5 @@
   <Footer />
 </template>
 
-<style scoped></style>
+<style scoped>
+</style>

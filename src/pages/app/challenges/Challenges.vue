@@ -81,66 +81,89 @@
 
 <template>
   <Header />
-  <v-container max-width="1200">
-    <h1 class="mb-4">Catalogue des défis</h1>
+  <v-main class="pb-16">
+    <v-container max-width="1200">
 
-    <v-container>
-      <v-row>
-        <v-col>
-          <v-combobox label="Nom du défi" />
-        </v-col>
+      <h1 class="text-h4 font-weight-bold mb-8">
+        Catalogue des défis
+      </h1>
 
-        <v-col>
-          <v-combobox
-            :items="defis"
-            label="Tous les défis"
-            multiple
-            persistent-placeholder
-            placeholder="Ex: Web"
-          />
-        </v-col>
+      <!-- FILTRES -->
+      <v-card class="pa-4 mb-8" variant="outlined">
+        <v-row>
+          <v-col cols="12" md="6" lg="4">
+            <v-combobox
+              label="Nom du défi"
+              clearable
+            />
+          </v-col>
 
-        <v-col>
-          <v-combobox
-            :items="difficulte"
-            label="Difficulté"
-            multiple
-            persistent-placeholder
-            placeholder="Ex: Facile"
-          />
-        </v-col>
+          <v-col cols="12" md="6" lg="4">
+            <v-combobox
+              :items="defis"
+              label="Catégorie"
+              multiple
+              clearable
+              placeholder="Ex : Web"
+            />
+          </v-col>
 
-        <v-col>
-          <v-combobox label="Points minimum" />
-        </v-col>
+          <v-col cols="12" md="6" lg="4">
+            <v-combobox
+              :items="difficulte"
+              label="Difficulté"
+              multiple
+              clearable
+              placeholder="Ex : Facile"
+            />
+          </v-col>
 
-        <v-col>
-          <v-combobox label="TAGS" />
-        </v-col>
+          <v-col cols="12" md="6" lg="4">
+            <v-text-field
+              label="Points minimum"
+              type="number"
+              clearable
+            />
+          </v-col>
 
-        <v-col>
-          <v-combobox
-            :items="avancement"
-            label="Avancement"
-            multiple
-            persistent-placeholder
-            placeholder="Ex: En Cours"
-          />
-        </v-col>
-      </v-row>
+          <v-col cols="12" md="6" lg="4">
+            <v-combobox
+              label="Tags"
+              clearable
+            />
+          </v-col>
 
-      <v-btn color="#BA2653" variant="flat"> Chercher </v-btn>
-    </v-container>
+          <v-col cols="12" md="6" lg="4">
+            <v-combobox
+              :items="avancement"
+              label="Avancement"
+              multiple
+              clearable
+              placeholder="Ex : En cours"
+            />
+          </v-col>
+        </v-row>
 
-    <v-container fluid>
+        <v-row justify="end">
+          <v-btn
+            color="#BA2653"
+            size="large"
+            class="text-none font-weight-bold"
+          >
+            Chercher
+          </v-btn>
+        </v-row>
+      </v-card>
+
+      <!-- LISTE DES DEFIS -->
       <v-row>
         <v-col
           v-for="(challenge, index) in featuredChallenges"
           :key="index"
           cols="12"
-          lg="3"
-          md="4"
           sm="6"
+          md="4"
+          lg="3"
         >
           <Card
             :avancement="challenge.progress"
@@ -152,8 +175,9 @@
           />
         </v-col>
       </v-row>
+
     </v-container>
-  </v-container>
+  </v-main>
 
   <Footer />
 </template>

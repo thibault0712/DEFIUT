@@ -1,32 +1,48 @@
 <script setup>
-
 </script>
 
 <template>
   <Header />
 
-  <v-main class="min-vh-100 pt-0 pb-16">
+  <v-main class="pb-16">
     <v-container max-width="1200">
-      <h1 class="mb-4">
+
+      <!-- Titre -->
+      <h1 class="text-h4 font-weight-bold mb-10">
         Classement
       </h1>
-      <v-container class="h-75">
-        <h2 class="text-h4 px-12 py-10 font-bold">
-          Top 3 des Joueurs
-        </h2>
-        <Podium />
-      </v-container>
-      <v-container class="h-75 d-flex flex-column justify-center py-16 mx-12">
-        <h2 class="text-h4 py-10 font-bold">
-          Classement global
-        </h2>
-        <Scoreboard :max-list-size="100" />
-      </v-container>
+
+      <!-- PODIUM -->
+      <v-row class="mb-16" justify="center">
+        <v-col cols="12">
+          <h2 class="text-h5 font-weight-bold mb-8 text-center text-md-left">
+            Top 3 des joueurs
+          </h2>
+        </v-col>
+
+        <v-col cols="12" md="8" class="d-flex justify-center">
+          <Podium />
+        </v-col>
+      </v-row>
+
+      <!-- SCOREBOARD -->
+      <v-row justify="center">
+        <v-col cols="12">
+          <h2 class="text-h5 font-weight-bold mb-8 text-center text-md-left">
+            Classement global
+          </h2>
+        </v-col>
+
+        <v-col cols="12" md="10" class="d-flex justify-center">
+          <Scoreboard :max-list-size="100" />
+        </v-col>
+      </v-row>
 
     </v-container>
-    <Footer />
-  </v-main></template>
+  </v-main>
+
+  <Footer />
+</template>
 
 <style scoped>
-
 </style>
