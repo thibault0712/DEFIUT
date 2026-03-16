@@ -109,7 +109,7 @@
 
           <div class="d-flex gap-4">
             <v-btn
-              v-for="indice in challenge.indice"
+              v-for="indice in challenge.clues"
               :key="indice.id"
               class="text-none"
               color="#8A9B46"
@@ -117,7 +117,7 @@
               variant="flat"
               @click="openIndiceDialog(indice)"
             >
-              INDICE {{ indice.id }} ({{ indice.point }} POINTS)
+              INDICE {{ indice.id }} ({{ indice.points }} POINTS)
             </v-btn>
           </div>
         </v-col>
