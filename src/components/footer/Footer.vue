@@ -1,7 +1,7 @@
 <template>
   <v-footer
-    class="d-flex flex-column pa-0 bg-background"
     aria-label="Pied de page du site"
+    class="d-flex flex-column pa-0 bg-background"
   >
 
     <v-container class="w-100 px-0 py-0" fluid>
@@ -10,26 +10,26 @@
       <v-container class="py-12 px-4 px-md-16">
 
         <v-row
-          class="ga-10 ga-md-16"
+          align="start"
+          class="ga-md-16 ga-8"
           justify="center"
           justify-md="start"
-          align="start"
         >
 
           <v-col
+            class="d-flex justify-center justify-md-start"
             cols="12"
             md="auto"
-            class="d-flex justify-center justify-md-start"
           >
             <v-img
               alt="DefIUT logo"
-              class="mx-auto mx-md-0"
+              max-width="120"
               src="/big_logo.png"
               width="120"
             />
           </v-col>
 
-          <v-col cols="12" md="auto">
+          <v-col class="text-center text-md-left" cols="12" md="auto">
             <h3 class="mb-2 text-subtitle-1 font-weight-bold">À propos & légal</h3>
             <ul class="footer-links">
               <li><router-link class="footer-link" to="/about/legal-notices">Mentions légales</router-link></li>
@@ -38,7 +38,7 @@
             </ul>
           </v-col>
 
-          <v-col cols="12" md="auto">
+          <v-col class="text-center text-md-left" cols="12" md="auto">
             <h3 class="mb-2 text-subtitle-1 font-weight-bold">Aide & support</h3>
             <ul class="footer-links">
               <li><router-link class="footer-link" to="/help/faq">FAQ</router-link></li>
@@ -46,7 +46,7 @@
             </ul>
           </v-col>
 
-          <v-col cols="12" md="auto">
+          <v-col class="text-center text-md-left" cols="12" md="auto">
             <h3 class="mb-2 text-subtitle-1 font-weight-bold">Liens rapides</h3>
             <ul class="footer-links">
               <li><router-link class="footer-link" to="/">Accueil</router-link></li>
@@ -77,7 +77,6 @@
   list-style: none;
   padding: 0;
   margin: 0;
-  text-align: left;
 }
 
 .footer-links li {

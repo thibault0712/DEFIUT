@@ -89,71 +89,57 @@
       </h1>
 
       <!-- FILTRES -->
-      <v-card class="pa-4 mb-8" variant="outlined">
+      <v-container class="pa-0 mb-8" fluid>
         <v-row>
-          <v-col cols="12" md="6" lg="4">
-            <v-combobox
-              label="Nom du défi"
-              clearable
-            />
+          <v-col cols="12" lg="2" md="4" sm="6">
+            <v-combobox label="Nom du défi" />
           </v-col>
 
-          <v-col cols="12" md="6" lg="4">
+          <v-col cols="12" lg="2" md="4" sm="6">
             <v-combobox
               :items="defis"
-              label="Catégorie"
+              label="Tous les défis"
               multiple
-              clearable
-              placeholder="Ex : Web"
+              persistent-placeholder
+              placeholder="Ex: Web"
             />
           </v-col>
 
-          <v-col cols="12" md="6" lg="4">
+          <v-col cols="12" lg="2" md="4" sm="6">
             <v-combobox
               :items="difficulte"
               label="Difficulté"
               multiple
-              clearable
-              placeholder="Ex : Facile"
+              persistent-placeholder
+              placeholder="Ex: Facile"
             />
           </v-col>
 
-          <v-col cols="12" md="6" lg="4">
-            <v-text-field
-              label="Points minimum"
-              type="number"
-              clearable
-            />
+          <v-col cols="12" lg="2" md="4" sm="6">
+            <v-combobox label="Points minimum" />
           </v-col>
 
-          <v-col cols="12" md="6" lg="4">
-            <v-combobox
-              label="Tags"
-              clearable
-            />
+          <v-col cols="12" lg="2" md="4" sm="6">
+            <v-combobox label="TAGS" />
           </v-col>
 
-          <v-col cols="12" md="6" lg="4">
+          <v-col cols="12" lg="2" md="4" sm="6">
             <v-combobox
               :items="avancement"
               label="Avancement"
               multiple
-              clearable
-              placeholder="Ex : En cours"
+              persistent-placeholder
+              placeholder="Ex: En Cours"
             />
           </v-col>
         </v-row>
 
-        <v-row justify="end">
-          <v-btn
-            color="#BA2653"
-            size="large"
-            class="text-none font-weight-bold"
-          >
-            Chercher
-          </v-btn>
+        <v-row class="mt-4" justify="end">
+          <v-col cols="12" sm="auto">
+            <v-btn block color="#BA2653" variant="flat"> Chercher </v-btn>
+          </v-col>
         </v-row>
-      </v-card>
+      </v-container>
 
       <!-- LISTE DES DEFIS -->
       <v-row>
@@ -161,9 +147,9 @@
           v-for="(challenge, index) in featuredChallenges"
           :key="index"
           cols="12"
-          sm="6"
-          md="4"
           lg="3"
+          md="4"
+          sm="6"
         >
           <Card
             :avancement="challenge.progress"

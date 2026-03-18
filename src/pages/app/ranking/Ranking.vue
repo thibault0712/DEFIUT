@@ -20,7 +20,7 @@
           </h2>
         </v-col>
 
-        <v-col cols="12" md="8" class="d-flex justify-center">
+        <v-col class="d-flex justify-center" cols="12" md="8">
           <Podium />
         </v-col>
       </v-row>
@@ -33,7 +33,7 @@
           </h2>
         </v-col>
 
-        <v-col cols="12" md="10" class="d-flex justify-center">
+        <v-col class="d-flex flex-column justify-center px-6" cols="12">
           <Scoreboard :max-list-size="100" />
         </v-col>
       </v-row>

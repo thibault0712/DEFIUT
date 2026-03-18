@@ -1,5 +1,5 @@
 <script setup>
-  import { ref, computed } from 'vue'
+  import { computed, ref } from 'vue'
   import { useTheme } from 'vuetify'
   import { useStore } from 'vuex'
 
@@ -17,12 +17,7 @@
 
 <template>
   <v-app-bar class="px-80 bg-background" flat height="80">
-    
-    <v-app-bar-nav-icon
-      class="d-md-none"
-      @click="drawer = !drawer"
-    />
-    
+
     <router-link class="no-link-style" to="/">
       <div class="d-flex align-center">
         <v-img
@@ -38,6 +33,11 @@
     </router-link>
 
     <v-spacer />
+
+    <v-app-bar-nav-icon
+      class="d-md-none"
+      @click="drawer = !drawer"
+    />
 
     <div class="d-none d-md-flex align-center ga-6">
       <v-btn class="text-none text-body-1" to="/challenges" variant="text">Défis</v-btn>
@@ -107,10 +107,10 @@
       <RouterLink to="/myProfile">
         <v-img
           v-if="userInfos.loggedIn && userInfos.data !== null"
+          :alt="`Avatar de ${userInfos.userName}`"
           class="rounded-circle cursor-pointer"
           :height="48"
           :src="userInfos.data.imageUrl"
-          :alt="`Avatar de ${userInfos.userName}`"
           :width="48"
         />
         <v-progress-circular v-if="userInfos.loggedIn && userInfos.data === null" color="secondary" indeterminate model-value="20" />
@@ -122,6 +122,7 @@
 
   <v-navigation-drawer
     v-model="drawer"
+    location="right"
     temporary
   >
     <v-list>
@@ -142,7 +143,7 @@
         <v-list-item-title>Contact</v-list-item-title>
       </v-list-item>
 
-      <v-divider class="my-2"/>
+      <v-divider class="my-2" />
 
       <!-- Menu selon l'état de connexion -->
       <template v-if="!userInfos.loggedIn">

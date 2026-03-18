@@ -1,61 +1,63 @@
 <script setup>
-import { computed, ref } from 'vue'
-import { useTheme } from 'vuetify'
-import { useStore } from 'vuex'
-import router from '@/router/index.js'
-import serializedTimestampToStringFormated from '@/utils/dateConvertor.js'
+  import { computed, ref } from 'vue'
+  import { useTheme } from 'vuetify'
+  import { useStore } from 'vuex'
+  import router from '@/router/index.js'
+  import serializedTimestampToStringFormated from '@/utils/dateConvertor.js'
 
-const store = useStore()
-const userInfos = computed(() => store.getters['user/user'].data)
-const theme = useTheme()
+  const store = useStore()
+  const userInfos = computed(() => store.getters['user/user'].data)
+  const theme = useTheme()
 
-const removeAccountPopup = ref(false)
-const editUserInformationPopup = ref(false)
+  const removeAccountPopup = ref(false)
+  const editUserInformationPopup = ref(false)
 
-async function logOut () {
-  await store.dispatch('user/logOut')
-  await router.push('/')
-}
-
-function toggleTheme () {
-  let newTheme = 'darkTheme'
-
-  switch (userInfos.value.theme) {
-    case 'lightTheme':
-      newTheme = 'darkTheme'
-      break
-    case 'darkTheme':
-      newTheme = 'lightTheme'
-      break
+  async function logOut () {
+    await store.dispatch('user/logOut')
+    await router.push('/')
   }
 
-  store.dispatch('user/updateTheme', newTheme)
-  theme.change(newTheme)
-}
+  function toggleTheme () {
+    let newTheme = 'darkTheme'
 
-const tab = ref(0)
+    switch (userInfos.value.theme) {
+      case 'lightTheme': {
+        newTheme = 'darkTheme'
+        break
+      }
+      case 'darkTheme': {
+        newTheme = 'lightTheme'
+        break
+      }
+    }
 
-const validatedHeaders = [
-  { title: 'Titre du défi', key: 'title' },
-  { title: 'Date de validation', key: 'date' },
-  { title: 'Points gagnés', key: 'points' },
-]
+    store.dispatch('user/updateTheme', newTheme)
+    theme.change(newTheme)
+  }
 
-const validatedItems = [
-  { title: 'Défi Web', date: '01/01/2025', points: 120 },
-  { title: 'Défi Crypto', date: '15/01/2025', points: 200 },
-]
+  const tab = ref(0)
 
-const badgesHeaders = [
-  { title: 'Badge', key: 'icon' },
-  { title: 'Nom du badge', key: 'name' },
-  { title: 'Date d’obtention', key: 'date' },
-]
+  const validatedHeaders = [
+    { title: 'Titre du défi', key: 'title' },
+    { title: 'Date de validation', key: 'date' },
+    { title: 'Points gagnés', key: 'points' },
+  ]
 
-const badgesItems = [
-  { icon: 'mdi-star', name: 'Badge #1', date: '05/01/2025' },
-  { icon: 'mdi-shield-check', name: 'Badge #2', date: '20/01/2025' },
-]
+  const validatedItems = [
+    { title: 'Défi Web', date: '01/01/2025', points: 120 },
+    { title: 'Défi Crypto', date: '15/01/2025', points: 200 },
+  ]
+
+  const badgesHeaders = [
+    { title: 'Badge', key: 'icon' },
+    { title: 'Nom du badge', key: 'name' },
+    { title: 'Date d’obtention', key: 'date' },
+  ]
+
+  const badgesItems = [
+    { icon: 'mdi-star', name: 'Badge #1', date: '05/01/2025' },
+    { icon: 'mdi-shield-check', name: 'Badge #2', date: '20/01/2025' },
+  ]
 </script>
 
 <template>
@@ -77,14 +79,14 @@ const badgesItems = [
           <v-switch
             v-model="userInfos.theme"
             append-icon="mdi-weather-sunny"
-            prepend-icon="mdi-weather-night"
-            false-value="darkTheme"
-            true-value="lightTheme"
+            aria-label="Changer le thème"
             color="primary"
+            false-value="darkTheme"
             hide-details
             inset
+            prepend-icon="mdi-weather-night"
             readonly
-            aria-label="Changer le thème"
+            true-value="lightTheme"
             @click="toggleTheme"
           />
         </v-col>
@@ -95,8 +97,8 @@ const badgesItems = [
         <v-col cols="auto">
           <v-avatar size="96">
             <v-img
-              :src="userInfos.imageUrl"
               :alt="`Avatar de ${userInfos.userName}`"
+              :src="userInfos.imageUrl"
             />
           </v-avatar>
         </v-col>
@@ -109,15 +111,15 @@ const badgesItems = [
       </v-row>
 
       <!-- DATES -->
-      <v-row class="mt-6">
-        <v-col cols="12" md="6">
-          <p class="text-medium-emphasis">
+      <v-row class="mt-4" dense>
+        <v-col cols="12">
+          <p class="text-medium-emphasis mb-0">
             Dernière connexion :
             {{ serializedTimestampToStringFormated(userInfos.lastLogin) }}
           </p>
         </v-col>
 
-        <v-col cols="12" md="6">
+        <v-col cols="12">
           <p class="text-medium-emphasis">
             Inscrit depuis :
             {{ serializedTimestampToStringFormated(userInfos.registeredAt) }}
@@ -126,7 +128,7 @@ const badgesItems = [
       </v-row>
 
       <!-- ACTIONS -->
-      <v-row class="mt-8" dense>
+      <v-row class="mt-4" dense>
         <v-col cols="12" sm="4">
           <v-btn
             block
@@ -168,10 +170,10 @@ const badgesItems = [
       <!-- TABLEAU -->
       <v-data-table
         class="mt-6"
+        density="comfortable"
         :headers="tab === 0 ? validatedHeaders : badgesHeaders"
         :items="tab === 0 ? validatedItems : badgesItems"
         :items-per-page="5"
-        density="comfortable"
       >
         <template #item.icon="{ value }">
           <v-icon aria-hidden="true">
