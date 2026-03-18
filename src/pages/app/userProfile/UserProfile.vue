@@ -96,13 +96,13 @@
 
       <!-- Informations -->
       <v-row class="mt-6">
-        <v-col cols="12" md="6">
+        <v-col cols="12" md="4">
           <p class="text-medium-emphasis">
             Dernière connexion : {{ user.lastLogin }}
           </p>
         </v-col>
 
-        <v-col cols="12" md="6">
+        <v-col cols="12" md="4">
           <p class="text-medium-emphasis">
             Inscrit depuis : {{ user.registeredAt }}
           </p>

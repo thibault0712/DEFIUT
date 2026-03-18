@@ -115,12 +115,13 @@
       <!-- Infos utilisateur -->
       <v-row v-if="userData" align="center" class="mt-6">
         <v-avatar
+          class="mr-6"
           :color="userData?.imageUrl ? undefined : 'pink'"
           size="96"
         >
           <v-img
             v-if="userData?.imageUrl"
-            :alt="`Avatar de ${userInfos.userName}`"
+            :alt="`Avatar de ${userData.userName}`"
             cover
             :src="userData.imageUrl"
           />
@@ -130,23 +131,23 @@
         </v-avatar>
         <v-col>
           <h2 class="text-h5 font-weight-bold">
-            {{ userInfos.userName }}
+            {{ userData.userName }}
           </h2>
         </v-col>
       </v-row>
 
       <!-- DATES -->
-      <v-row v-if="userData" align="center" class="mt-8">
-        <v-col cols="12">
-          <p class="text-medium-emphasis mb-0">
-            Dernière connexion :
-            {{ serializedTimestampToStringFormated(userData.lastLogin) }}
+      <v-row class="mt-6">
+        <v-col cols="12" md="4">
+          <p class="text-medium-emphasis">
+            Dernière connexion : {{ serializedTimestampToStringFormated(userData.lastLogin) }}
           </p>
         </v-col>
-        <v-col cols="12">
-          <p class="text-medium-emphasis mb-0">
-            Inscrit depuis :
-            {{ serializedTimestampToStringFormated(userInfos.registeredAt) }}</p>
+
+        <v-col cols="12" md="4">
+          <p class="text-medium-emphasis">
+            Inscrit depuis : {{ serializedTimestampToStringFormated(userData.registeredAt) }}
+          </p>
         </v-col>
       </v-row>
 
