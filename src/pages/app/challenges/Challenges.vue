@@ -81,58 +81,67 @@ const featuredChallenges = [
 
 <template>
   <Header />
-  <v-container max-width="1200">
-    <h1 class="mb-4">Catalogue des défis</h1>
+  <v-main class="pb-16">
+    <v-container max-width="1200">
 
-    <v-container>
-      <v-row>
-        <v-col>
-          <v-combobox label="Nom du défi" />
-        </v-col>
+      <h1 class="text-h4 font-weight-bold mb-8">
+        Catalogue des défis
+      </h1>
 
-        <v-col>
-          <v-combobox
-            :items="defis"
-            label="Tous les défis"
-            multiple
-            persistent-placeholder
-            placeholder="Ex: Web"
-          />
-        </v-col>
+      <!-- FILTRES -->
+      <v-container class="pa-0 mb-8" fluid>
+        <v-row>
+          <v-col cols="12" lg="2" md="4" sm="6">
+            <v-combobox label="Nom du défi" />
+          </v-col>
 
-        <v-col>
-          <v-combobox
-            :items="difficulte"
-            label="Difficulté"
-            multiple
-            persistent-placeholder
-            placeholder="Ex: Facile"
-          />
-        </v-col>
+          <v-col cols="12" lg="2" md="4" sm="6">
+            <v-combobox
+              :items="defis"
+              label="Tous les défis"
+              multiple
+              persistent-placeholder
+              placeholder="Ex: Web"
+            />
+          </v-col>
 
-        <v-col>
-          <v-combobox label="Points minimum" />
-        </v-col>
+          <v-col cols="12" lg="2" md="4" sm="6">
+            <v-combobox
+              :items="difficulte"
+              label="Difficulté"
+              multiple
+              persistent-placeholder
+              placeholder="Ex: Facile"
+            />
+          </v-col>
 
-        <v-col>
-          <v-combobox label="TAGS" />
-        </v-col>
+          <v-col cols="12" lg="2" md="4" sm="6">
+            <v-combobox label="Points minimum" />
+          </v-col>
 
-        <v-col>
-          <v-combobox
-            :items="avancement"
-            label="Avancement"
-            multiple
-            persistent-placeholder
-            placeholder="Ex: En Cours"
-          />
-        </v-col>
-      </v-row>
+          <v-col cols="12" lg="2" md="4" sm="6">
+            <v-combobox label="TAGS" />
+          </v-col>
 
-      <v-btn color="#BA2653" variant="flat"> Chercher </v-btn>
-    </v-container>
+          <v-col cols="12" lg="2" md="4" sm="6">
+            <v-combobox
+              :items="avancement"
+              label="Avancement"
+              multiple
+              persistent-placeholder
+              placeholder="Ex: En Cours"
+            />
+          </v-col>
+        </v-row>
 
-    <v-container fluid>
+        <v-row class="mt-4" justify="end">
+          <v-col cols="12" sm="auto">
+            <v-btn block color="#BA2653" variant="flat"> Chercher </v-btn>
+          </v-col>
+        </v-row>
+      </v-container>
+
+      <!-- LISTE DES DEFIS -->
       <v-row>
         <v-col
           v-for="(challenge, index) in featuredChallenges"
@@ -152,8 +161,9 @@ const featuredChallenges = [
           />
         </v-col>
       </v-row>
+
     </v-container>
-  </v-container>
+  </v-main>
 
   <Footer />
 </template>

@@ -51,16 +51,17 @@ const featuredChallenges = [
 <template>
   <Header />
 
-  <v-main class="min-vh-100 pt-0 pb-16">
+  <v-main class="min-vh-100 pb-16 pt-0">
+    <!-- Hero / Section de bienvenue -->
     <v-container max-width="1200">
       <v-container
         class="d-flex align-center justify-center h-screen pb-16"
         fluid
       >
-        <div class="d-flex align-center justify-center w-100">
-          <div class="d-flex justify-end">
+        <div class="d-flex flex-column flex-md-row align-center justify-center w-100">
+          <div class="d-flex justify-center justify-md-end mb-6 mb-md-0">
             <v-img
-              class="mr-10"
+              class="mr-md-10"
               contain
               max-width="250"
               src="/big_logo.png"
@@ -68,14 +69,14 @@ const featuredChallenges = [
             />
           </div>
 
-          <v-divider vertical />
+          <v-divider class="d-none d-md-flex" vertical />
 
-          <div class="d-flex flex-column justify-center ml-10">
-            <h1 class="text-h1 font-weight-bold text-on-background mb-4">
+          <div class="d-flex flex-column align-center align-md-start justify-center ml-md-10 text-center text-md-left">
+            <h1 class="text-h3 text-md-h1 font-weight-bold text-on-background mb-4">
               Bienvenue
             </h1>
             <p
-              class="text-h5 text-medium-emphasis"
+              class="text-body-1 text-md-h5 text-medium-emphasis"
               style="line-height: 1.4; max-width: 500px"
             >
               Défis CTF, adrénaline et progression garantie : deviens le hacker
@@ -84,16 +85,16 @@ const featuredChallenges = [
           </div>
         </div>
       </v-container>
+    </v-container>
 
-      <v-container class="py-10">
-        <h2 class="text-h4 font-weight-bold mb-10">Nos défis à la une :</h2>
+    <v-container class="py-0" max-width="1200">
+      <!-- Carousel des défis -->
+      <div class="py-10">
+        <h2 class="text-h4 font-weight-bold mb-10 text-center text-md-left">Nos défis à la une :</h2>
 
         <v-sheet class="bg-transparent">
           <v-slide-group center-active class="pa-4" show-arrows>
-            <v-slide-group-item
-              v-for="(challenge, n) in featuredChallenges"
-              :key="n"
-            >
+            <v-slide-group-item v-for="(challenge, n) in featuredChallenges" :key="n">
               <Card
                 :avancement="challenge.progress"
                 :categorie="challenge.category"
@@ -109,7 +110,7 @@ const featuredChallenges = [
           </v-slide-group>
         </v-sheet>
 
-        <v-row class="mt-8 px-4" justify="end">
+        <v-row class="mt-8 px-4" justify="center justify-md-end">
           <v-btn
             class="text-none font-weight-bold px-8"
             color="primary"
@@ -120,12 +121,13 @@ const featuredChallenges = [
             VOIR PLUS
           </v-btn>
         </v-row>
-      </v-container>
+      </div>
 
-      <v-container>
-        <h2 class="text-h4 font-weight-bold mb-10">Classement :</h2>
+      <!-- Section classement -->
+      <div class="py-10">
+        <h2 class="text-h4 font-weight-bold mb-10 text-center text-md-left">Classement :</h2>
 
-        <v-row align="center" justify="center">
+        <v-row align="center" class="gap-6 gap-md-0" justify="center">
           <v-col class="d-flex justify-center" cols="12" md="6">
             <Podium />
           </v-col>
@@ -135,7 +137,7 @@ const featuredChallenges = [
           </v-col>
         </v-row>
 
-        <v-row class="mt-8 px-4" justify="end">
+        <v-row class="mt-8 px-4" justify="center justify-md-end">
           <v-btn
             class="text-none font-weight-bold px-8"
             color="primary"
@@ -146,7 +148,7 @@ const featuredChallenges = [
             VOIR PLUS
           </v-btn>
         </v-row>
-      </v-container>
+      </div>
     </v-container>
   </v-main>
 

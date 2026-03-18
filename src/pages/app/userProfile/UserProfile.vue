@@ -1,105 +1,119 @@
 <script setup>
-import { ref, onMounted, computed } from 'vue';
-import { useRoute } from 'vue-router';
-import { useStore } from 'vuex';
-import serializedTimestampToStringFormated from '@/utils/dateConvertor.js';
+  import { computed, onMounted, ref } from 'vue'
+  import { useRoute } from 'vue-router'
+  import { useStore } from 'vuex'
+  import serializedTimestampToStringFormated from '@/utils/dateConvertor.js'
 
-const route = useRoute();
-const store = useStore();
-const userData = computed(() => store.getters['otherUser/user'].data);
+  const route = useRoute()
+  const store = useStore()
+  const userData = computed(() => store.getters['otherUser/user'].data)
 
-onMounted(async () => {
-  await store.dispatch('otherUser/fetchUserByID', route.query.uid);
-});
+  onMounted(async () => {
+    await store.dispatch('otherUser/fetchUserByID', route.query.uid)
+  })
 
-const user = computed(() => {
-  return {
-    username: userData.value?.userName || 'Chargement...',
-    lastLogin: userData.value?.lastLogin
-      ? userData.value.lastLogin.toDate().toLocaleDateString()
-      : '...',
-    registeredAt: userData.value?.registeredAt
-      ? userData.value.registeredAt.toDate().toLocaleDateString()
-      : '...',
-    imageUrl: userData.value?.imageUrl || null,
-  };
-});
-
-/* Onglet actif */
-const tab = ref(0);
-
-/* === Défis validés === */
-const validatedHeaders = [
-  { title: 'Titre du défi', key: 'title' },
-  { title: 'Date de validation', key: 'date' },
-  { title: 'Points gagnés', key: 'points' },
-];
-
-const validatedItems = computed(() => {
-  if (!userData.value || !userData.value.challenges) return [];
-
-  return Object.entries(userData.value.challenges).map(([id, data]) => {
+  const user = computed(() => {
     return {
-      title: data.title || '...',
-      date: serializedTimestampToStringFormated(data.date) || '...',
-      points: data.points || '...',
-    };
-  });
-});
+      username: userData.value?.userName || 'Chargement...',
+      lastLogin: userData.value?.lastLogin
+        ? userData.value.lastLogin.toDate().toLocaleDateString()
+        : '...',
+      registeredAt: userData.value?.registeredAt
+        ? userData.value.registeredAt.toDate().toLocaleDateString()
+        : '...',
+      imageUrl: userData.value?.imageUrl || null,
+    }
+  })
 
-/* === Badges === */
-const badgesHeaders = [
-  { title: 'Badge', key: 'icon' },
-  { title: 'Nom du badge', key: 'name' },
-  { title: 'Date d’obtention', key: 'date' },
-];
+  /* Onglet actif */
+  const tab = ref(0)
 
-const badgesItems = computed(() => {
-  if (!userData.value || !userData.value.badges) return [];
-  return Object.entries(userData.value.badges).map(([id, data]) => {
-    return {
-      icon: data.icon || '...',
-      name: data.name || '...',
-      date: serializedTimestampToStringFormated(data.date) || '...',
-    };
-  });
-});
+  /* === Défis validés === */
+  const validatedHeaders = [
+    { title: 'Titre du défi', key: 'title' },
+    { title: 'Date de validation', key: 'date' },
+    { title: 'Points gagnés', key: 'points' },
+  ]
+
+  const validatedItems = computed(() => {
+    if (!userData.value || !userData.value.challenges) return []
+
+    return Object.entries(userData.value.challenges).map(([id, data]) => {
+      return {
+        title: data.title || '...',
+        date: serializedTimestampToStringFormated(data.date) || '...',
+        points: data.points || '...',
+      }
+    })
+  })
+
+  /* === Badges === */
+  const badgesHeaders = [
+    { title: 'Badge', key: 'icon' },
+    { title: 'Nom du badge', key: 'name' },
+    { title: 'Date d’obtention', key: 'date' },
+  ]
+
+  const badgesItems = computed(() => {
+    if (!userData.value || !userData.value.badges) return []
+    return Object.entries(userData.value.badges).map(([id, data]) => {
+      return {
+        icon: data.icon || '...',
+        name: data.name || '...',
+        date: serializedTimestampToStringFormated(data.date) || '...',
+      }
+    })
+  })
 </script>
 
 <template>
   <Header />
 
-  <v-main class="h-screen">
+  <v-main class="pb-16">
     <v-container max-width="1200">
       <!-- Titre -->
-      <h1>Profil utilisateur</h1>
+      <h1 class="text-h4 font-weight-bold mb-8">
+        Profil utilisateur
+      </h1>
 
       <!-- Infos utilisateur -->
-      <v-row align="center" class="mt-6">
-        <v-avatar class="mr-6 text-h4" color="secondary" size="96">
-          <v-img v-if="user.imageUrl" :src="user.imageUrl" cover />
-          <span v-else class="text-h4">
-            {{ user.username[0] }}
-          </span>
-        </v-avatar>
-        <h1>{{ user.username }}</h1>
+      <v-row align="center">
+        <v-col cols="auto">
+          <v-avatar class="text-h4" color="secondary" size="96">
+            <v-img v-if="user.imageUrl" cover :src="user.imageUrl" />
+            <span v-else class="text-h4">
+              {{ user.username[0] }}
+            </span>
+          </v-avatar>
+        </v-col>
+
+        <v-col>
+          <h2 class="text-h5 font-weight-bold">
+            {{ user.username }}
+          </h2>
+        </v-col>
       </v-row>
 
-      <v-row class="gx-4 mt-8 mb-3">
-        <v-col cols="4">
-          <p class="text-uppercase font-weight-medium">
+      <!-- Informations -->
+      <v-row class="mt-6">
+        <v-col cols="12" md="6">
+          <p class="text-medium-emphasis">
             Dernière connexion : {{ user.lastLogin }}
           </p>
         </v-col>
-        <v-col cols="4">
-          <p class="text-uppercase font-weight-medium">
+
+        <v-col cols="12" md="6">
+          <p class="text-medium-emphasis">
             Inscrit depuis : {{ user.registeredAt }}
           </p>
         </v-col>
       </v-row>
 
       <!-- Onglets -->
-      <v-tabs v-model="tab">
+      <v-tabs
+        v-model="tab"
+        class="mt-10"
+      >
         <v-tab>Défis validés</v-tab>
         <v-tab>Badges</v-tab>
       </v-tabs>
@@ -107,15 +121,19 @@ const badgesItems = computed(() => {
       <!-- Tableau -->
       <v-data-table
         class="mt-6"
+        density="comfortable"
         :headers="tab === 0 ? validatedHeaders : badgesHeaders"
         :items="tab === 0 ? validatedItems : badgesItems"
         :items-per-page="5"
         :items-per-page-options="[5, 10, 25, 50, 100, -1]"
       >
         <template #item.icon="{ value }">
-          <v-icon>{{ value }}</v-icon>
+          <v-icon aria-hidden="true">
+            {{ value }}
+          </v-icon>
         </template>
       </v-data-table>
+
     </v-container>
   </v-main>
 
