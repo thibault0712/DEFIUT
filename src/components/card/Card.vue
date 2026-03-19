@@ -1,36 +1,37 @@
 <script setup>
-import { computed } from 'vue';
+  import { computed } from 'vue'
 
-const props = defineProps({
-  titre: { type: String, default: 'Titre' },
-  points: { type: Number, default: -1 },
-  description: { type: String, default: 'Description' },
-  difficulte: { type: String, default: 'Facile' },
-  avancement: { type: String, default: 'Avancement' },
-  categorie: { type: String, default: 'Catégorie' },
-});
+  const props = defineProps({
+    titre: { type: String, default: 'Titre' },
+    points: { type: Number, default: -1 },
+    description: { type: String, default: 'Description' },
+    difficulte: { type: String, default: 'Facile' },
+    avancement: { type: String, default: 'Avancement' },
+    categorie: { type: String, default: 'Catégorie' },
+    challengeId: { type: String, default: '' },
+  })
 
-// Pour mettre à jour la couleur suivant la difficulté
-const difficultyColor = computed(() => {
-  switch (props.difficulte.toLowerCase()) {
-    case 'facile': {
-      return '#8A9B46';
+  // Pour mettre à jour la couleur suivant la difficulté
+  const difficultyColor = computed(() => {
+    switch (props.difficulte.toLowerCase()) {
+      case 'facile': {
+        return '#8A9B46'
+      }
+      case 'moyen': {
+        return '#FB8C00'
+      }
+      case 'difficile': {
+        return '#BA2653'
+      }
+      default: {
+        return 'primary'
+      }
     }
-    case 'moyen': {
-      return '#FB8C00';
-    }
-    case 'difficile': {
-      return '#BA2653';
-    }
-    default: {
-      return 'primary';
-    }
+  })
+
+  function goToChallenge (challengeId) {
+    window.location.href = '/challenge/' + challengeId
   }
-})
-
-function goToChallenge() {
-  window.location.href = '/challenge';
-}
 </script>
 
 <template>
@@ -38,7 +39,7 @@ function goToChallenge() {
     class="bg-surface border-thin d-flex flex-column"
     flat
     height="100%"
-    @click="goToChallenge()"
+    @click="goToChallenge(challengeId)"
   >
     <v-card-item class="pt-2">
       <div
@@ -58,7 +59,7 @@ function goToChallenge() {
       <div class="text-caption text-medium-emphasis mb-4">
         Nombre de points : {{ points }}
       </div>
-      <p class="text-body-2 text-medium-emphasis">
+      <p class="text-body-2 text-medium-emphasis text-clamp-3">
         {{ description }}
       </p>
     </v-card-item>

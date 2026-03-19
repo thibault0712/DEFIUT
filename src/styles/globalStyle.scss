@@ -42,3 +42,10 @@ h6 {
     font-family: $font-family-body !important;
   }
 }
+
+.text-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

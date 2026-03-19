@@ -1,9 +1,10 @@
-import { createStore } from 'vuex';
-import createPersistedState from 'vuex-persistedstate';
-import user from './user.js';
+import { createStore } from 'vuex'
+import createPersistedState from 'vuex-persistedstate'
 import challenge from './challenge.js'
-import userList from './userList.js';
-import otherUser from './otherUser.js';
+import challengeList from './challengeList'
+import otherUser from './otherUser.js'
+import user from './user.js'
+import userList from './userList.js'
 
 export default createStore({
   modules: {
@@ -11,6 +12,7 @@ export default createStore({
     userList,
     challenge,
     otherUser,
+    challengeList,
   },
   plugins: [
     createPersistedState({
@@ -18,4 +20,4 @@ export default createStore({
       paths: ['user'],
     }),
   ],
-});
+})
