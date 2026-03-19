@@ -1,51 +1,27 @@
 <script setup>
-definePage({
-  alias: ['/'],
-});
+  import { computed, onMounted } from 'vue'
+  import { useStore } from 'vuex'
 
-// Données factices pour le carousel des défis
-const featuredChallenges = [
-  {
-    title: 'SQL Injection',
-    points: 100,
-    description: 'Exploitez une faille SQL pour récupérer la base de données.',
-    difficulty: 'Facile',
-    progress: 'En cours',
-    category: 'Web',
-  },
-  {
-    title: 'Reverse Engineering',
-    points: 250,
-    description: 'Analysez le binaire pour trouver le flag caché.',
-    difficulty: 'Moyen',
-    progress: '',
-    category: 'Programmation',
-  },
-  {
-    title: 'Cryptography',
-    points: 150,
-    description: 'Déchiffrez le message codé avec une méthode classique.',
-    difficulty: 'Facile',
-    progress: 'Terminé',
-    category: 'Cryptographie',
-  },
-  {
-    title: 'Network Analysis',
-    points: 300,
-    description: 'Analysez le fichier .pcap pour intercepter le trafic.',
-    difficulty: 'Difficile',
-    progress: 'En cours',
-    category: 'Réseau',
-  },
-  {
-    title: 'Web Exploitation',
-    points: 200,
-    description: 'Trouvez la vulnérabilité XSS sur cette page.',
-    difficulty: 'Moyen',
-    progress: 'Terminé',
-    category: 'Web',
-  },
-];
+  definePage({
+    alias: ['/'],
+  })
+
+  const store = useStore()
+  const challengeList = computed(() => store.getters['challengeList/challengeList'])
+
+  async function loadChallenges () {
+    await store.dispatch('challengeList/updateList')
+  }
+
+  onMounted(() => {
+    loadChallenges()
+  })
+
+  const featuredChallenges = computed(() => {
+    if (!challengeList.value) return []
+
+    return challengeList.value.slice(0, 10)
+  })
 </script>
 
 <template>
@@ -94,9 +70,12 @@ const featuredChallenges = [
 
         <v-sheet class="bg-transparent">
           <v-slide-group center-active class="pa-4" show-arrows>
-            <v-slide-group-item v-for="(challenge, n) in featuredChallenges" :key="n">
+            <v-slide-group-item
+              v-for="challenge in featuredChallenges"
+              :key="challenge.uid"
+            >
               <Card
-                :avancement="challenge.progress"
+                :avancement="''"
                 :categorie="challenge.category"
                 class="ma-4"
                 :description="challenge.description"
