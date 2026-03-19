@@ -77,6 +77,7 @@
               <Card
                 :avancement="''"
                 :categorie="challenge.category"
+                :challenge-id="challenge.uid"
                 class="ma-4"
                 :description="challenge.description"
                 :difficulte="challenge.difficulty"

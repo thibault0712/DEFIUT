@@ -144,6 +144,7 @@
           <Card
             :avancement="''"
             :categorie="challenge.category"
+            :challenge-id="challenge.uid"
             :description="challenge.description"
             :difficulte="challenge.difficulty"
             :points="challenge.points"
