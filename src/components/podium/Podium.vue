@@ -1,24 +1,49 @@
 <script setup>
-import { computed, onMounted } from 'vue';
-import { useStore } from 'vuex';
+  import { computed, onMounted } from 'vue'
+  import { useDisplay } from 'vuetify'
+  import { useStore } from 'vuex'
 
-const store = useStore();
+  const store = useStore()
+  const { smAndDown } = useDisplay()
 
-const bestUsers = computed(() => store.getters['userList/userList']);
+  const bestUsers = computed(() => store.getters['userList/userList'])
 
-const firstPlace = computed(() => bestUsers.value?.[0] || null);
-const secondPlace = computed(() => bestUsers.value?.[1] || null);
-const thirdPlace = computed(() => bestUsers.value?.[2] || null);
+  const firstPlace = computed(() => bestUsers.value?.[0] || null)
+  const secondPlace = computed(() => bestUsers.value?.[1] || null)
+  const thirdPlace = computed(() => bestUsers.value?.[2] || null)
 
-onMounted(async () => {
-  await store.dispatch('userList/updateList');
-});
+  const podiumSizes = computed(() => {
+    if (smAndDown.value) {
+      return {
+        userAvatar: 72,
+        sideHeight: 150,
+        sideWidth: 100,
+        centerHeight: 220,
+        centerWidth: 120,
+        sideRankAvatar: 52,
+        centerRankAvatar: 64,
+      }
+    }
+
+    return {
+      userAvatar: 96,
+      sideHeight: 180,
+      sideWidth: 140,
+      centerHeight: 280,
+      centerWidth: 160,
+      sideRankAvatar: 70,
+      centerRankAvatar: 80,
+    }
+  })
+
+  onMounted(async () => {
+    await store.dispatch('userList/updateList')
+  })
 </script>
 
 <template>
   <v-container
     class="d-flex align-end justify-center py-10"
-    style="min-height: 500px"
   >
     <div class="d-flex flex-column align-center mx-1">
       <RouterLink
@@ -27,8 +52,8 @@ onMounted(async () => {
           query: { uid: thirdPlace ? thirdPlace.uid : 'INCONNU' },
         }"
       >
-        <v-avatar size="96" color="secondary" class="mb-2">
-          <v-img v-if="thirdPlace?.imageUrl" :src="thirdPlace.imageUrl" cover />
+        <v-avatar class="mb-2" color="secondary" :size="podiumSizes.userAvatar">
+          <v-img v-if="thirdPlace?.imageUrl" cover :src="thirdPlace.imageUrl" />
           <span v-else class="text-h5">
             {{ thirdPlace?.userName?.[0] }}
           </span>
@@ -37,10 +62,10 @@ onMounted(async () => {
       <v-sheet
         class="rounded-t-lg d-flex align-center justify-center"
         color="primary"
-        height="180"
-        width="140"
+        :height="podiumSizes.sideHeight"
+        :width="podiumSizes.sideWidth"
       >
-        <v-avatar class="title-orbitron" color="brown-darken-3" size="60">
+        <v-avatar class="title-orbitron" color="brown-darken-3" :size="podiumSizes.sideRankAvatar">
           <span class="text-h4">3</span>
         </v-avatar>
       </v-sheet>
@@ -53,8 +78,8 @@ onMounted(async () => {
           query: { uid: firstPlace ? firstPlace.uid : 'INCONNU' },
         }"
       >
-        <v-avatar size="96" color="secondary" class="mb-2">
-          <v-img v-if="firstPlace?.imageUrl" :src="firstPlace.imageUrl" cover />
+        <v-avatar class="mb-2" color="secondary" :size="podiumSizes.userAvatar">
+          <v-img v-if="firstPlace?.imageUrl" cover :src="firstPlace.imageUrl" />
           <span v-else class="text-h5">
             {{ firstPlace?.userName?.[0] }}
           </span>
@@ -63,13 +88,13 @@ onMounted(async () => {
       <v-sheet
         class="rounded-t-lg d-flex align-center justify-center shadow-lg"
         color="primary"
-        height="280"
-        width="160"
+        :height="podiumSizes.centerHeight"
+        :width="podiumSizes.centerWidth"
       >
         <v-avatar
           class="title-orbitron elevation-6"
           color="orange-darken-1"
-          size="80"
+          :size="podiumSizes.centerRankAvatar"
         >
           <span class="text-h3 font-weight-bold">1</span>
         </v-avatar>
@@ -83,11 +108,11 @@ onMounted(async () => {
           query: { uid: secondPlace ? secondPlace.uid : 'INCONNU' },
         }"
       >
-        <v-avatar size="96" color="secondary" class="mb-2">
+        <v-avatar class="mb-2" color="secondary" :size="podiumSizes.userAvatar">
           <v-img
             v-if="secondPlace?.imageUrl"
-            :src="secondPlace.imageUrl"
             cover
+            :src="secondPlace.imageUrl"
           />
           <span v-else class="text-h5">
             {{ secondPlace?.userName?.[0] }}
@@ -97,10 +122,10 @@ onMounted(async () => {
       <v-sheet
         class="rounded-t-lg d-flex align-center justify-center"
         color="primary"
-        height="220"
-        width="140"
+        :height="podiumSizes.sideHeight"
+        :width="podiumSizes.sideWidth"
       >
-        <v-avatar class="title-orbitron" color="grey-darken-3" size="70">
+        <v-avatar class="title-orbitron" color="grey-darken-3" :size="podiumSizes.sideRankAvatar">
           <span class="text-h4">2</span>
         </v-avatar>
       </v-sheet>

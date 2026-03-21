@@ -32,7 +32,7 @@
       @click="drawer = !drawer"
     />
 
-    <div class="d-flex align-center ga-6">
+    <div class="align-center ga-6 d-none d-md-flex">
       <v-btn
         class="text-none text-body-1"
         to="/challenges"
