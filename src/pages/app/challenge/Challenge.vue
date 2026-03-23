@@ -1,39 +1,65 @@
 <script setup>
-  import { computed, onMounted, ref } from 'vue'
-  import { useRoute } from 'vue-router'
-  import { useStore } from 'vuex'
+import { computed, onMounted, ref } from 'vue';
+import { useRoute } from 'vue-router';
+import { useStore } from 'vuex';
 
-  const route = useRoute()
-  const store = useStore()
+const route = useRoute();
+const store = useStore();
 
-  const flagInput = ref('')
-  const showIndiceDialog = ref(false)
-  const currentIndice = ref(null)
-  const loading = ref(true)
+const flagInput = ref('');
+const showIndiceDialog = ref(false);
+const currentIndice = ref(null);
+const loading = ref(true);
 
-  const challenge = computed(() => store.getters['challenge/currentChallenge'])
+const challenge = computed(() => store.getters['challenge/currentChallenge']);
+const difficultyColor = computed(() => {
+  const rawDifficulty = challenge.value?.difficulty;
 
-  onMounted(async () => {
-    await store.dispatch('challenge/fetchChallenge', route.params.id)
-    loading.value = false
-  })
-
-  function openIndiceDialog (indice) {
-    currentIndice.value = indice
-    showIndiceDialog.value = true
+  if (!rawDifficulty) {
+    return '#8A9B46';
   }
 
-  function closeIndiceDialog () {
-    showIndiceDialog.value = false
-    currentIndice.value = null
+  switch (String(rawDifficulty).trim().toLowerCase()) {
+    case 'facile': {
+      return '#8A9B46';
+    }
+    case 'moyen': {
+      return '#FB8C00';
+    }
+    case 'difficile': {
+      return '#BA2653';
+    }
+    default: {
+      return '#8A9B46';
+    }
   }
+});
+
+onMounted(async () => {
+  await store.dispatch('challenge/fetchChallenge', route.params.id);
+  loading.value = false;
+});
+
+function openIndiceDialog(indice) {
+  currentIndice.value = indice;
+  showIndiceDialog.value = true;
+}
+
+function closeIndiceDialog() {
+  showIndiceDialog.value = false;
+  currentIndice.value = null;
+}
 </script>
 
 <template>
   <Header />
 
   <v-main class="min-vh-100 pt-0 pb-16 h-screen">
-    <v-container v-if="loading" class="d-flex justify-center align-center" style="height: 50vh;">
+    <v-container
+      v-if="loading"
+      class="d-flex justify-center align-center"
+      style="height: 50vh"
+    >
       <v-progress-circular color="primary" indeterminate size="64" />
     </v-container>
 
@@ -64,7 +90,7 @@
           <div class="mb-6">
             <h3 class="text-h5 mb-2">
               Difficultée :
-              <span style="color: #8a9b46">{{ challenge.difficulty }}</span>
+              <span :style="{ color: difficultyColor }">{{ challenge.difficulty }}</span>
             </h3>
           </div>
 
@@ -107,11 +133,11 @@
             </div>
           </div>
 
-          <div class="d-flex gap-4">
+          <div class="clues-list">
             <v-btn
               v-for="indice in challenge.clues"
               :key="indice.id"
-              class="text-none"
+              class="text-none clue-btn"
               color="#8A9B46"
               size="large"
               variant="flat"
@@ -166,7 +192,25 @@
 </template>
 
 <style scoped>
-.gap-4 {
+.clues-list {
+  display: grid;
+  grid-template-columns: repeat(2, 230px);
   gap: 1rem;
+}
+
+.clue-btn {
+  width: 230px;
+  min-width: 230px;
+}
+
+@media (max-width: 760px) {
+  .clues-list {
+    grid-template-columns: 1fr;
+  }
+
+  .clue-btn {
+    width: 100%;
+    min-width: 0;
+  }
 }
 </style>
