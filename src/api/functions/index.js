@@ -16,3 +16,14 @@ setGlobalOptions({ maxInstances: 10 });
 const { isFlag } = require('./isFlag');
 
 exports.isFlag = isFlag;
+// exports.helloWorld = onRequest((request, response) => {
+//   logger.info("Hello logs!", {structuredData: true});
+//   response.send("Hello from Firebase!");
+// });
+
+// Import hints management functions
+const {getHint, getPurchasedHints, getUserPoints} = require("./hints");
+
+exports.getHint = getHint;
+exports.getPurchasedHints = getPurchasedHints;
+exports.getUserPoints = getUserPoints;
