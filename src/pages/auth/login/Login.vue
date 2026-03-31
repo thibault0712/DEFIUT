@@ -103,7 +103,7 @@ async function loginWithGoogle() {
 
       <v-btn
         block
-        class="text-none mb-6"
+        class="text-none 12 mb-6"
         color="grey-lighten-4"
         size="large"
         variant="flat"
