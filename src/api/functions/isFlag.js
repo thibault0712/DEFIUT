@@ -50,29 +50,37 @@ const isFlag = onCall({ enforceAppCheck: false }, async (request) => {
     return { success: false, message: 'Flag incorrect.' };
   }
 
-  // Vérification que le défi n'est pas déjà validé par cet utilisateur
+  // Vérification + mise à jour en transaction pour éviter les doubles validations
   const userRef = db.collection('users').doc(uid);
-  const userSnap = await userRef.get();
 
-  if (!userSnap.exists) {
-    throw new HttpsError('not-found', 'Utilisateur introuvable.');
-  }
+  const alreadyCompleted = await db.runTransaction(async (transaction) => {
+    const userSnap = await transaction.get(userRef);
 
-  const userData = userSnap.data();
+    if (!userSnap.exists) {
+      throw new HttpsError('not-found', 'Utilisateur introuvable.');
+    }
 
-  if (userData.challenges && userData.challenges[challengeId]) {
+    const userData = userSnap.data();
+
+    if (userData.challenges && userData.challenges[challengeId]) {
+      return true;
+    }
+
+    transaction.update(userRef, {
+      [`challenges.${challengeId}`]: {
+        title: challengeData.title,
+        date: FieldValue.serverTimestamp(),
+        points: challengeData.points,
+      },
+      points: FieldValue.increment(challengeData.points),
+    });
+
+    return false;
+  });
+
+  if (alreadyCompleted) {
     return { success: false, message: 'Vous avez déjà validé ce défi.' };
   }
-
-  // Mise à jour du document utilisateur
-  await userRef.update({
-    [`challenges.${challengeId}`]: {
-      title: challengeData.title,
-      date: FieldValue.serverTimestamp(),
-      points: challengeData.points,
-    },
-    points: FieldValue.increment(challengeData.points),
-  });
 
   return {
     success: true,

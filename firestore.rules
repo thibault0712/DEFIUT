@@ -14,10 +14,19 @@ service cloud.firestore {
       allow write: if false;
     }
 
-    // Utilisateurs : lecture publique, écriture uniquement sur son propre document
+    // Utilisateurs : lecture publique
+    // Écriture limitée aux champs de profil (pas points/challenges/badges)
     match /users/{uid} {
       allow read: if true;
-      allow write: if request.auth != null && request.auth.uid == uid;
+      allow write: if request.auth != null
+                   && request.auth.uid == uid
+                   && !request.resource.data.diff(resource.data).affectedKeys()
+                       .hasAny(['points', 'challenges', 'badges']);
+    }
+
+    // Sous-collection hintsPurchased : inaccessible aux clients
+    match /users/{uid}/hintsPurchased/{doc} {
+      allow read, write: if false;
     }
   }
 }

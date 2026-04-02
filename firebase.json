@@ -23,10 +23,8 @@
         "firebase-debug.*.log",
         "*.local"
       ],
-      "predeploy": [
-        "npm --prefix \"$RESOURCE_DIR\" run lint"
-      ],
-      "source": "functions"
+      "predeploy": [],
+      "source": "src/api/functions"
     }
   ]
 }

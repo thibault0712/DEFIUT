@@ -14,6 +14,11 @@ const currentIndice = ref(null);
 const loading = ref(true);
 const flagLoading = ref(false);
 const flagResult = ref(null);
+const showConfirmDialog = ref(false);
+const pendingIndice = ref(null);
+const hintLoading = ref(false);
+const hintError = ref(null);
+const purchasedHints = ref([]);
 
 const challenge = computed(() => store.getters['challenge/currentChallenge']);
 const difficultyColor = computed(() => {
@@ -41,6 +46,12 @@ const difficultyColor = computed(() => {
 
 onMounted(async () => {
   await store.dispatch('challenge/fetchChallenge', route.params.id);
+  try {
+    const { data } = await httpsCallable(functions, 'getPurchasedHints')({ challengeId: route.params.id });
+    purchasedHints.value = data.purchasedHints || [];
+  } catch {
+    // ignore
+  }
   loading.value = false;
 });
 
@@ -65,8 +76,42 @@ async function submitFlag() {
 }
 
 function openIndiceDialog(indice) {
-  currentIndice.value = indice;
-  showIndiceDialog.value = true;
+  if (purchasedHints.value.includes(indice.id)) {
+    currentIndice.value = indice;
+    showIndiceDialog.value = true;
+    return;
+  }
+  pendingIndice.value = indice;
+  showConfirmDialog.value = true;
+}
+
+async function confirmHintPurchase() {
+  const indice = pendingIndice.value;
+  hintLoading.value = true;
+  hintError.value = null;
+
+  try {
+    await httpsCallable(functions, 'getHint')({
+      challengeId: route.params.id,
+      hintId: indice.id,
+    });
+    await store.dispatch('user/fetchUser', auth.currentUser);
+    purchasedHints.value.push(indice.id);
+    showConfirmDialog.value = false;
+    currentIndice.value = indice;
+    showIndiceDialog.value = true;
+  } catch (error) {
+    hintError.value = error?.message || 'Erreur lors de l\'achat de l\'indice.';
+  } finally {
+    hintLoading.value = false;
+    pendingIndice.value = null;
+  }
+}
+
+function cancelHintPurchase() {
+  showConfirmDialog.value = false;
+  pendingIndice.value = null;
+  hintError.value = null;
 }
 
 function closeIndiceDialog() {
@@ -199,6 +244,46 @@ function closeIndiceDialog() {
         </v-col>
       </v-row>
     </v-container>
+
+    <v-dialog
+      v-model="showConfirmDialog"
+      max-width="450"
+      @click:outside="cancelHintPurchase"
+    >
+      <v-card class="pa-6" color="surface">
+        <v-card-title class="text-h5 pa-0 mb-4">
+          Acheter cet indice ?
+        </v-card-title>
+
+        <v-card-text class="pa-0 mb-6 text-body-1">
+          Cela vous coûtera <strong>{{ pendingIndice?.points }} points</strong>.
+        </v-card-text>
+
+        <v-alert
+          v-if="hintError"
+          class="mb-4"
+          type="error"
+          density="compact"
+          variant="tonal"
+        >
+          {{ hintError }}
+        </v-alert>
+
+        <v-card-actions class="pa-0 justify-end">
+          <v-btn variant="text" @click="cancelHintPurchase">
+            Annuler
+          </v-btn>
+          <v-btn
+            color="#8A9B46"
+            variant="flat"
+            :loading="hintLoading"
+            @click="confirmHintPurchase"
+          >
+            Confirmer
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
 
     <v-dialog
       v-model="showIndiceDialog"

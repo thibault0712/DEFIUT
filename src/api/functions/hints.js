@@ -16,18 +16,26 @@ exports.getHint = onCall(async (request) => {
     }
 
     const userId = request.auth.uid;
-    const {challengeId, hintId, hintCost} = request.data;
+    const {challengeId, hintId} = request.data;
 
     // Valider les paramètres
-    if (!challengeId || !hintId || hintCost === undefined) {
-      throw new Error("Missing required parameters: challengeId, hintId, hintCost");
-    }
-
-    if (hintCost < 0) {
-      throw new Error("Hint cost cannot be negative");
+    if (!challengeId || !hintId) {
+      throw new Error("Missing required parameters: challengeId, hintId");
     }
 
     const db = admin.firestore();
+
+    // Récupérer le coût réel de l'indice depuis la base
+    const challengeDoc = await db.collection("challenges").doc(challengeId).get();
+    if (!challengeDoc.exists) {
+      throw new Error("Challenge not found");
+    }
+    const clues = challengeDoc.data().clues || [];
+    const clue = clues.find((c) => c.id === hintId);
+    if (!clue) {
+      throw new Error("Hint not found in challenge");
+    }
+    const hintCost = clue.points;
 
     // Référence au document utilisateur
     const userRef = db.collection("users").doc(userId);
