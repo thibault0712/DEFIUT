@@ -24,7 +24,7 @@ const isFlag = onCall({ enforceAppCheck: false }, async (request) => {
   const db = getFirestore();
   const uid = request.auth.uid;
 
-  // Récupération du défi
+  // Récupération du défi (métadonnées publiques)
   const challengeRef = db.collection('challenges').doc(challengeId);
   const challengeSnap = await challengeRef.get();
 
@@ -34,9 +34,17 @@ const isFlag = onCall({ enforceAppCheck: false }, async (request) => {
 
   const challengeData = challengeSnap.data();
 
+  // Récupération du flag depuis la collection sécurisée (inaccessible aux clients)
+  const flagRef = db.collection('flags').doc(challengeId);
+  const flagSnap = await flagRef.get();
+
+  if (!flagSnap.exists) {
+    throw new HttpsError('not-found', 'Flag non configuré pour ce défi.');
+  }
+
   // Vérification que le flag correspond (insensible à la casse + espaces)
   const submittedFlag = flag.trim().toLowerCase();
-  const correctFlag = (challengeData.flag || '').trim().toLowerCase();
+  const correctFlag = (flagSnap.data().flag || '').trim().toLowerCase();
 
   if (submittedFlag !== correctFlag) {
     return { success: false, message: 'Flag incorrect.' };

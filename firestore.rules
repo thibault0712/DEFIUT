@@ -1,0 +1,23 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Flags : jamais lisibles ni modifiables par les clients
+    match /flags/{challengeId} {
+      allow read, write: if false;
+    }
+
+    // Défis : lecture publique, écriture interdite aux clients
+    match /challenges/{challengeId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // Utilisateurs : lecture publique, écriture uniquement sur son propre document
+    match /users/{uid} {
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.uid == uid;
+    }
+  }
+}
