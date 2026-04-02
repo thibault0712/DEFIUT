@@ -2,6 +2,8 @@
   import { computed, onMounted, ref } from 'vue'
   import { useRoute } from 'vue-router'
   import { useStore } from 'vuex'
+  import { httpsCallable } from 'firebase/functions'
+  import { functions } from '@/api/firebaseApp.js'
 
   const route = useRoute()
   const store = useStore()
@@ -10,6 +12,8 @@
   const showIndiceDialog = ref(false)
   const currentIndice = ref(null)
   const loading = ref(true)
+  const flagLoading = ref(false)
+  const flagResult = ref(null) // { success: boolean, message: string }
 
   const challenge = computed(() => store.getters['challenge/currentChallenge'])
 
@@ -17,6 +21,27 @@
     await store.dispatch('challenge/fetchChallenge', route.params.id)
     loading.value = false
   })
+
+  async function submitFlag () {
+    if (!flagInput.value.trim()) return
+
+    flagLoading.value = true
+    flagResult.value = null
+
+    try {
+      const { data } = await httpsCallable(functions, 'isFlag')({ challengeId: route.params.id, flag: flagInput.value })
+      const result = data
+      flagResult.value = result
+      if (result.success) {
+        await store.dispatch('user/fetchUser')
+        flagInput.value = ''
+      }
+    } catch (error) {
+      flagResult.value = { success: false, message: 'Une erreur est survenue. Réessayez.' }
+    } finally {
+      flagLoading.value = false
+    }
+  }
 
   function openIndiceDialog (indice) {
     currentIndice.value = indice
@@ -78,16 +103,30 @@
                 hide-details
                 placeholder="FLAG-AAAAA-{aaaa_aaaa_aaaa_aaaa}"
                 variant="outlined"
+                :disabled="flagLoading"
+                @keyup.enter="submitFlag"
               />
               <v-btn
                 class="text-none"
                 color="#8A9B46"
                 size="large"
                 variant="flat"
+                :loading="flagLoading"
+                @click="submitFlag"
               >
                 VALIDER
               </v-btn>
             </div>
+
+            <v-alert
+              v-if="flagResult"
+              class="mt-3"
+              :type="flagResult.success ? 'success' : 'error'"
+              density="compact"
+              variant="tonal"
+            >
+              {{ flagResult.message }}
+            </v-alert>
           </div>
 
           <div class="mb-6">
