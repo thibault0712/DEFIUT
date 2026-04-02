@@ -21,8 +21,8 @@ async function updateUser(
     registeredAt,
     theme,
     points,
-    challenges,
-    badges,
+    challenges: challenges || {},
+    badges: badges || {},
   });
 }
 

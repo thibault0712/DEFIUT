@@ -3,7 +3,7 @@
   import { useRoute } from 'vue-router'
   import { useStore } from 'vuex'
   import { httpsCallable } from 'firebase/functions'
-  import { functions } from '@/api/firebaseApp.js'
+  import { functions, auth } from '@/api/firebaseApp.js'
 
   const route = useRoute()
   const store = useStore()
@@ -30,14 +30,13 @@
 
     try {
       const { data } = await httpsCallable(functions, 'isFlag')({ challengeId: route.params.id, flag: flagInput.value })
-      const result = data
-      flagResult.value = result
-      if (result.success) {
-        await store.dispatch('user/fetchUser')
+      flagResult.value = data
+      if (data.success) {
+        await store.dispatch('user/fetchUser', auth.currentUser)
         flagInput.value = ''
       }
     } catch (error) {
-      flagResult.value = { success: false, message: 'Une erreur est survenue. Réessayez.' }
+      flagResult.value = { success: false, message: error?.message || 'Une erreur est survenue. Réessayez.' }
     } finally {
       flagLoading.value = false
     }
