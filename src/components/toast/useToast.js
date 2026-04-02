@@ -7,6 +7,7 @@ const types = ref([]);
 export function useToast() {
   function resetMessages() {
     messages.value = [];
+    types.value = [];
   }
 
   function addMessage(message, type = 'info') {
