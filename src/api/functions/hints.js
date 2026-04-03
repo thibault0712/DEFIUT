@@ -12,7 +12,7 @@ exports.getHint = onCall(async (request) => {
   try {
     // Vérifier que l'utilisateur est authentifié
     if (!request.auth) {
-      throw new Error("User not authenticated");
+      throw new Error("Utilisateur non authentifié");
     }
 
     const userId = request.auth.uid;
@@ -20,7 +20,7 @@ exports.getHint = onCall(async (request) => {
 
     // Valider les paramètres
     if (!challengeId || !hintId) {
-      throw new Error("Missing required parameters: challengeId, hintId");
+      throw new Error("Paramètres manquants : challengeId, hintId");
     }
 
     const db = admin.firestore();
@@ -28,12 +28,12 @@ exports.getHint = onCall(async (request) => {
     // Récupérer le coût réel de l'indice depuis la base
     const challengeDoc = await db.collection("challenges").doc(challengeId).get();
     if (!challengeDoc.exists) {
-      throw new Error("Challenge not found");
+      throw new Error("Défi non trouvé");
     }
     const clues = challengeDoc.data().clues || [];
     const clue = clues.find((c) => c.id === hintId);
     if (!clue) {
-      throw new Error("Hint not found in challenge");
+      throw new Error("Indice non trouvé dans le défi");
     }
     const hintCost = clue.points;
 
@@ -42,7 +42,7 @@ exports.getHint = onCall(async (request) => {
     const userDoc = await userRef.get();
 
     if (!userDoc.exists) {
-      throw new Error("User not found");
+      throw new Error("Utilisateur non trouvé");
     }
 
     const userData = userDoc.data();
@@ -64,7 +64,7 @@ exports.getHint = onCall(async (request) => {
       logger.info(`User ${userId} accessing already purchased hint ${hintId} for challenge ${challengeId}`);
       return {
         success: true,
-        message: "Hint already purchased - no points deducted",
+        message: "Indice déjà acheté - aucun point déduit",
         hintsRemaining: currentPoints,
       };
     }
@@ -72,7 +72,7 @@ exports.getHint = onCall(async (request) => {
     // Vérifier que l'utilisateur a assez de points
     if (currentPoints < hintCost) {
       logger.warn(`User ${userId} insufficient points for hint ${hintId}. Required: ${hintCost}, Available: ${currentPoints}`);
-      throw new Error(`Insufficient points. Required: ${hintCost}, Available: ${currentPoints}`);
+      throw new Error(`Points insuffisants. Requis : ${hintCost}, Disponibles : ${currentPoints}`);
     }
 
     // Déduire les points et enregistrer l'achat dans une transaction
@@ -104,13 +104,13 @@ exports.getHint = onCall(async (request) => {
 
     return {
       success: true,
-      message: "Hint purchased successfully",
+      message: "Indice acheté avec succès",
       pointsDeducted: hintCost,
       hintsRemaining: currentPoints - hintCost,
     };
   } catch (error) {
     logger.error("Error in getHint function:", error);
-    throw new Error(error.message || "An error occurred while processing the hint request");
+    throw new Error(error.message || "Une erreur est survenue lors du traitement de la demande d'indice");
   }
 });
 
@@ -120,14 +120,14 @@ exports.getHint = onCall(async (request) => {
 exports.getPurchasedHints = onCall(async (request) => {
   try {
     if (!request.auth) {
-      throw new Error("User not authenticated");
+      throw new Error("Utilisateur non authentifié");
     }
 
     const userId = request.auth.uid;
     const {challengeId} = request.data;
 
     if (!challengeId) {
-      throw new Error("Missing required parameter: challengeId");
+      throw new Error("Paramètre manquant : challengeId");
     }
 
     const db = admin.firestore();
@@ -151,7 +151,7 @@ exports.getPurchasedHints = onCall(async (request) => {
     };
   } catch (error) {
     logger.error("Error in getPurchasedHints function:", error);
-    throw new Error(error.message || "An error occurred while retrieving purchased hints");
+    throw new Error(error.message || "Une erreur est survenue lors de la récupération des indices achetés");
   }
 });
 
@@ -161,7 +161,7 @@ exports.getPurchasedHints = onCall(async (request) => {
 exports.getUserPoints = onCall(async (request) => {
   try {
     if (!request.auth) {
-      throw new Error("User not authenticated");
+      throw new Error("Utilisateur non authentifié");
     }
 
     const userId = request.auth.uid;
@@ -170,7 +170,7 @@ exports.getUserPoints = onCall(async (request) => {
     const userDoc = await db.collection("users").doc(userId).get();
 
     if (!userDoc.exists) {
-      throw new Error("User not found");
+      throw new Error("Utilisateur non trouvé");
     }
 
     return {
@@ -179,6 +179,6 @@ exports.getUserPoints = onCall(async (request) => {
     };
   } catch (error) {
     logger.error("Error in getUserPoints function:", error);
-    throw new Error(error.message || "An error occurred while retrieving user points");
+    throw new Error(error.message || "Une erreur est survenue lors de la récupération des points de l'utilisateur");
   }
 });
