@@ -1,5 +1,6 @@
 const { onCall, HttpsError } = require('firebase-functions/v2/https');
 const { getFirestore, FieldValue } = require('firebase-admin/firestore');
+const { awardAlanTuringBadge } = require('./badges');
 
 /**
  * Valide le flag soumis par l'utilisateur pour un défi donné.
@@ -82,8 +83,17 @@ const isFlag = onCall({ enforceAppCheck: false }, async (request) => {
     return { success: false, message: 'Vous avez déjà validé ce défi.' };
   }
 
+  let badgeAwarded = false;
+  try {
+    const badgeResult = await awardAlanTuringBadge({db, uid, challengeId});
+    badgeAwarded = badgeResult.awarded;
+  } catch {
+    // L'attribution de badge ne doit pas bloquer la validation du défi.
+  }
+
   return {
     success: true,
+    badgeAwarded,
     message: `Félicitations ! Vous avez gagné ${challengeData.points} points.`,
   };
 });

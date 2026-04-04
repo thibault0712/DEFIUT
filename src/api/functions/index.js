@@ -23,7 +23,9 @@ exports.isFlag = isFlag;
 
 // Import hints management functions
 const {getHint, getPurchasedHints, getUserPoints} = require("./hints");
+const {checkAlanTuringBadge} = require("./badges");
 
 exports.getHint = getHint;
 exports.getPurchasedHints = getPurchasedHints;
 exports.getUserPoints = getUserPoints;
+exports.checkAlanTuringBadge = checkAlanTuringBadge;
