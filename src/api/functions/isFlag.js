@@ -1,6 +1,10 @@
 const { onCall, HttpsError } = require('firebase-functions/v2/https');
 const { getFirestore, FieldValue } = require('firebase-admin/firestore');
-const { awardAlanTuringBadge } = require('./badges');
+const {
+  awardAlanTuringBadge,
+  awardRichardHammingBadge,
+  registerFailedAttempt,
+} = require('./badges');
 
 /**
  * Valide le flag soumis par l'utilisateur pour un défi donné.
@@ -48,6 +52,12 @@ const isFlag = onCall({ enforceAppCheck: false }, async (request) => {
   const correctFlag = (flagSnap.data().flag || '').trim().toLowerCase();
 
   if (submittedFlag !== correctFlag) {
+    // Enregistre l'échec pour permettre le badge Richard Hamming plus tard
+    try {
+      await registerFailedAttempt({db, uid, challengeId});
+    } catch {
+      // Le tracking d'échec ne doit pas casser la réponse utilisateur
+    }
     return { success: false, message: 'Flag incorrect.' };
   }
 
@@ -83,17 +93,34 @@ const isFlag = onCall({ enforceAppCheck: false }, async (request) => {
     return { success: false, message: 'Vous avez déjà validé ce défi.' };
   }
 
+  // Attribution non bloquante du badge Alan Turing (si défi crypto)
   let badgeAwarded = false;
+  let alanTuringAwarded = false;
+  let richardHammingAwarded = false;
   try {
     const badgeResult = await awardAlanTuringBadge({db, uid, challengeId});
-    badgeAwarded = badgeResult.awarded;
+    alanTuringAwarded = badgeResult.awarded;
   } catch {
     // L'attribution de badge ne doit pas bloquer la validation du défi.
   }
 
+  // Attribution non bloquante du badge Richard Hamming (après échec préalable)
+  try {
+    const badgeResult = await awardRichardHammingBadge({db, uid, challengeId});
+    richardHammingAwarded = badgeResult.awarded;
+  } catch {
+    // L'attribution de badge ne doit pas bloquer la validation du défi.
+  }
+
+  badgeAwarded = alanTuringAwarded || richardHammingAwarded;
+
   return {
     success: true,
     badgeAwarded,
+    badgesAwarded: {
+      alanTuring: alanTuringAwarded,
+      richardHamming: richardHammingAwarded,
+    },
     message: `Félicitations ! Vous avez gagné ${challengeData.points} points.`,
   };
 });
