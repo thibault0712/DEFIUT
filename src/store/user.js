@@ -8,13 +8,24 @@ import {
   signOut,
 } from 'firebase/auth';
 import { Timestamp } from 'firebase/firestore';
+import { httpsCallable } from 'firebase/functions';
 import createFirebaseUserCollection from '@/api/firebase/create/createUser.js';
 import deleteFirebaseUserCollection from '@/api/firebase/delete/deleteUser.js';
 import getFirebaseUserCollection from '@/api/firebase/read/getUserByID.js';
 import updateFirebaseUserCollection from '@/api/firebase/update/updateUser.js';
-import { auth, googleAuthProvider } from '@/api/firebaseApp.js';
+import { auth, functions, googleAuthProvider } from '@/api/firebaseApp.js';
 import uploadUserProfilePicture from '@/api/firestore/uploadUserProfilePicture.js';
 import isPreviousCalendarDay from '@/utils/isPreviousCalendarDay.js';
+
+async function checkLinusTorvaldBadge() {
+  // On ne bloque jamais la connexion si l'attribution échoue
+  try {
+    const userAgent = typeof navigator !== 'undefined' ? navigator.userAgent : '';
+    await httpsCallable(functions, 'checkLinusTorvaldBadge')({ userAgent });
+  } catch {
+    // Badge best-effort seulement
+  }
+}
 
 const user = {
   namespaced: true,
@@ -119,6 +130,7 @@ const user = {
         // Create the user if it does not exist yet
         if (userData) {
           await context.dispatch('fetchUser', response.user);
+          await checkLinusTorvaldBadge();
         } else {
           const userName =
             'Utilisateur' + Math.random().toString(36).slice(0, 8);
@@ -150,6 +162,7 @@ const user = {
             {},
             {},
           );
+          await checkLinusTorvaldBadge();
         }
       } else {
         throw new Error("Impossible d'enregistrer l'utilisateur");
@@ -171,6 +184,7 @@ const user = {
             );
           }
           await context.dispatch('fetchUser', response.user);
+          await checkLinusTorvaldBadge();
         } else {
           throw new Error('Impossible de se connecter, erreur inconnue');
         }
