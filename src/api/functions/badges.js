@@ -11,6 +11,11 @@ const RICHARD_HAMMING_BADGE = {
   name: "Badge Richard Hamming",
   icon: "mdi-target",
 };
+const ADA_LOVELACE_BADGE_ID = "adaLovelace";
+const ADA_LOVELACE_BADGE = {
+  name: "Badge Ada Lovelace",
+  icon: "mdi-trophy",
+};
 
 function isCryptoChallenge(challengeData) {
   // On tolère les deux formes: "crypto" et "cryptographie"
@@ -123,6 +128,55 @@ async function awardRichardHammingBadge({db, uid, challengeId}) {
   return {awarded};
 }
 
+async function awardAdaLovelaceBadge({db, uid, challengeId, isFirstSolver}) {
+  let canAward = isFirstSolver;
+
+  // Si non précisé, on vérifie depuis le défi qui est le premier solveur enregistré
+  if (typeof canAward !== "boolean") {
+    const challengeRef = db.collection("challenges").doc(challengeId);
+    const challengeSnap = await challengeRef.get();
+
+    if (!challengeSnap.exists) {
+      throw new HttpsError("not-found", "Défi introuvable.");
+    }
+
+    canAward = challengeSnap.data()?.firstSolverUid === uid;
+  }
+
+  if (!canAward) {
+    return {awarded: false};
+  }
+
+  const userRef = db.collection("users").doc(uid);
+
+  const awarded = await db.runTransaction(async (transaction) => {
+    const userSnap = await transaction.get(userRef);
+
+    if (!userSnap.exists) {
+      throw new HttpsError("not-found", "Utilisateur introuvable.");
+    }
+
+    const userData = userSnap.data();
+    const badges = userData.badges || {};
+
+    if (badges[ADA_LOVELACE_BADGE_ID]) {
+      return false;
+    }
+
+    transaction.update(userRef, {
+      [`badges.${ADA_LOVELACE_BADGE_ID}`]: {
+        ...ADA_LOVELACE_BADGE,
+        challengeId,
+        date: FieldValue.serverTimestamp(),
+      },
+    });
+
+    return true;
+  });
+
+  return {awarded};
+}
+
 const checkAlanTuringBadge = onCall(async (request) => {
   if (!request.auth) {
     throw new HttpsError("unauthenticated", "Vous devez être connecté.");
@@ -167,10 +221,34 @@ const checkRichardHammingBadge = onCall(async (request) => {
   };
 });
 
+const checkAdaLovelaceBadge = onCall(async (request) => {
+  if (!request.auth) {
+    throw new HttpsError("unauthenticated", "Vous devez être connecté.");
+  }
+
+  const {challengeId} = request.data;
+  if (!challengeId || typeof challengeId !== "string") {
+    throw new HttpsError("invalid-argument", "challengeId manquant ou invalide.");
+  }
+
+  const db = getFirestore();
+  const uid = request.auth.uid;
+
+  const result = await awardAdaLovelaceBadge({db, uid, challengeId});
+
+  return {
+    success: true,
+    awarded: result.awarded,
+    badgeId: result.awarded ? ADA_LOVELACE_BADGE_ID : null,
+  };
+});
+
 module.exports = {
   checkAlanTuringBadge,
   checkRichardHammingBadge,
+  checkAdaLovelaceBadge,
   awardAlanTuringBadge,
   awardRichardHammingBadge,
+  awardAdaLovelaceBadge,
   registerFailedAttempt,
 };
