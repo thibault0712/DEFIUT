@@ -28,6 +28,7 @@ const {
 	checkRichardHammingBadge,
 	checkAdaLovelaceBadge,
 	checkMargaretHamiltonBadge,
+	checkLeslieLamportBadge,
 } = require("./badges");
 
 exports.getHint = getHint;
@@ -37,3 +38,4 @@ exports.checkAlanTuringBadge = checkAlanTuringBadge;
 exports.checkRichardHammingBadge = checkRichardHammingBadge;
 exports.checkAdaLovelaceBadge = checkAdaLovelaceBadge;
 exports.checkMargaretHamiltonBadge = checkMargaretHamiltonBadge;
+exports.checkLeslieLamportBadge = checkLeslieLamportBadge;

@@ -5,6 +5,7 @@ const {
   awardRichardHammingBadge,
   awardAdaLovelaceBadge,
   awardMargaretHamiltonBadge,
+  awardLeslieLamportBadge,
   registerFailedAttempt,
 } = require('./badges');
 
@@ -115,6 +116,7 @@ const isFlag = onCall({ enforceAppCheck: false }, async (request) => {
   let richardHammingAwarded = false;
   let adaLovelaceAwarded = false;
   let margaretHamiltonAwarded = false;
+  let leslieLamportAwarded = false;
   try {
     const badgeResult = await awardAlanTuringBadge({db, uid, challengeId});
     alanTuringAwarded = badgeResult.awarded;
@@ -151,11 +153,25 @@ const isFlag = onCall({ enforceAppCheck: false }, async (request) => {
     // L'attribution de badge ne doit pas bloquer la validation du défi.
   }
 
+  // Attribution non bloquante du badge Leslie Lamport (résolution de nuit)
+  try {
+    const badgeResult = await awardLeslieLamportBadge({
+      db,
+      uid,
+      challengeId,
+      solvedAt: Date.now(),
+    });
+    leslieLamportAwarded = badgeResult.awarded;
+  } catch {
+    // L'attribution de badge ne doit pas bloquer la validation du défi.
+  }
+
   badgeAwarded =
     alanTuringAwarded ||
     richardHammingAwarded ||
     adaLovelaceAwarded ||
-    margaretHamiltonAwarded;
+    margaretHamiltonAwarded ||
+    leslieLamportAwarded;
 
   return {
     success: true,
@@ -165,6 +181,7 @@ const isFlag = onCall({ enforceAppCheck: false }, async (request) => {
       richardHamming: richardHammingAwarded,
       adaLovelace: adaLovelaceAwarded,
       margaretHamilton: margaretHamiltonAwarded,
+      leslieLamport: leslieLamportAwarded,
     },
     message: `Félicitations ! Vous avez gagné ${challengeData.points} points.`,
   };

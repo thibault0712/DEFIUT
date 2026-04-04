@@ -21,6 +21,11 @@ const MARGARET_HAMILTON_BADGE = {
   name: "Badge Margaret Hamilton",
   icon: "mdi-rocket-launch",
 };
+const LESLIE_LAMPORT_BADGE_ID = "leslieLamport";
+const LESLIE_LAMPORT_BADGE = {
+  name: "Badge Leslie Lamport",
+  icon: "mdi-weather-night",
+};
 
 function toMillis(value) {
   // Accepte les Timestamp Firestore + objets sérialisés éventuels
@@ -29,6 +34,17 @@ function toMillis(value) {
   if (typeof value.seconds === "number") return value.seconds * 1000;
   if (typeof value._seconds === "number") return value._seconds * 1000;
   return null;
+}
+
+function isMidnightToSixAM(date, timeZone = "Europe/Paris") {
+  const hourString = new Intl.DateTimeFormat("fr-FR", {
+    hour: "numeric",
+    hour12: false,
+    timeZone,
+  }).format(date);
+  const hour = Number(hourString);
+
+  return Number.isFinite(hour) && hour >= 0 && hour < 6;
 }
 
 function isCryptoChallenge(challengeData) {
@@ -238,6 +254,44 @@ async function awardMargaretHamiltonBadge({db, uid, challengeId}) {
   return {awarded};
 }
 
+async function awardLeslieLamportBadge({db, uid, challengeId, solvedAt}) {
+  const solvedDate = solvedAt ? new Date(solvedAt) : new Date();
+
+  // Fenêtre temporelle définie entre 00h00 et 05h59 (heure de Paris)
+  if (!isMidnightToSixAM(solvedDate, "Europe/Paris")) {
+    return {awarded: false};
+  }
+
+  const userRef = db.collection("users").doc(uid);
+
+  const awarded = await db.runTransaction(async (transaction) => {
+    const userSnap = await transaction.get(userRef);
+
+    if (!userSnap.exists) {
+      throw new HttpsError("not-found", "Utilisateur introuvable.");
+    }
+
+    const userData = userSnap.data();
+    const badges = userData.badges || {};
+
+    if (badges[LESLIE_LAMPORT_BADGE_ID]) {
+      return false;
+    }
+
+    transaction.update(userRef, {
+      [`badges.${LESLIE_LAMPORT_BADGE_ID}`]: {
+        ...LESLIE_LAMPORT_BADGE,
+        challengeId,
+        date: FieldValue.serverTimestamp(),
+      },
+    });
+
+    return true;
+  });
+
+  return {awarded};
+}
+
 const checkAlanTuringBadge = onCall(async (request) => {
   if (!request.auth) {
     throw new HttpsError("unauthenticated", "Vous devez être connecté.");
@@ -322,14 +376,39 @@ const checkMargaretHamiltonBadge = onCall(async (request) => {
   };
 });
 
+const checkLeslieLamportBadge = onCall(async (request) => {
+  if (!request.auth) {
+    throw new HttpsError("unauthenticated", "Vous devez être connecté.");
+  }
+
+  const db = getFirestore();
+  const uid = request.auth.uid;
+  const {challengeId} = request.data || {};
+
+  const result = await awardLeslieLamportBadge({
+    db,
+    uid,
+    challengeId,
+    solvedAt: Date.now(),
+  });
+
+  return {
+    success: true,
+    awarded: result.awarded,
+    badgeId: result.awarded ? LESLIE_LAMPORT_BADGE_ID : null,
+  };
+});
+
 module.exports = {
   checkAlanTuringBadge,
   checkRichardHammingBadge,
   checkAdaLovelaceBadge,
   checkMargaretHamiltonBadge,
+  checkLeslieLamportBadge,
   awardAlanTuringBadge,
   awardRichardHammingBadge,
   awardAdaLovelaceBadge,
   awardMargaretHamiltonBadge,
+  awardLeslieLamportBadge,
   registerFailedAttempt,
 };
