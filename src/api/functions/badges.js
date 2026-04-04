@@ -26,6 +26,11 @@ const LESLIE_LAMPORT_BADGE = {
   name: "Badge Leslie Lamport",
   icon: "mdi-weather-night",
 };
+const LINUS_TORVALD_BADGE_ID = "linusTorvald";
+const LINUS_TORVALD_BADGE = {
+  name: "Badge Linus Torvald",
+  icon: "mdi-linux",
+};
 
 function toMillis(value) {
   // Accepte les Timestamp Firestore + objets sérialisés éventuels
@@ -45,6 +50,11 @@ function isMidnightToSixAM(date, timeZone = "Europe/Paris") {
   const hour = Number(hourString);
 
   return Number.isFinite(hour) && hour >= 0 && hour < 6;
+}
+
+function isLinuxUserAgent(userAgent) {
+  // On s'appuie sur le user-agent du navigateur pour détecter Linux
+  return typeof userAgent === "string" && /linux/i.test(userAgent);
 }
 
 function isCryptoChallenge(challengeData) {
@@ -292,12 +302,47 @@ async function awardLeslieLamportBadge({db, uid, challengeId, solvedAt}) {
   return {awarded};
 }
 
+async function awardLinusTorvaldBadge({db, uid, userAgent}) {
+  if (!isLinuxUserAgent(userAgent)) {
+    return {awarded: false};
+  }
+
+  const userRef = db.collection("users").doc(uid);
+
+  const awarded = await db.runTransaction(async (transaction) => {
+    const userSnap = await transaction.get(userRef);
+
+    if (!userSnap.exists) {
+      throw new HttpsError("not-found", "Utilisateur introuvable.");
+    }
+
+    const userData = userSnap.data();
+    const badges = userData.badges || {};
+
+    if (badges[LINUS_TORVALD_BADGE_ID]) {
+      return false;
+    }
+
+    transaction.update(userRef, {
+      [`badges.${LINUS_TORVALD_BADGE_ID}`]: {
+        ...LINUS_TORVALD_BADGE,
+        source: "login",
+        date: FieldValue.serverTimestamp(),
+      },
+    });
+
+    return true;
+  });
+
+  return {awarded};
+}
+
 const checkAlanTuringBadge = onCall(async (request) => {
   if (!request.auth) {
     throw new HttpsError("unauthenticated", "Vous devez être connecté.");
   }
 
-  const {challengeId} = request.data;
+  const {challengeId} = request.data || {};
   if (!challengeId || typeof challengeId !== "string") {
     throw new HttpsError("invalid-argument", "challengeId manquant ou invalide.");
   }
@@ -319,7 +364,7 @@ const checkRichardHammingBadge = onCall(async (request) => {
     throw new HttpsError("unauthenticated", "Vous devez être connecté.");
   }
 
-  const {challengeId} = request.data;
+  const {challengeId} = request.data || {};
   if (!challengeId || typeof challengeId !== "string") {
     throw new HttpsError("invalid-argument", "challengeId manquant ou invalide.");
   }
@@ -341,7 +386,7 @@ const checkAdaLovelaceBadge = onCall(async (request) => {
     throw new HttpsError("unauthenticated", "Vous devez être connecté.");
   }
 
-  const {challengeId} = request.data;
+  const {challengeId} = request.data || {};
   if (!challengeId || typeof challengeId !== "string") {
     throw new HttpsError("invalid-argument", "challengeId manquant ou invalide.");
   }
@@ -399,16 +444,37 @@ const checkLeslieLamportBadge = onCall(async (request) => {
   };
 });
 
+const checkLinusTorvaldBadge = onCall(async (request) => {
+  if (!request.auth) {
+    throw new HttpsError("unauthenticated", "Vous devez être connecté.");
+  }
+
+  const db = getFirestore();
+  const uid = request.auth.uid;
+  // Le user-agent est transmis par le client pour garder une détection explicite.
+  const userAgent = request.data?.userAgent || request.rawRequest?.headers?.["user-agent"] || "";
+
+  const result = await awardLinusTorvaldBadge({db, uid, userAgent});
+
+  return {
+    success: true,
+    awarded: result.awarded,
+    badgeId: result.awarded ? LINUS_TORVALD_BADGE_ID : null,
+  };
+});
+
 module.exports = {
   checkAlanTuringBadge,
   checkRichardHammingBadge,
   checkAdaLovelaceBadge,
   checkMargaretHamiltonBadge,
   checkLeslieLamportBadge,
+  checkLinusTorvaldBadge,
   awardAlanTuringBadge,
   awardRichardHammingBadge,
   awardAdaLovelaceBadge,
   awardMargaretHamiltonBadge,
   awardLeslieLamportBadge,
+  awardLinusTorvaldBadge,
   registerFailedAttempt,
 };
