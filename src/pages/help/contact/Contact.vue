@@ -26,8 +26,8 @@ const sendEmail = async () => {
 
   try {
     await emailjs.send(
-      'service_91hd0ak',
-      'template_4liopz8',
+      import.meta.env.VITE_EMAILJS_SERVICE_ID,
+      import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
       {
         nom: form.nom,
         prenom: form.prenom,
@@ -35,7 +35,7 @@ const sendEmail = async () => {
         sujet: form.sujet,
         message: form.message,
       },
-      'P1z_1lhIR5lcj-1c0',
+      import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
     );
 
     snackbarText.value = 'Message envoyé avec succès !';
