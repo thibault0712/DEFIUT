@@ -10,9 +10,9 @@
     "lint": "eslint . --fix"
   },
   "dependencies": {
+    "@emailjs/browser": "^4.4.1",
     "@fontsource/roboto": "5.2.7",
     "@mdi/font": "^7.4.47",
-    "emailjs": "^5.0.0",
     "firebase": "^12.9.0",
     "vue": "^3.5.21",
     "vue-router": "^4.5.1",
