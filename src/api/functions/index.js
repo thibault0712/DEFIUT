@@ -23,7 +23,21 @@ exports.isFlag = isFlag;
 
 // Import hints management functions
 const {getHint, getPurchasedHints, getUserPoints} = require("./hints");
+const {
+	checkAlanTuringBadge,
+	checkRichardHammingBadge,
+	checkAdaLovelaceBadge,
+	checkMargaretHamiltonBadge,
+	checkLeslieLamportBadge,
+	checkLinusTorvaldBadge,
+} = require("./badges");
 
 exports.getHint = getHint;
 exports.getPurchasedHints = getPurchasedHints;
 exports.getUserPoints = getUserPoints;
+exports.checkAlanTuringBadge = checkAlanTuringBadge;
+exports.checkRichardHammingBadge = checkRichardHammingBadge;
+exports.checkAdaLovelaceBadge = checkAdaLovelaceBadge;
+exports.checkMargaretHamiltonBadge = checkMargaretHamiltonBadge;
+exports.checkLeslieLamportBadge = checkLeslieLamportBadge;
+exports.checkLinusTorvaldBadge = checkLinusTorvaldBadge;

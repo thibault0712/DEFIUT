@@ -1,5 +1,13 @@
 const { onCall, HttpsError } = require('firebase-functions/v2/https');
 const { getFirestore, FieldValue } = require('firebase-admin/firestore');
+const {
+  awardAlanTuringBadge,
+  awardRichardHammingBadge,
+  awardAdaLovelaceBadge,
+  awardMargaretHamiltonBadge,
+  awardLeslieLamportBadge,
+  registerFailedAttempt,
+} = require('./badges');
 
 /**
  * Valide le flag soumis par l'utilisateur pour un défi donné.
@@ -44,23 +52,35 @@ const isFlag = onCall({ enforceAppCheck: false }, async (request) => {
   const correctFlag = challengeData.flag.trim().toLowerCase();
 
   if (submittedFlag !== correctFlag) {
+    // Enregistre l'échec pour permettre le badge Richard Hamming plus tard
+    try {
+      await registerFailedAttempt({db, uid, challengeId});
+    } catch {
+      // Le tracking d'échec ne doit pas casser la réponse utilisateur
+    }
     return { success: false, message: 'Flag incorrect.' };
   }
 
   // Vérification + mise à jour en transaction pour éviter les doubles validations
   const userRef = db.collection('users').doc(uid);
 
-  const alreadyCompleted = await db.runTransaction(async (transaction) => {
+  const validationResult = await db.runTransaction(async (transaction) => {
     const userSnap = await transaction.get(userRef);
+    const challengeTxSnap = await transaction.get(challengeRef);
 
     if (!userSnap.exists) {
       throw new HttpsError('not-found', 'Utilisateur introuvable.');
     }
+    if (!challengeTxSnap.exists) {
+      throw new HttpsError('not-found', 'Défi introuvable.');
+    }
 
     const userData = userSnap.data();
+    const challengeTxData = challengeTxSnap.data() || {};
+    const isFirstSolver = !challengeTxData.firstSolverUid;
 
     if (userData.challenges && userData.challenges[challengeId]) {
-      return true;
+      return { alreadyCompleted: true, isFirstSolver: false };
     }
 
     transaction.update(userRef, {
@@ -72,15 +92,94 @@ const isFlag = onCall({ enforceAppCheck: false }, async (request) => {
       points: FieldValue.increment(challengeData.points),
     });
 
-    return false;
+    // On enregistre le premier solveur de façon atomique pour éviter les courses
+    if (isFirstSolver) {
+      transaction.update(challengeRef, {
+        firstSolverUid: uid,
+        firstSolvedAt: FieldValue.serverTimestamp(),
+      });
+    }
+
+    return { alreadyCompleted: false, isFirstSolver };
   });
 
-  if (alreadyCompleted) {
+  if (validationResult.alreadyCompleted) {
     return { success: false, message: 'Vous avez déjà validé ce défi.' };
   }
 
+  // Attribution non bloquante du badge Alan Turing (si défi crypto)
+  let badgeAwarded = false;
+  let alanTuringAwarded = false;
+  let richardHammingAwarded = false;
+  let adaLovelaceAwarded = false;
+  let margaretHamiltonAwarded = false;
+  let leslieLamportAwarded = false;
+  try {
+    const badgeResult = await awardAlanTuringBadge({db, uid, challengeId});
+    alanTuringAwarded = badgeResult.awarded;
+  } catch {
+    // L'attribution de badge ne doit pas bloquer la validation du défi.
+  }
+
+  // Attribution non bloquante du badge Richard Hamming (après échec préalable)
+  try {
+    const badgeResult = await awardRichardHammingBadge({db, uid, challengeId});
+    richardHammingAwarded = badgeResult.awarded;
+  } catch {
+    // L'attribution de badge ne doit pas bloquer la validation du défi.
+  }
+
+  // Attribution non bloquante du badge Ada Lovelace (premier solveur)
+  try {
+    const badgeResult = await awardAdaLovelaceBadge({
+      db,
+      uid,
+      challengeId,
+      isFirstSolver: validationResult.isFirstSolver,
+    });
+    adaLovelaceAwarded = badgeResult.awarded;
+  } catch {
+    // L'attribution de badge ne doit pas bloquer la validation du défi.
+  }
+
+  // Attribution non bloquante du badge Margaret Hamilton (2 défis en < 24h)
+  try {
+    const badgeResult = await awardMargaretHamiltonBadge({db, uid, challengeId});
+    margaretHamiltonAwarded = badgeResult.awarded;
+  } catch {
+    // L'attribution de badge ne doit pas bloquer la validation du défi.
+  }
+
+  // Attribution non bloquante du badge Leslie Lamport (résolution de nuit)
+  try {
+    const badgeResult = await awardLeslieLamportBadge({
+      db,
+      uid,
+      challengeId,
+      solvedAt: Date.now(),
+    });
+    leslieLamportAwarded = badgeResult.awarded;
+  } catch {
+    // L'attribution de badge ne doit pas bloquer la validation du défi.
+  }
+
+  badgeAwarded =
+    alanTuringAwarded ||
+    richardHammingAwarded ||
+    adaLovelaceAwarded ||
+    margaretHamiltonAwarded ||
+    leslieLamportAwarded;
+
   return {
     success: true,
+    badgeAwarded,
+    badgesAwarded: {
+      alanTuring: alanTuringAwarded,
+      richardHamming: richardHammingAwarded,
+      adaLovelace: adaLovelaceAwarded,
+      margaretHamilton: margaretHamiltonAwarded,
+      leslieLamport: leslieLamportAwarded,
+    },
     message: `Félicitations ! Vous avez gagné ${challengeData.points} points.`,
   };
 });
