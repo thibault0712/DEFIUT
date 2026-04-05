@@ -133,6 +133,17 @@
           <h2 class="text-h5 font-weight-bold">
             {{ userData.userName }}
           </h2>
+          <v-chip
+            v-if="userData.points !== undefined"
+            class="mt-1"
+            color="primary"
+            label
+            size="small"
+            variant="flat"
+          >
+            <v-icon start>mdi-star</v-icon>
+            {{ userData.points }} points
+          </v-chip>
         </v-col>
       </v-row>
 

@@ -22,6 +22,7 @@
         ? userData.value.registeredAt.toDate().toLocaleDateString()
         : '...',
       imageUrl: userData.value?.imageUrl || null,
+      points: userData.value?.points ?? 0,
     }
   })
 
@@ -91,6 +92,17 @@
           <h2 class="text-h5 font-weight-bold">
             {{ user.username }}
           </h2>
+          <v-chip
+            v-if="user.points !== undefined"
+            class="mt-1"
+            color="primary"
+            label
+            size="small"
+            variant="flat"
+          >
+            <v-icon start>mdi-star</v-icon>
+            {{ user.points }} points
+          </v-chip>
         </v-col>
       </v-row>
 
