@@ -3,7 +3,8 @@ import { computed, onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 import { httpsCallable } from 'firebase/functions';
-import { functions, auth } from '@/api/firebaseApp.js';
+import { ref as storageRef, getDownloadURL } from 'firebase/storage';
+import { functions, auth, storage } from '@/api/firebaseApp.js';
 
 const route = useRoute();
 const store = useStore();
@@ -19,6 +20,7 @@ const pendingIndice = ref(null);
 const hintLoading = ref(false);
 const hintError = ref(null);
 const purchasedHints = ref([]);
+const linkUrls = ref({});
 
 const challenge = computed(() => store.getters['challenge/currentChallenge']);
 const difficultyColor = computed(() => {
@@ -52,8 +54,27 @@ onMounted(async () => {
   } catch {
     // ignore
   }
+  await resolveLinkUrls();
   loading.value = false;
 });
+
+async function resolveLinkUrls() {
+  const links = challenge.value?.links || [];
+  const resolved = {};
+  await Promise.all(links.map(async (link) => {
+    if (/^https?:\/\//i.test(link)) {
+      resolved[link] = link;
+      return;
+    }
+    try {
+      const path = link.includes('/') ? link : `challenges/${link}`;
+      resolved[link] = await getDownloadURL(storageRef(storage, path));
+    } catch {
+      resolved[link] = null;
+    }
+  }));
+  linkUrls.value = resolved;
+}
 
 async function submitFlag() {
   if (!flagInput.value.trim()) return;
@@ -207,12 +228,23 @@ function closeIndiceDialog() {
               class="mb-1"
             >
               <a
+                v-if="linkUrls[link]"
                 class="text-body-1"
-                :href="`https://${link}`"
-                style="color: white; text-decoration: none"
+                :href="linkUrls[link]"
+                download
+                target="_blank"
+                rel="noopener"
+                style="color: white; text-decoration: underline"
               >
                 {{ link }}
               </a>
+              <span
+                v-else
+                class="text-body-1"
+                style="color: #aaa"
+              >
+                {{ link }} (indisponible)
+              </span>
             </div>
           </div>
 
