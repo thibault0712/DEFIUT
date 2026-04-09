@@ -57,6 +57,11 @@ exports.getHint = onCall(async (request) => {
       purchasedHints = hintsPurchasedDoc.data().hints || [];
     }
 
+    // Vérifier que l'indice précédent a été débloqué
+    if (hintId > 1 && !purchasedHints.includes(hintId - 1)) {
+      throw new HttpsError("failed-precondition", "Vous devez d'abord débloquer l'indice précédent.");
+    }
+
     // Vérifier si l'indice a déjà été acheté
     const hintAlreadyPurchased = purchasedHints.includes(hintId);
 

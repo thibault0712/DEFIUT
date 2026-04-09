@@ -96,6 +96,10 @@
     }
   }
 
+  function isHintLocked (indice) {
+    return indice.id > 1 && !purchasedHints.value.includes(indice.id - 1)
+  }
+
   function openIndiceDialog (indice) {
     if (purchasedHints.value.includes(indice.id)) {
       currentIndice.value = indice
@@ -254,12 +258,18 @@
               v-for="indice in challenge.clues"
               :key="indice.id"
               class="text-none clue-btn"
-              color="#8A9B46"
+              :color="isHintLocked(indice) ? '#666' : '#8A9B46'"
+              :disabled="isHintLocked(indice)"
               size="large"
               variant="flat"
               @click="openIndiceDialog(indice)"
             >
-              INDICE {{ indice.id }} ({{ indice.points }} POINTS)
+              <template v-if="isHintLocked(indice)">
+                🔒 INDICE {{ indice.id }}
+              </template>
+              <template v-else>
+                INDICE {{ indice.id }} ({{ indice.points }} POINTS)
+              </template>
             </v-btn>
           </div>
         </v-col>
