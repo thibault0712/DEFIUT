@@ -27,6 +27,21 @@ async function checkLinusTorvaldBadge() {
   }
 }
 
+function getChallengeMaps(value) {
+  return {
+    startedChallenges: value?.startedChallenges || {},
+    completedChallenges: value?.challenges || value?.completedChallenges || {},
+  };
+}
+
+function createStartedChallengeEntry(challenge) {
+  return {
+    startedAt: Timestamp.now(),
+    title: challenge?.title || '',
+    points: challenge?.points || 0,
+  };
+}
+
 const user = {
   namespaced: true,
   state: {
@@ -52,6 +67,8 @@ const user = {
         return;
       }
 
+      const challengeMaps = getChallengeMaps(value);
+
       state.user.data = {
         uid: value.uid,
         userName: value.userName,
@@ -61,7 +78,9 @@ const user = {
         registeredAt: value.registeredAt,
         theme: value.theme,
         points: value.points,
-        challenges: value.challenges,
+        challenges: challengeMaps.completedChallenges,
+        startedChallenges: challengeMaps.startedChallenges,
+        completedChallenges: challengeMaps.completedChallenges,
         badges: value.badges,
       };
     },
@@ -89,6 +108,8 @@ const user = {
             Timestamp.now(),
             'darkTheme',
             0,
+            {},
+            {},
             {},
             {},
           );
@@ -148,6 +169,8 @@ const user = {
             theme: 'darkTheme',
             points: 0,
             challenges: {},
+            startedChallenges: {},
+            completedChallenges: {},
             badges: {},
           });
           await createFirebaseUserCollection(
@@ -159,6 +182,8 @@ const user = {
             Timestamp.now(),
             'darkTheme',
             0,
+            {},
+            {},
             {},
             {},
           );
@@ -245,7 +270,9 @@ const user = {
         registeredAt: userData.registeredAt,
         theme: userData.theme,
         points: userData.points,
-        challenges: userData.challenges,
+        challenges: getChallengeMaps(userData).completedChallenges,
+        startedChallenges: getChallengeMaps(userData).startedChallenges,
+        completedChallenges: getChallengeMaps(userData).completedChallenges,
         badges: userData.badges,
       });
 
@@ -259,10 +286,53 @@ const user = {
           userData.registeredAt,
           userData.theme,
           userData.points,
-          userData.challenges,
+          getChallengeMaps(userData).completedChallenges,
           userData.badges,
+          getChallengeMaps(userData).startedChallenges,
+          getChallengeMaps(userData).completedChallenges,
         );
       }
+    },
+
+    async addChallengeToStarted(context, challenge) {
+      const userData = context.getters.user.data;
+
+      if (!userData || !challenge?.uid) {
+        return;
+      }
+
+      const challengeMaps = getChallengeMaps(userData);
+
+      if (challengeMaps.completedChallenges[challenge.uid]) {
+        return;
+      }
+
+      const startedChallenges = {
+        ...challengeMaps.startedChallenges,
+        [challenge.uid]: createStartedChallengeEntry(challenge),
+      };
+
+      context.commit('SET_USER', {
+        ...userData,
+        startedChallenges,
+        completedChallenges: challengeMaps.completedChallenges,
+        challenges: challengeMaps.completedChallenges,
+      });
+
+      await updateFirebaseUserCollection(
+        userData.uid,
+        userData.userName,
+        userData.email,
+        userData.imageUrl,
+        userData.lastLogin,
+        userData.registeredAt,
+        userData.theme,
+        userData.points,
+        challengeMaps.completedChallenges,
+        userData.badges,
+        startedChallenges,
+        challengeMaps.completedChallenges,
+      );
     },
 
     async removeUser(context) {
@@ -286,8 +356,10 @@ const user = {
         user.registeredAt,
         theme,
         user.points,
-        user.challenges,
+        getChallengeMaps(user).completedChallenges,
         user.badges,
+        getChallengeMaps(user).startedChallenges,
+        getChallengeMaps(user).completedChallenges,
       );
     },
 
@@ -315,8 +387,10 @@ const user = {
         userData.registeredAt,
         userData.theme,
         userData.points,
-        userData.challenges,
+        getChallengeMaps(userData).completedChallenges,
         userData.badges,
+        getChallengeMaps(userData).startedChallenges,
+        getChallengeMaps(userData).completedChallenges,
       );
       context.commit('SET_USER', {
         ...userData,
