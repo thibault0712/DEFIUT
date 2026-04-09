@@ -37,7 +37,7 @@
   })
 
   const secondPlaceHeight = computed(() => {
-    return smAndDown.value ? 150 : 200
+    return smAndDown.value ? 150 : 190
   })
 
   const thirdPlaceHeight = computed(() => {
