@@ -21,6 +21,9 @@ const otherUser = {
         return;
       }
 
+      const startedChallenges = value.startedChallenges || {};
+      const completedChallenges = value.completedChallenges || value.challenges || {};
+
       state.user.data = {
         uid: value.uid,
         userName: value.userName,
@@ -30,7 +33,9 @@ const otherUser = {
         registeredAt: value.registeredAt,
         theme: value.theme,
         points: value.points,
-        challenges: value.challenges,
+        challenges: completedChallenges,
+        startedChallenges,
+        completedChallenges,
         badges: value.badges,
       };
     },
@@ -55,7 +60,9 @@ const otherUser = {
         registeredAt: userData.registeredAt,
         theme: userData.theme,
         points: userData.points,
-        challenges: userData.challenges,
+        challenges: userData.completedChallenges || userData.challenges,
+        startedChallenges: userData.startedChallenges,
+        completedChallenges: userData.completedChallenges || userData.challenges,
         badges: userData.badges,
       });
     },

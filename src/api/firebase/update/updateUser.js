@@ -12,6 +12,8 @@ async function updateUser(
   points,
   challenges,
   badges,
+  startedChallenges = {},
+  completedChallenges = {},
 ) {
   await setDoc(doc(db, 'users', uid), {
     userName,
@@ -23,6 +25,8 @@ async function updateUser(
     points,
     challenges: challenges || {},
     badges: badges || {},
+    startedChallenges: startedChallenges || {},
+    completedChallenges: completedChallenges || {},
   });
 }
 

@@ -79,7 +79,9 @@ const isFlag = onCall({ enforceAppCheck: false }, async (request) => {
     const challengeTxData = challengeTxSnap.data() || {};
     const isFirstSolver = !challengeTxData.firstSolverUid;
 
-    if (userData.challenges && userData.challenges[challengeId]) {
+    const completedChallenges = userData.challenges || userData.completedChallenges || {};
+
+    if (completedChallenges[challengeId]) {
       return { alreadyCompleted: true, isFirstSolver: false };
     }
 
@@ -89,6 +91,12 @@ const isFlag = onCall({ enforceAppCheck: false }, async (request) => {
         date: FieldValue.serverTimestamp(),
         points: challengeData.points,
       },
+      [`completedChallenges.${challengeId}`]: {
+        title: challengeData.title,
+        date: FieldValue.serverTimestamp(),
+        points: challengeData.points,
+      },
+      [`startedChallenges.${challengeId}`]: FieldValue.delete(),
       points: FieldValue.increment(challengeData.points),
     });
 
