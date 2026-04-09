@@ -1,5 +1,7 @@
 <script setup>
   import { computed } from 'vue'
+  import { useRouter } from 'vue-router'
+  import { useStore } from 'vuex'
 
   const props = defineProps({
     titre: { type: String, default: 'Titre' },
@@ -9,6 +11,44 @@
     avancement: { type: String, default: 'Avancement' },
     categorie: { type: String, default: 'Catégorie' },
     challengeId: { type: String, default: '' },
+  })
+
+  const store = useStore()
+  const router = useRouter()
+
+  const userData = computed(() => store.getters['user/user'].data)
+
+  const challengeStatus = computed(() => {
+    if (props.avancement && props.avancement.trim()) {
+      return props.avancement
+    }
+
+    const startedChallenges = userData.value?.startedChallenges || {}
+    const completedChallenges = userData.value?.completedChallenges || userData.value?.challenges || {}
+
+    if (props.challengeId && completedChallenges[props.challengeId]) {
+      return 'Réussi'
+    }
+
+    if (props.challengeId && startedChallenges[props.challengeId]) {
+      return 'En cours'
+    }
+
+    return 'Pas commencé'
+  })
+
+  const challengeStatusClass = computed(() => {
+    switch (challengeStatus.value) {
+      case 'En cours': {
+        return 'font-weight-medium text-warning'
+      }
+      case 'Réussi': {
+        return 'font-weight-medium text-success'
+      }
+      default: {
+        return 'font-weight-medium'
+      }
+    }
   })
 
   // Pour mettre à jour la couleur suivant la difficulté
@@ -29,8 +69,20 @@
     }
   })
 
-  function goToChallenge (challengeId) {
-    window.location.href = '/challenge/' + challengeId
+  async function goToChallenge (challengeId) {
+    if (!challengeId) {
+      return
+    }
+
+    if (userData.value && challengeStatus.value === 'Pas commencé') {
+      await store.dispatch('user/addChallengeToStarted', {
+        uid: challengeId,
+        title: props.titre,
+        points: props.points,
+      })
+    }
+
+    await router.push('/challenge/' + challengeId)
   }
 </script>
 
@@ -48,8 +100,8 @@
         <div class="font-weight-medium">
           {{ categorie }}
         </div>
-        <div>
-          {{ avancement }}
+        <div :class="challengeStatusClass">
+          {{ challengeStatus }}
         </div>
       </div>
 
