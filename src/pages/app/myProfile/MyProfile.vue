@@ -148,7 +148,7 @@
       </v-row>
 
       <!-- DATES -->
-      <v-row class="mt-6">
+      <v-row v-if="userData" class="mt-6">
         <v-col cols="12" md="4">
           <p class="text-medium-emphasis">
             Dernière connexion : {{ serializedTimestampToStringFormated(userData.lastLogin) }}
@@ -163,7 +163,7 @@
       </v-row>
 
       <!-- ACTIONS -->
-      <v-row class="mt-4" dense>
+      <v-row v-if="userData" class="mt-4" dense>
         <v-col cols="12" sm="4">
           <v-btn
             block

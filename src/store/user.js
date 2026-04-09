@@ -6,22 +6,22 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
-} from 'firebase/auth';
-import { Timestamp } from 'firebase/firestore';
-import { httpsCallable } from 'firebase/functions';
-import createFirebaseUserCollection from '@/api/firebase/create/createUser.js';
-import deleteFirebaseUserCollection from '@/api/firebase/delete/deleteUser.js';
-import getFirebaseUserCollection from '@/api/firebase/read/getUserByID.js';
-import updateFirebaseUserCollection from '@/api/firebase/update/updateUser.js';
-import { auth, functions, googleAuthProvider } from '@/api/firebaseApp.js';
-import uploadUserProfilePicture from '@/api/firestore/uploadUserProfilePicture.js';
-import isPreviousCalendarDay from '@/utils/isPreviousCalendarDay.js';
+} from 'firebase/auth'
+import { Timestamp } from 'firebase/firestore'
+import { httpsCallable } from 'firebase/functions'
+import createFirebaseUserCollection from '@/api/firebase/create/createUser.js'
+import deleteFirebaseUserCollection from '@/api/firebase/delete/deleteUser.js'
+import getFirebaseUserCollection from '@/api/firebase/read/getUserByID.js'
+import updateFirebaseUserCollection from '@/api/firebase/update/updateUser.js'
+import { auth, functions, googleAuthProvider } from '@/api/firebaseApp.js'
+import uploadUserProfilePicture from '@/api/firestore/uploadUserProfilePicture.js'
+import isPreviousCalendarDay from '@/utils/isPreviousCalendarDay.js'
 
-async function checkLinusTorvaldBadge() {
+async function checkLinusTorvaldBadge () {
   // On ne bloque jamais la connexion si l'attribution échoue
   try {
-    const userAgent = typeof navigator !== 'undefined' ? navigator.userAgent : '';
-    await httpsCallable(functions, 'checkLinusTorvaldBadge')({ userAgent });
+    const userAgent = typeof navigator === 'undefined' ? '' : navigator.userAgent
+    await httpsCallable(functions, 'checkLinusTorvaldBadge')({ userAgent })
   } catch {
     // Badge best-effort seulement
   }
@@ -37,19 +37,19 @@ const user = {
   },
 
   getters: {
-    user(state) {
-      return state.user;
+    user (state) {
+      return state.user
     },
   },
 
   mutations: {
-    SET_LOGGED_IN(state, value) {
-      state.user.loggedIn = value;
+    SET_LOGGED_IN (state, value) {
+      state.user.loggedIn = value
     },
-    SET_USER(state, value) {
+    SET_USER (state, value) {
       if (value === null) {
-        state.user.data = null;
-        return;
+        state.user.data = null
+        return
       }
 
       state.user.data = {
@@ -63,23 +63,23 @@ const user = {
         points: value.points,
         challenges: value.challenges,
         badges: value.badges,
-      };
+      }
     },
   },
 
   actions: {
-    async register(context, { email, password, userName }) {
+    async register (context, { email, password, userName }) {
       try {
         const response = await createUserWithEmailAndPassword(
           auth,
           email,
           password,
-        );
+        )
         if (response) {
-          const imageUrl =
-            'https://api.dicebear.com/9.x/bottts/svg?seed=' +
-            userName +
-            '&backgroundColor=BA2653&backgroundType=solid&scale=80';
+          const imageUrl
+            = 'https://api.dicebear.com/9.x/bottts/svg?seed='
+              + userName
+              + '&backgroundColor=BA2653&backgroundType=solid&scale=80'
           await createFirebaseUserCollection(
             response.user.uid,
             userName,
@@ -91,53 +91,53 @@ const user = {
             0,
             {},
             {},
-          );
-          await sendEmailVerification(response.user);
-          await context.dispatch('logOut'); // Due to email validation, the user is automatically logged out
+          )
+          await sendEmailVerification(response.user)
+          await context.dispatch('logOut') // Due to email validation, the user is automatically logged out
         } else {
-          throw new Error("Impossible d'enregistrer l'utilisateur");
+          throw new Error('Impossible d\'enregistrer l\'utilisateur')
         }
       } catch (error_) {
-        let message = "Une erreur est survenue lors de l'inscription";
+        let message = 'Une erreur est survenue lors de l\'inscription'
         switch (error_.code) {
           case 'auth/email-already-in-use': {
-            message = 'Cette adresse email est déjà utilisée';
+            message = 'Cette adresse email est déjà utilisée'
 
-            break;
+            break
           }
           case 'auth/weak-password': {
-            message = 'Le mot de passe est trop court';
+            message = 'Le mot de passe est trop court'
 
-            break;
+            break
           }
           case 'auth/invalid-email': {
-            message = "L'adresse email est invalide";
+            message = 'L\'adresse email est invalide'
 
-            break;
+            break
           }
           // No default
         }
-        throw new Error(message);
+        throw new Error(message)
       }
     },
 
     // Used for registration and login
-    async signInWithGoogle(context) {
-      const response = await signInWithPopup(auth, googleAuthProvider);
+    async signInWithGoogle (context) {
+      const response = await signInWithPopup(auth, googleAuthProvider)
       if (response) {
-        const userData = await getFirebaseUserCollection(response.user.uid);
+        const userData = await getFirebaseUserCollection(response.user.uid)
 
         // Create the user if it does not exist yet
         if (userData) {
-          await context.dispatch('fetchUser', response.user);
-          await checkLinusTorvaldBadge();
+          await context.dispatch('fetchUser', response.user)
+          await checkLinusTorvaldBadge()
         } else {
-          const userName =
-            'Utilisateur' + Math.random().toString(36).slice(0, 8);
-          const imageUrl =
-            'https://api.dicebear.com/9.x/bottts/svg?seed=' +
-            userName +
-            '&backgroundColor=BA2653&backgroundType=solid&scale=80';
+          const userName
+            = 'Utilisateur' + Math.random().toString(36).slice(0, 8)
+          const imageUrl
+            = 'https://api.dicebear.com/9.x/bottts/svg?seed='
+              + userName
+              + '&backgroundColor=BA2653&backgroundType=solid&scale=80'
           context.commit('SET_USER', {
             uid: response.user.uid,
             userName,
@@ -149,7 +149,7 @@ const user = {
             points: 0,
             challenges: {},
             badges: {},
-          });
+          })
           await createFirebaseUserCollection(
             response.user.uid,
             userName,
@@ -161,79 +161,79 @@ const user = {
             0,
             {},
             {},
-          );
-          await checkLinusTorvaldBadge();
+          )
+          await checkLinusTorvaldBadge()
         }
       } else {
-        throw new Error("Impossible d'enregistrer l'utilisateur");
+        throw new Error('Impossible d\'enregistrer l\'utilisateur')
       }
     },
 
-    async logIn(context, { email, password }) {
+    async logIn (context, { email, password }) {
       try {
         const response = await signInWithEmailAndPassword(
           auth,
           email,
           password,
-        );
+        )
         if (response) {
           if (response.user.emailVerified === false) {
-            await context.dispatch('logOut');
+            await context.dispatch('logOut')
             throw new Error(
               'Vous devez dans un premier temps valider votre email',
-            );
+            )
           }
-          await context.dispatch('fetchUser', response.user);
-          await checkLinusTorvaldBadge();
+          await context.dispatch('fetchUser', response.user)
+          await checkLinusTorvaldBadge()
         } else {
-          throw new Error('Impossible de se connecter, erreur inconnue');
+          throw new Error('Impossible de se connecter, erreur inconnue')
         }
       } catch (error_) {
-        let message = error_.message;
+        let message = error_.message
         switch (error_.code) {
           case 'auth/user-not-found':
           case 'auth/wrong-password':
           case 'auth/invalid-credential': {
-            message = 'Identifiant ou mot de passe incorrect';
+            message = 'Identifiant ou mot de passe incorrect'
 
-            break;
+            break
           }
           case 'auth/invalid-email': {
-            message = "L'adresse email est invalide";
+            message = 'L\'adresse email est invalide'
 
-            break;
+            break
           }
           case 'auth/too-many-requests': {
-            message = 'Trop de tentatives, réessayez plus tard';
+            message = 'Trop de tentatives, réessayez plus tard'
 
-            break;
+            break
           }
           // No default
         }
-        throw new Error(message);
+        throw new Error(message)
       }
     },
 
-    async logOut(context) {
-      await signOut(auth);
-      context.commit('SET_USER', null);
-      context.commit('SET_LOGGED_IN', false);
+    async logOut (context) {
+      await signOut(auth)
+      context.commit('SET_USER', null)
+      context.commit('SET_LOGGED_IN', false)
     },
 
-    async fetchUser(context, user) {
+    async fetchUser (context, user) {
       if (!user) {
-        context.commit('SET_USER', null);
-        context.commit('SET_LOGGED_IN', false);
-        return;
+        context.commit('SET_USER', null)
+        context.commit('SET_LOGGED_IN', false)
+        return
       }
 
-      context.commit('SET_LOGGED_IN', true);
+      context.commit('SET_LOGGED_IN', true)
 
-      const userData = await getFirebaseUserCollection(user.uid);
+      const userData = await getFirebaseUserCollection(user.uid)
 
       if (!userData) {
         // User could not be created in database due to delay insertion
-        return;
+        return
       }
 
       context.commit('SET_USER', {
@@ -247,7 +247,7 @@ const user = {
         points: userData.points,
         challenges: userData.challenges,
         badges: userData.badges,
-      });
+      })
 
       if (isPreviousCalendarDay(userData.lastLogin)) {
         await updateFirebaseUserCollection(
@@ -261,22 +261,23 @@ const user = {
           userData.points,
           userData.challenges,
           userData.badges,
-        );
+        )
       }
     },
 
-    async removeUser(context) {
-      const uid = context.getters.user.data.uid;
-      await deleteUser(auth.currentUser);
-      // Don't use the logout function because deleteUser logout the user automatically
-      await deleteFirebaseUserCollection(uid);
-      context.commit('SET_USER', null);
-      context.commit('SET_LOGGED_IN', false);
+    async removeUser (context) {
+      const uid = context.getters.user.data.uid
+      // On supprime d'abord les données Firebase avant le compte Auth
+      // car une fois le compte Auth supprimé, on n'a plus les droits pour supprimer la collection
+      await deleteFirebaseUserCollection(uid)
+      await deleteUser(auth.currentUser)
+      context.commit('SET_USER', null)
+      context.commit('SET_LOGGED_IN', false)
     },
 
-    async updateTheme(context, theme) {
-      const user = context.getters.user.data;
-      context.commit('SET_USER', { ...user, theme });
+    async updateTheme (context, theme) {
+      const user = context.getters.user.data
+      context.commit('SET_USER', { ...user, theme })
       await updateFirebaseUserCollection(
         user.uid,
         user.userName,
@@ -288,22 +289,22 @@ const user = {
         user.points,
         user.challenges,
         user.badges,
-      );
+      )
     },
 
-    async forgotPassword(context, email) {
-      await sendPasswordResetEmail(auth, email);
+    async forgotPassword (context, email) {
+      await sendPasswordResetEmail(auth, email)
     },
 
-    async updateUserInformation(context, { userName, profilePictureFile }) {
-      const userData = context.getters.user.data;
-      let profilePictureUrl = userData.imageUrl;
+    async updateUserInformation (context, { userName, profilePictureFile }) {
+      const userData = context.getters.user.data
+      let profilePictureUrl = userData.imageUrl
 
       if (profilePictureFile !== null) {
         profilePictureUrl = await uploadUserProfilePicture(
           profilePictureFile,
           userName,
-        );
+        )
       }
 
       await updateFirebaseUserCollection(
@@ -317,14 +318,14 @@ const user = {
         userData.points,
         userData.challenges,
         userData.badges,
-      );
+      )
       context.commit('SET_USER', {
         ...userData,
         userName,
         imageUrl: profilePictureUrl,
-      });
+      })
     },
   },
-};
+}
 
-export default user;
+export default user
