@@ -57,7 +57,7 @@
 
       if (
         tagsFilter.value.length > 0
-        && !tagsFilter.value.some(tag => challenge.tags?.includes(tag))
+          && !getChallengeTags(challenge).some(tag => tagsFilter.value.some(filterTag => normalizeTag(filterTag) === tag))
       ) {
         return false
       }
@@ -65,6 +65,44 @@
       return true
     })
   })
+
+    function normalizeTag (tag) {
+      if (tag === null || tag === undefined) {
+        return ''
+      }
+
+      if (typeof tag === 'string') {
+        return tag.trim().toLowerCase()
+      }
+
+      if (typeof tag === 'object') {
+        return String(tag.name ?? tag.label ?? tag.title ?? tag.value ?? tag.id ?? '')
+          .trim()
+          .toLowerCase()
+      }
+
+      return String(tag).trim().toLowerCase()
+    }
+
+    function getChallengeTags (challenge) {
+      if (!Array.isArray(challenge?.tags)) {
+        return []
+      }
+
+      return challenge.tags
+        .map(normalizeTag)
+        .filter(Boolean)
+    }
+
+    const availableTags = computed(() => {
+      const tags = new Set()
+
+      challengeList.value.forEach((challenge) => {
+        getChallengeTags(challenge).forEach(tag => tags.add(tag))
+      })
+
+      return [...tags]
+    })
 </script>
 
 <template>
@@ -115,6 +153,9 @@
               v-model="tagsFilter"
               label="TAGS"
               multiple
+                :items="availableTags"
+                persistent-placeholder
+                placeholder="Ex: Crypto"
             />
           </v-col>
 
