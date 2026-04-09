@@ -15,7 +15,7 @@
           justify-md="start"
         >
           <v-col
-            class="d-flex justify-centerjustify-md-start"
+            class="d-flex justify-center justify-md-start"
             cols="12"
             md="auto"
           >

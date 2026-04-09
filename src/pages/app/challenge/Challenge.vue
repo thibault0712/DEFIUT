@@ -142,9 +142,9 @@
 </script>
 
 <template>
+  <div id="app" style="display: flex; flex-direction: column; min-height: 100vh">
   <Header />
-
-  <v-main class="min-vh-100 pt-0 pb-16 h-screen">
+  <v-main style="flex: 1;">
     <v-container
       v-if="loading"
       class="d-flex justify-center align-center"
@@ -346,6 +346,8 @@
   </v-main>
 
   <Footer />
+  </div>
+
 </template>
 
 <style scoped>
