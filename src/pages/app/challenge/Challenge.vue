@@ -1,123 +1,144 @@
 <script setup>
-import { computed, onMounted, ref } from 'vue';
-import { useRoute } from 'vue-router';
-import { useStore } from 'vuex';
-import { httpsCallable } from 'firebase/functions';
-import { functions, auth } from '@/api/firebaseApp.js';
+  import { httpsCallable } from 'firebase/functions'
+  import { getDownloadURL, ref as storageRef } from 'firebase/storage'
+  import { computed, onMounted, ref } from 'vue'
+  import { useRoute } from 'vue-router'
+  import { useStore } from 'vuex'
+  import { auth, functions, storage } from '@/api/firebaseApp.js'
 
-const route = useRoute();
-const store = useStore();
+  const route = useRoute()
+  const store = useStore()
 
-const flagInput = ref('');
-const showIndiceDialog = ref(false);
-const currentIndice = ref(null);
-const loading = ref(true);
-const flagLoading = ref(false);
-const flagResult = ref(null);
-const showConfirmDialog = ref(false);
-const pendingIndice = ref(null);
-const hintLoading = ref(false);
-const hintError = ref(null);
-const purchasedHints = ref([]);
+  const flagInput = ref('')
+  const showIndiceDialog = ref(false)
+  const currentIndice = ref(null)
+  const loading = ref(true)
+  const flagLoading = ref(false)
+  const flagResult = ref(null)
+  const showConfirmDialog = ref(false)
+  const pendingIndice = ref(null)
+  const hintLoading = ref(false)
+  const hintError = ref(null)
+  const purchasedHints = ref([])
+  const linkUrls = ref({})
 
-const challenge = computed(() => store.getters['challenge/currentChallenge']);
-const difficultyColor = computed(() => {
-  const rawDifficulty = challenge.value?.difficulty;
+  const challenge = computed(() => store.getters['challenge/currentChallenge'])
+  const difficultyColor = computed(() => {
+    const rawDifficulty = challenge.value?.difficulty
 
-  if (!rawDifficulty) {
-    return '#8A9B46';
-  }
-
-  switch (String(rawDifficulty).trim().toLowerCase()) {
-    case 'facile': {
-      return '#8A9B46';
+    if (!rawDifficulty) {
+      return '#8A9B46'
     }
-    case 'moyen': {
-      return '#FB8C00';
-    }
-    case 'difficile': {
-      return '#BA2653';
-    }
-    default: {
-      return '#8A9B46';
-    }
-  }
-});
 
-onMounted(async () => {
-  await store.dispatch('challenge/fetchChallenge', route.params.id);
-  try {
-    const { data } = await httpsCallable(functions, 'getPurchasedHints')({ challengeId: route.params.id });
-    purchasedHints.value = data.purchasedHints || [];
-  } catch {
+    switch (String(rawDifficulty).trim().toLowerCase()) {
+      case 'facile': {
+        return '#8A9B46'
+      }
+      case 'moyen': {
+        return '#FB8C00'
+      }
+      case 'difficile': {
+        return '#BA2653'
+      }
+      default: {
+        return '#8A9B46'
+      }
+    }
+  })
+
+  onMounted(async () => {
+    await store.dispatch('challenge/fetchChallenge', route.params.id)
+    try {
+      const { data } = await httpsCallable(functions, 'getPurchasedHints')({ challengeId: route.params.id })
+      purchasedHints.value = data.purchasedHints || []
+    } catch {
     // ignore
-  }
-  loading.value = false;
-});
-
-async function submitFlag() {
-  if (!flagInput.value.trim()) return;
-
-  flagLoading.value = true;
-  flagResult.value = null;
-
-  try {
-    const { data } = await httpsCallable(functions, 'isFlag')({ challengeId: route.params.id, flag: flagInput.value });
-    flagResult.value = data;
-    if (data.success) {
-      await store.dispatch('user/fetchUser', auth.currentUser);
-      flagInput.value = '';
     }
-  } catch (error) {
-    flagResult.value = { success: false, message: error?.message || 'Une erreur est survenue. Réessayez.' };
-  } finally {
-    flagLoading.value = false;
+    await resolveLinkUrls()
+    loading.value = false
+  })
+
+  async function resolveLinkUrls () {
+    const links = challenge.value?.links || []
+    const resolved = {}
+    await Promise.all(links.map(async link => {
+      if (/^https?:\/\//i.test(link)) {
+        resolved[link] = link
+        return
+      }
+      try {
+        const path = link.includes('/') ? link : `challenges/${link}`
+        resolved[link] = await getDownloadURL(storageRef(storage, path))
+      } catch {
+        resolved[link] = null
+      }
+    }))
+    linkUrls.value = resolved
   }
-}
 
-function openIndiceDialog(indice) {
-  if (purchasedHints.value.includes(indice.id)) {
-    currentIndice.value = indice;
-    showIndiceDialog.value = true;
-    return;
+  async function submitFlag () {
+    if (!flagInput.value.trim()) return
+
+    flagLoading.value = true
+    flagResult.value = null
+
+    try {
+      const { data } = await httpsCallable(functions, 'isFlag')({ challengeId: route.params.id, flag: flagInput.value })
+      flagResult.value = data
+      if (data.success) {
+        await store.dispatch('user/fetchUser', auth.currentUser)
+        flagInput.value = ''
+      }
+    } catch (error) {
+      flagResult.value = { success: false, message: error?.message || 'Une erreur est survenue. Réessayez.' }
+    } finally {
+      flagLoading.value = false
+    }
   }
-  pendingIndice.value = indice;
-  showConfirmDialog.value = true;
-}
 
-async function confirmHintPurchase() {
-  const indice = pendingIndice.value;
-  hintLoading.value = true;
-  hintError.value = null;
-
-  try {
-    await httpsCallable(functions, 'getHint')({
-      challengeId: route.params.id,
-      hintId: indice.id,
-    });
-    await store.dispatch('user/fetchUser', auth.currentUser);
-    purchasedHints.value.push(indice.id);
-    showConfirmDialog.value = false;
-    currentIndice.value = indice;
-    showIndiceDialog.value = true;
-  } catch (error) {
-    hintError.value = error?.message || 'Erreur lors de l\'achat de l\'indice.';
-  } finally {
-    hintLoading.value = false;
-    pendingIndice.value = null;
+  function openIndiceDialog (indice) {
+    if (purchasedHints.value.includes(indice.id)) {
+      currentIndice.value = indice
+      showIndiceDialog.value = true
+      return
+    }
+    pendingIndice.value = indice
+    showConfirmDialog.value = true
   }
-}
 
-function cancelHintPurchase() {
-  showConfirmDialog.value = false;
-  pendingIndice.value = null;
-  hintError.value = null;
-}
+  async function confirmHintPurchase () {
+    const indice = pendingIndice.value
+    hintLoading.value = true
+    hintError.value = null
 
-function closeIndiceDialog() {
-  showIndiceDialog.value = false;
-  currentIndice.value = null;
-}
+    try {
+      await httpsCallable(functions, 'getHint')({
+        challengeId: route.params.id,
+        hintId: indice.id,
+      })
+      await store.dispatch('user/fetchUser', auth.currentUser)
+      purchasedHints.value.push(indice.id)
+      showConfirmDialog.value = false
+      currentIndice.value = indice
+      showIndiceDialog.value = true
+    } catch (error) {
+      hintError.value = error?.message || 'Erreur lors de l\'achat de l\'indice.'
+    } finally {
+      hintLoading.value = false
+      pendingIndice.value = null
+    }
+  }
+
+  function cancelHintPurchase () {
+    showConfirmDialog.value = false
+    pendingIndice.value = null
+    hintError.value = null
+  }
+
+  function closeIndiceDialog () {
+    showIndiceDialog.value = false
+    currentIndice.value = null
+  }
 </script>
 
 <template>
@@ -170,18 +191,18 @@ function closeIndiceDialog() {
                 v-model="flagInput"
                 class="mr-4"
                 density="comfortable"
+                :disabled="flagLoading"
                 hide-details
                 placeholder="FLAG-AAAAA-{aaaa_aaaa_aaaa_aaaa}"
                 variant="outlined"
-                :disabled="flagLoading"
                 @keyup.enter="submitFlag"
               />
               <v-btn
                 class="text-none"
                 color="#8A9B46"
+                :loading="flagLoading"
                 size="large"
                 variant="flat"
-                :loading="flagLoading"
                 @click="submitFlag"
               >
                 VALIDER
@@ -191,8 +212,8 @@ function closeIndiceDialog() {
             <v-alert
               v-if="flagResult"
               class="mt-3"
-              :type="flagResult.success ? 'success' : 'error'"
               density="compact"
+              :type="flagResult.success ? 'success' : 'error'"
               variant="tonal"
             >
               {{ flagResult.message }}
@@ -207,9 +228,22 @@ function closeIndiceDialog() {
               class="mb-1"
             >
               <a
+                v-if="linkUrls[link]"
                 class="text-body-1"
-                :href="`https://${link}`"
-                style="color: white; text-decoration: none"
+                download
+                :href="linkUrls[link]"
+                rel="noopener"
+                style="color: white; text-decoration: underline"
+                target="_blank"
+              >
+                {{ link }}
+              </a>
+              <a
+                v-else
+                class="text-body-1"
+                :href="'https://' + link"
+                style="color: white; text-decoration: underline"
+                target="_blank"
               >
                 {{ link }}
               </a>
@@ -262,8 +296,8 @@ function closeIndiceDialog() {
         <v-alert
           v-if="hintError"
           class="mb-4"
-          type="error"
           density="compact"
+          type="error"
           variant="tonal"
         >
           {{ hintError }}
@@ -275,8 +309,8 @@ function closeIndiceDialog() {
           </v-btn>
           <v-btn
             color="#8A9B46"
-            variant="flat"
             :loading="hintLoading"
+            variant="flat"
             @click="confirmHintPurchase"
           >
             Confirmer
