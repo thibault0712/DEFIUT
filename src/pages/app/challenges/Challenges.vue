@@ -5,6 +5,7 @@
   const store = useStore()
 
   const challengeList = computed(() => store.getters['challengeList/challengeList'])
+  const userData = computed(() => store.getters['user/user'].data)
 
   async function loadChallenges () {
     await store.dispatch('challengeList/updateList')
@@ -62,9 +63,40 @@
         return false
       }
 
+      if (progressFilter.value.length > 0) {
+        const challengeStatus = getChallengeStatus(challenge.uid)
+        const normalizedSelectedStatus = progressFilter.value.map(s =>
+          String(s).trim().toLowerCase()
+        )
+        const normalizedChallengeStatus = challengeStatus.toLowerCase()
+
+        if (!normalizedSelectedStatus.includes(normalizedChallengeStatus)) {
+          return false
+        }
+      }
+
       return true
     })
   })
+
+  function getChallengeStatus(challengeId) {
+    if (!challengeId || !userData.value) {
+      return 'Pas commencé'
+    }
+
+    const challenges = userData.value?.challenges || {}
+    const startedChallenges = userData.value?.startedChallenges || {}
+
+    if (challenges[challengeId]) {
+      return 'Terminé'
+    }
+
+    if (startedChallenges[challengeId]) {
+      return 'En cours'
+    }
+
+    return 'Pas commencé'
+  }
 
     function normalizeTag (tag) {
       if (tag === null || tag === undefined) {
@@ -166,7 +198,7 @@
               label="Avancement"
               multiple
               persistent-placeholder
-              placeholder="Ex: En Cours"
+              placeholder="Ex: Terminé"
             />
           </v-col>
         </v-row>
