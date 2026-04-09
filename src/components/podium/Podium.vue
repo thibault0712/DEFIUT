@@ -36,6 +36,14 @@
     }
   })
 
+  const secondPlaceHeight = computed(() => {
+    return smAndDown.value ? 150 : 200
+  })
+
+  const thirdPlaceHeight = computed(() => {
+    return smAndDown.value ? 135 : 130
+  })
+
   onMounted(async () => {
     await store.dispatch('userList/updateList')
   })
@@ -49,24 +57,24 @@
       <RouterLink
         :to="{
           path: '/userProfile',
-          query: { uid: thirdPlace ? thirdPlace.uid : 'INCONNU' },
+          query: { uid: secondPlace ? secondPlace.uid : 'INCONNU' },
         }"
       >
         <v-avatar class="mb-2" color="secondary" :size="podiumSizes.userAvatar">
-          <v-img v-if="thirdPlace?.imageUrl" cover :src="thirdPlace.imageUrl" />
+          <v-img v-if="secondPlace?.imageUrl" cover :src="secondPlace.imageUrl"/>
           <span v-else class="text-h5">
-            {{ thirdPlace?.userName?.[0] }}
+            {{ secondPlace?.userName?.[0] }}
           </span>
         </v-avatar>
       </RouterLink>
       <v-sheet
         class="rounded-t-lg d-flex align-center justify-center"
         color="primary"
-        :height="podiumSizes.sideHeight"
+        :height="secondPlaceHeight"
         :width="podiumSizes.sideWidth"
       >
-        <v-avatar class="title-orbitron" color="brown-darken-3" :size="podiumSizes.sideRankAvatar">
-          <span class="text-h4">3</span>
+        <v-avatar class="title-orbitron" color="grey-darken-3" :size="podiumSizes.sideRankAvatar">
+          <span class="text-h4">2</span>
         </v-avatar>
       </v-sheet>
     </div>
@@ -101,32 +109,28 @@
       </v-sheet>
     </div>
 
-    <div class="d-flex flex-column align-center mx-1">
+    <div class="d-flex flex-column align-center mx-1" style="margin-top: 40px">
       <RouterLink
         :to="{
           path: '/userProfile',
-          query: { uid: secondPlace ? secondPlace.uid : 'INCONNU' },
+          query: { uid: thirdPlace ? thirdPlace.uid : 'INCONNU' },
         }"
       >
         <v-avatar class="mb-2" color="secondary" :size="podiumSizes.userAvatar">
-          <v-img
-            v-if="secondPlace?.imageUrl"
-            cover
-            :src="secondPlace.imageUrl"
-          />
+          <v-img v-if="thirdPlace?.imageUrl" cover :src="thirdPlace.imageUrl" />
           <span v-else class="text-h5">
-            {{ secondPlace?.userName?.[0] }}
+            {{ thirdPlace?.userName?.[0] }}
           </span>
         </v-avatar>
       </RouterLink>
       <v-sheet
         class="rounded-t-lg d-flex align-center justify-center"
         color="primary"
-        :height="podiumSizes.sideHeight"
+        :height="thirdPlaceHeight"
         :width="podiumSizes.sideWidth"
       >
-        <v-avatar class="title-orbitron" color="grey-darken-3" :size="podiumSizes.sideRankAvatar">
-          <span class="text-h4">2</span>
+        <v-avatar class="title-orbitron" color="brown-darken-3" :size="podiumSizes.sideRankAvatar">
+          <span class="text-h4">3</span>
         </v-avatar>
       </v-sheet>
     </div>
