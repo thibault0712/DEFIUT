@@ -125,7 +125,6 @@
       hintError.value = error?.message || 'Erreur lors de l\'achat de l\'indice.'
     } finally {
       hintLoading.value = false
-      pendingIndice.value = null
     }
   }
 

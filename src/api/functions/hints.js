@@ -1,4 +1,4 @@
-const {onCall} = require("firebase-functions/v2/https");
+const {onCall, HttpsError} = require("firebase-functions/v2/https");
 const admin = require("firebase-admin");
 const logger = require("firebase-functions/logger");
 
@@ -12,7 +12,7 @@ exports.getHint = onCall(async (request) => {
   try {
     // Vérifier que l'utilisateur est authentifié
     if (!request.auth) {
-      throw new Error("Utilisateur non authentifié");
+      throw new HttpsError("unauthenticated", "Utilisateur non authentifié.");
     }
 
     const userId = request.auth.uid;
@@ -20,7 +20,7 @@ exports.getHint = onCall(async (request) => {
 
     // Valider les paramètres
     if (!challengeId || !hintId) {
-      throw new Error("Paramètres manquants : challengeId, hintId");
+      throw new HttpsError("invalid-argument", "Paramètres manquants : challengeId, hintId.");
     }
 
     const db = admin.firestore();
@@ -28,12 +28,12 @@ exports.getHint = onCall(async (request) => {
     // Récupérer le coût réel de l'indice depuis la base
     const challengeDoc = await db.collection("challenges").doc(challengeId).get();
     if (!challengeDoc.exists) {
-      throw new Error("Défi non trouvé");
+      throw new HttpsError("not-found", "Défi non trouvé.");
     }
     const clues = challengeDoc.data().clues || [];
     const clue = clues.find((c) => c.id === hintId);
     if (!clue) {
-      throw new Error("Indice non trouvé dans le défi");
+      throw new HttpsError("not-found", "Indice non trouvé dans le défi.");
     }
     const hintCost = clue.points;
 
@@ -42,7 +42,7 @@ exports.getHint = onCall(async (request) => {
     const userDoc = await userRef.get();
 
     if (!userDoc.exists) {
-      throw new Error("Utilisateur non trouvé");
+      throw new HttpsError("not-found", "Utilisateur non trouvé.");
     }
 
     const userData = userDoc.data();
@@ -72,7 +72,7 @@ exports.getHint = onCall(async (request) => {
     // Vérifier que l'utilisateur a assez de points
     if (currentPoints < hintCost) {
       logger.warn(`User ${userId} insufficient points for hint ${hintId}. Required: ${hintCost}, Available: ${currentPoints}`);
-      throw new Error(`Points insuffisants. Requis : ${hintCost}, Disponibles : ${currentPoints}`);
+      throw new HttpsError("failed-precondition", `Points insuffisants. Requis : ${hintCost}, Disponibles : ${currentPoints}.`);
     }
 
     // Déduire les points et enregistrer l'achat dans une transaction
@@ -110,7 +110,8 @@ exports.getHint = onCall(async (request) => {
     };
   } catch (error) {
     logger.error("Error in getHint function:", error);
-    throw new Error(error.message || "Une erreur est survenue lors du traitement de la demande d'indice");
+    if (error instanceof HttpsError) throw error;
+    throw new HttpsError("internal", "Une erreur est survenue lors du traitement de la demande d'indice.");
   }
 });
 
@@ -120,14 +121,14 @@ exports.getHint = onCall(async (request) => {
 exports.getPurchasedHints = onCall(async (request) => {
   try {
     if (!request.auth) {
-      throw new Error("Utilisateur non authentifié");
+      throw new HttpsError("unauthenticated", "Utilisateur non authentifié.");
     }
 
     const userId = request.auth.uid;
     const {challengeId} = request.data;
 
     if (!challengeId) {
-      throw new Error("Paramètre manquant : challengeId");
+      throw new HttpsError("invalid-argument", "Paramètre manquant : challengeId.");
     }
 
     const db = admin.firestore();
@@ -151,7 +152,8 @@ exports.getPurchasedHints = onCall(async (request) => {
     };
   } catch (error) {
     logger.error("Error in getPurchasedHints function:", error);
-    throw new Error(error.message || "Une erreur est survenue lors de la récupération des indices achetés");
+    if (error instanceof HttpsError) throw error;
+    throw new HttpsError("internal", "Une erreur est survenue lors de la récupération des indices achetés.");
   }
 });
 
@@ -161,7 +163,7 @@ exports.getPurchasedHints = onCall(async (request) => {
 exports.getUserPoints = onCall(async (request) => {
   try {
     if (!request.auth) {
-      throw new Error("Utilisateur non authentifié");
+      throw new HttpsError("unauthenticated", "Utilisateur non authentifié.");
     }
 
     const userId = request.auth.uid;
@@ -170,7 +172,7 @@ exports.getUserPoints = onCall(async (request) => {
     const userDoc = await db.collection("users").doc(userId).get();
 
     if (!userDoc.exists) {
-      throw new Error("Utilisateur non trouvé");
+      throw new HttpsError("not-found", "Utilisateur non trouvé.");
     }
 
     return {
@@ -179,6 +181,7 @@ exports.getUserPoints = onCall(async (request) => {
     };
   } catch (error) {
     logger.error("Error in getUserPoints function:", error);
-    throw new Error(error.message || "Une erreur est survenue lors de la récupération des points de l'utilisateur");
+    if (error instanceof HttpsError) throw error;
+    throw new HttpsError("internal", "Une erreur est survenue lors de la récupération des points de l'utilisateur.");
   }
 });
