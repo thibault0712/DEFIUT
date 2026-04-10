@@ -49,7 +49,7 @@
 
           <div class="d-flex flex-column align-center align-md-start justify-center ml-md-10 text-center text-md-left">
             <h1 class="text-h3 text-md-h1 font-weight-bold text-on-background mb-4">
-              Test
+              Bienvenue
             </h1>
             <p
               class="text-body-1 text-md-h5 text-medium-emphasis"
